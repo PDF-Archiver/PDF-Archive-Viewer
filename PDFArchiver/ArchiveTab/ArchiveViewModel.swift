@@ -94,17 +94,20 @@ class ArchiveViewModel: ObservableObject, SystemLogging {
             .sink { [weak self] documents in
                 guard let self = self else { return }
 
-                // workaround to skip creation of large SwiftUI List Diffs
-                // TODO: should be tested on low end devices
-                // TODO: add sections to improve diffing?
-                if self.documents.count + documents.count < 500 {
+                if #available(iOS 14, *) {
+                    // no need for this in iOS 14 <3
                     self.documents = documents
                 } else {
-                    // seems to improve the performance A LOT - from: https://stackoverflow.com/a/58329615
-                    // => no need to build a diff
-                    self.documents = []
-                    DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(10)) {
+                    // workaround to skip creation of large SwiftUI List Diffs
+                    if self.documents.count + documents.count < 500 {
                         self.documents = documents
+                    } else {
+                        // seems to improve the performance A LOT - from: https://stackoverflow.com/a/58329615
+                        // => no need to build a diff
+                        self.documents = []
+                        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(10)) {
+                            self.documents = documents
+                        }
                     }
                 }
             }

@@ -21,27 +21,37 @@ struct MoreTabView: View {
                 Spacer()
             }
             NavigationView {
-                List {
+                Form {
                     preferences
                     subscription
                     moreInformation
                 }
                 .listStyle(GroupedListStyle())
+                .foregroundColor(.primary)
                 .sheet(isPresented: $viewModel.isShowingMailView) {
                     SupportMailView(subject: MoreTabViewModel.mailSubject,
                                     recipients: MoreTabViewModel.mailRecipients,
                                     result: self.$viewModel.result)
                 }
-                .navigationBarTitle("Preferences & More")
+                .navigationBarTitleView(title)
             }
             .navigationViewStyle(StackNavigationViewStyle())
-            .frame(maxWidth: 700)
+            .frame(maxWidth: 500)
             if UIDevice.current.userInterfaceIdiom != .phone {
                 Spacer()
             }
         }
         .backgroundColor(Color(.systemGroupedBackground))
+        .navigationViewStyle(StackNavigationViewStyle())
         .onAppear(perform: viewModel.updateSubscription)
+    }
+    
+    private var title: some View {
+        Text("Preferences & More")
+            .font(.largeTitle)
+            .fontWeight(.bold)
+            .background(Color(.systemGroupedBackground))
+            .maxWidth(.infinity)
     }
 
     private var preferences: some View {
@@ -73,9 +83,7 @@ struct MoreTabView: View {
             DetailRowView(name: "Activate Subscription") {
                 NotificationCenter.default.post(.showSubscriptionView)
             }
-            DetailRowView(name: "Manage Subscription") {
-                self.viewModel.showManageSubscription()
-            }
+            Link("Manage Subscription", destination: viewModel.manageSubscriptionUrl)
         }
     }
 
@@ -85,15 +93,9 @@ struct MoreTabView: View {
             NavigationLink(destination: AboutMeView()) {
                 Text("About  👤")
             }
-            DetailRowView(name: "PDF Archiver (macOS)  🖥") {
-                self.viewModel.showMacOSApp()
-            }
-            DetailRowView(name: "Terms of Use & Privacy Policy") {
-                self.viewModel.showPrivacyPolicy()
-            }
-            DetailRowView(name: "Imprint") {
-                self.viewModel.showImprintCell()
-            }
+            Link("PDF Archiver (macOS)  🖥", destination: viewModel.macOSAppUrl)
+            Link("Terms of Use & Privacy Policy", destination: viewModel.privacyPolicyUrl)
+            Link("Imprint", destination: viewModel.imprintUrl)
             DetailRowView(name: "Support  🚑") {
                 self.viewModel.showSupport()
             }
@@ -104,6 +106,10 @@ struct MoreTabView: View {
 struct MoreTabView_Previews: PreviewProvider {
     @State static var viewModel = MoreTabViewModel()
     static var previews: some View {
-        MoreTabView(viewModel: viewModel)
+        Group {
+            MoreTabView(viewModel: viewModel)
+                .preferredColorScheme(.dark)
+                .padding()
+        }
     }
 }

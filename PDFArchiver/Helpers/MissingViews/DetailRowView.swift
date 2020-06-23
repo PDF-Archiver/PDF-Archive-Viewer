@@ -17,10 +17,10 @@ struct DetailRowView: View {
         }, label: {
             HStack {
                 Text(name)
-                Spacer()
-                Image(systemName: "chevron.right")
-                    .foregroundColor(Color(.quaternaryLabel))
-                    .font(.system(.headline))
+//                Spacer()
+//                Image(systemName: "chevron.right")
+//                    .foregroundColor(Color(.quaternaryLabel))
+//                    .font(.system(.headline))
             }.accentColor(.primary)
         })
     }

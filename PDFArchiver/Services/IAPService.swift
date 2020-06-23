@@ -102,7 +102,7 @@ public class IAPService: NSObject, SystemLogging {
                 self.fetchReceipt(appStart: appStart)
 
                 // validate receipt and check expiration date
-                _ = self.saveNewExpiryDateOfReceipt()
+                self.saveNewExpiryDateOfReceipt()
             }
             return false
         }
@@ -121,7 +121,7 @@ public class IAPService: NSObject, SystemLogging {
                 self.fetchReceipt()
 
                 // validate receipt and save new expiry date
-                _ = self.saveNewExpiryDateOfReceipt()
+                self.saveNewExpiryDateOfReceipt()
 
             case .error(let error):
                 os_log("Purchase failed with error: %@", log: IAPService.log, type: .error, error.localizedDescription)
