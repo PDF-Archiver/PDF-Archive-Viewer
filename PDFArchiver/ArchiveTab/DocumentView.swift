@@ -12,6 +12,7 @@ import SwiftUIX
 
 struct DocumentView: View {
 
+    @Namespace var namespace
     let viewModel: DocumentViewModel
     let showTagStatus: Bool
 
@@ -57,7 +58,7 @@ struct DocumentView: View {
     }
 
     var tags: some View {
-        TagListView(tags: .constant(viewModel.sortedTags), isEditable: false, isMultiLine: false, tapHandler: nil)
+        TagListView(tagViewNamespace: namespace, tags: .constant(viewModel.sortedTags), isEditable: false, isMultiLine: false, tapHandler: nil)
             .font(.caption)
     }
 }
@@ -98,6 +99,9 @@ struct DocumentView_Previews: PreviewProvider {
                                                      downloadStatus: .downloading(percentDownloaded: 0.33))
     static var previews: some View {
         DocumentView(viewModel: documentViewModel, showTagStatus: false)
+            .preferredColorScheme(.light)
+            .environment(\.sizeCategory, .extraExtraLarge)
+            .previewLayout(.sizeThatFits)
             .frame(minWidth: 0.0, maxWidth: .infinity, minHeight: 0, maxHeight: 45.0)
             .padding()
     }

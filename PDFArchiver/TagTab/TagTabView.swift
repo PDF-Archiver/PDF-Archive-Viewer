@@ -10,6 +10,9 @@ import KeyboardObserving
 import SwiftUI
 
 struct TagTabView: View {
+
+    @Namespace var namespace
+
     @ObservedObject var viewModel: TagTabViewModel
 
     // trigger a reload of the view, when the device rotation changes
@@ -102,8 +105,10 @@ struct TagTabView: View {
     }
 
     private var documentInformation: some View {
-        VStack(alignment: .leading, spacing: 16.0) {
-            datePicker
+        Form {
+//        VStack(alignment: .leading, spacing: 16.0) {
+//            datePicker
+            DatePicker("Date", selection: $viewModel.date)
             TextField("Description", text: $viewModel.specification)
                 .modifier(ClearButton(text: $viewModel.specification))
             documentTags
@@ -126,7 +131,7 @@ struct TagTabView: View {
         VStack(alignment: .leading) {
             Text("Document Tags")
                 .font(.caption)
-            TagListView(tags: $viewModel.documentTags, isEditable: true, isMultiLine: true, tapHandler: viewModel.documentTagTapped(_:))
+            TagListView(tagViewNamespace: namespace, tags: $viewModel.documentTags, isEditable: true, isMultiLine: true, tapHandler: viewModel.documentTagTapped(_:))
                 .font(.body)
             CustomTextField(text: $viewModel.documentTagInput,
                             placeholder: "Enter Tag",
@@ -142,7 +147,7 @@ struct TagTabView: View {
         VStack(alignment: .leading) {
             Text("Suggested Tags")
                 .font(.caption)
-            TagListView(tags: $viewModel.suggestedTags, isEditable: false, isMultiLine: true, tapHandler: viewModel.suggestedTagTapped(_:))
+            TagListView(tagViewNamespace: namespace, tags: $viewModel.suggestedTags, isEditable: false, isMultiLine: true, tapHandler: viewModel.suggestedTagTapped(_:))
                 .font(.body)
         }
     }
@@ -174,3 +179,28 @@ struct TagTabView: View {
         }
     }
 }
+
+#if DEBUG
+import ArchiveLib
+struct TagTabView_Previews: PreviewProvider {
+    static var viewModel: TagTabViewModel = {
+        let model = TagTabViewModel()
+        model.showLoadingView = false
+        model.date = Date()
+        model.documents = [
+            Document.create(),
+            Document.create(),
+            Document.create(),
+        ]
+        model.documentTags = ["bill", "letter"]
+        model.suggestedTags = ["tag1", "tag2", "tag3"]
+        model.currentDocument = Document.create()
+        return model
+    }()
+    
+    static var previews: some View {
+        TagTabView(viewModel: viewModel)
+//            .previewDevice("iPhone 11")
+    }
+}
+#endif

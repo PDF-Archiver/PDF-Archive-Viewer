@@ -2,15 +2,6 @@
   "object": {
     "pins": [
       {
-        "package": "ArchiveLib",
-        "repositoryURL": "https://github.com/PDF-Archiver/ArchiveLib",
-        "state": {
-          "branch": null,
-          "revision": "0f7ebca217cc720bae386ec3d780709e540d38d7",
-          "version": "2.0.12"
-        }
-      },
-      {
         "package": "Diagnostics",
         "repositoryURL": "https://github.com/WeTransfer/Diagnostics",
         "state": {

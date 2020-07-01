@@ -10,6 +10,7 @@ import SwiftUI
 
 struct TagListView: View {
 
+    let tagViewNamespace: Namespace.ID
     @Binding var tags: [String]
     let isEditable: Bool
     let isMultiLine: Bool
@@ -27,7 +28,8 @@ struct TagListView: View {
     private var singleLineView: some View {
         HStack {
             ForEach(tags.filter { !$0.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }, id: \.self) { tagName in
-                TagView(tagName: tagName,
+                TagView(tagViewNamespace: tagViewNamespace,
+                        tagName: tagName,
                         isEditable: self.isEditable,
                         tapHandler: self.tapHandler)
             }
@@ -38,13 +40,13 @@ struct TagListView: View {
         ForEach(0...tags.count / 3, id: \.self) { rowIndex in
             HStack {
                 if (rowIndex * 3 + 0) < self.tags.count {
-                    TagView(tagName: self.tags[rowIndex * 3 + 0], isEditable: self.isEditable, tapHandler: self.tapHandler)
+                    TagView(tagViewNamespace: tagViewNamespace, tagName: self.tags[rowIndex * 3 + 0], isEditable: self.isEditable, tapHandler: self.tapHandler)
                 }
                 if (rowIndex * 3 + 1) < self.tags.count {
-                    TagView(tagName: self.tags[rowIndex * 3 + 1], isEditable: self.isEditable, tapHandler: self.tapHandler)
+                    TagView(tagViewNamespace: tagViewNamespace, tagName: self.tags[rowIndex * 3 + 1], isEditable: self.isEditable, tapHandler: self.tapHandler)
                 }
                 if (rowIndex * 3 + 2) < self.tags.count {
-                    TagView(tagName: self.tags[rowIndex * 3 + 2], isEditable: self.isEditable, tapHandler: self.tapHandler)
+                    TagView(tagViewNamespace: tagViewNamespace, tagName: self.tags[rowIndex * 3 + 2], isEditable: self.isEditable, tapHandler: self.tapHandler)
                 }
             }
         }
@@ -52,9 +54,10 @@ struct TagListView: View {
 }
 
 struct TagListView_Previews: PreviewProvider {
+    @Namespace static var namespace
     @State static var tags = ["tag1", "tag2    ", "    tag3", "   ", "tag4"]
     static var previews: some View {
-        TagListView(tags: $tags, isEditable: true, isMultiLine: true, tapHandler: nil)
+        TagListView(tagViewNamespace: namespace, tags: $tags, isEditable: true, isMultiLine: true, tapHandler: nil)
     }
 }
 

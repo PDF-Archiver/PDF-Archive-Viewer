@@ -30,7 +30,7 @@ protocol DocumentsQueryDelegate: AnyObject {
 /// The DocumentBrowserQuery wraps an `NSMetadataQuery` to insulate us from the
 /// queueing and animation concerns. It runs the query and computes animations
 /// from the results set.
-class DocumentsQuery: NSObject, SystemLogging {
+class DocumentsQuery: SystemLogging {
 
     private let notContainsTempPath = NSPredicate(format: "(NOT (%K CONTAINS[c] %@)) AND (NOT (%K CONTAINS[c] %@))", NSMetadataItemPathKey, "/\(StorageHelper.Paths.tempFolderName)/", NSMetadataItemPathKey, "/.Trash/")
     private var metadataQuery: NSMetadataQuery
@@ -49,7 +49,7 @@ class DocumentsQuery: NSObject, SystemLogging {
 
     // MARK: - Initialization
 
-    override init() {
+    init() {
         metadataQuery = NSMetadataQuery()
 
         // Filter only documents from the current year and the year before
@@ -80,8 +80,6 @@ class DocumentsQuery: NSObject, SystemLogging {
          Note that the operationQueue of the `NSMetadataQuery` must be serial.
          */
         metadataQuery.operationQueue = workerQueue
-
-        super.init()
 
         NotificationCenter.default.addObserver(self, selector: #selector(DocumentsQuery.finishGathering(notification:)), name: .NSMetadataQueryDidFinishGathering, object: metadataQuery)
         NotificationCenter.default.addObserver(self, selector: #selector(DocumentsQuery.queryUpdated(notification:)), name: .NSMetadataQueryDidUpdate, object: metadataQuery)

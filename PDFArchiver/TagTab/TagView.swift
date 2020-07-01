@@ -10,6 +10,7 @@ import SwiftUI
 
 struct TagView: View {
 
+    let tagViewNamespace: Namespace.ID
     let tagName: String
     let isEditable: Bool
     let tapHandler: ((String) -> Void)?
@@ -20,6 +21,7 @@ struct TagView: View {
         }, label: {
             self.tag
         })
+        .matchedGeometryEffect(id: tagName, in: tagViewNamespace)
     }
 
     private var tag: some View {

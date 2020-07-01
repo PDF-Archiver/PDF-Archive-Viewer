@@ -45,7 +45,7 @@ class MoreTabViewModel: ObservableObject {
 
     func showIntro() {
         Log.send(.info, "More table view show: intro")
-        NotificationCenter.default.post(name: .introChanges, object: true)
+//        NotificationCenter.default.post(name: .introChanges, object: true)
     }
 
     func showPermissions() {
@@ -73,28 +73,20 @@ class MoreTabViewModel: ObservableObject {
         AlertViewModel.createAndPost(title: "Reset App", message: "Please restart the app to complete the reset.", primaryButtonTitle: "OK")
     }
 
-    func showManageSubscription() {
-        Log.send(.info, "More table view show: manage subscription")
-        guard let link = URL(string: "https://apps.apple.com/account/subscriptions") else { fatalError("Could not parse subscription url.") }
-        UIApplication.shared.open(link)
+    var manageSubscriptionUrl: URL {
+        URL(string: "https://apps.apple.com/account/subscriptions")!
     }
 
-    func showMacOSApp() {
-        Log.send(.info, "More table view show: macOS App")
-        guard let link = URL(string: "https://macos.pdf-archiver.io") else { fatalError("Could not parse macOS app url.") }
-        UIApplication.shared.open(link)
+    var macOSAppUrl: URL {
+        URL(string: "https://macos.pdf-archiver.io")!
     }
 
-    func showPrivacyPolicy() {
-        Log.send(.info, "More table view show: privacy")
-        guard let link = URL(string: NSLocalizedString("MoreTableViewController.privacyPolicyCell.url", comment: "")) else { fatalError("Could not parse termsOfUseCell url.") }
-        UIApplication.shared.open(link)
+    var privacyPolicyUrl: URL {
+        URL(string: NSLocalizedString("MoreTableViewController.privacyPolicyCell.url", comment: ""))!
     }
 
-    func showImprintCell() {
-        Log.send(.info, "More table view show: imprint")
-        guard let link = URL(string: NSLocalizedString("MoreTableViewController.imprintCell.url", comment: "")) else { fatalError("Could not parse privacyPolicyCell url.") }
-        UIApplication.shared.open(link)
+    var imprintUrl: URL {
+        URL(string: NSLocalizedString("MoreTableViewController.imprintCell.url", comment: ""))!
     }
 
     func showSupport() {
