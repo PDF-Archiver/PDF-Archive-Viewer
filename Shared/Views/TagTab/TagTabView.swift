@@ -108,7 +108,7 @@ struct TagTabView: View {
         Form {
 //        VStack(alignment: .leading, spacing: 16.0) {
 //            datePicker
-            DatePicker("Date", selection: $viewModel.date)
+            DatePicker("Date", selection: $viewModel.date, displayedComponents: .date)
             TextField("Description", text: $viewModel.specification)
                 .modifier(ClearButton(text: $viewModel.specification))
             documentTags

@@ -162,7 +162,7 @@ class TagTabViewModel: ObservableObject {
                 } else {
                     Log.send(.error, "Could not present document.")
                     self.pdfDocument = PDFDocument()
-                    assertionFailure("Could not present document.")
+//                    assertionFailure("Could not present document.")
                 }
                 self.specification = document.specification
                 self.documentTags = document.tags.sorted()

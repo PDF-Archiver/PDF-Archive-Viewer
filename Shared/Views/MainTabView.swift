@@ -14,7 +14,7 @@ struct MainTabView: View {
         case tag, archive, more
     }
 
-    @ObservedObject var viewModel: MainTabViewModel
+    @StateObject var viewModel = MainTabViewModel()
 
     var body: some View {
         ZStack {

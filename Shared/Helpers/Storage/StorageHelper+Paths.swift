@@ -17,7 +17,9 @@ extension StorageHelper {
 
         static var archivePath: URL? = {
             guard let containerUrl = FileManager.default.url(forUbiquityContainerIdentifier: nil) else {
-                assertionFailure("Could not find default container identifier.")
+
+                // TODO: fix this in simulator
+//                assertionFailure("Could not find default container identifier.")
                 Log.send(.error, "Could not find default container identifier.")
                 return nil
             }

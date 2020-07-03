@@ -131,7 +131,6 @@
 		3416B23524A9282800D5F4E0 /* ArchiveViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3416B1A924A9282700D5F4E0 /* ArchiveViewModel.swift */; };
 		3416B23624A9282800D5F4E0 /* DocumentDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3416B1AA24A9282700D5F4E0 /* DocumentDetailView.swift */; };
 		3416B23724A9282800D5F4E0 /* DocumentDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3416B1AA24A9282700D5F4E0 /* DocumentDetailView.swift */; };
-		3416B23A24A9282800D5F4E0 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 3416B1AD24A9282700D5F4E0 /* Settings.bundle */; };
 		3416B23B24A9282800D5F4E0 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 3416B1AD24A9282700D5F4E0 /* Settings.bundle */; };
 		3416B23C24A9282800D5F4E0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3416B1AE24A9282800D5F4E0 /* Assets.xcassets */; };
 		3416B23D24A9282800D5F4E0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3416B1AE24A9282800D5F4E0 /* Assets.xcassets */; };
@@ -179,10 +178,13 @@
 		3416B28724A92D4200D5F4E0 /* Sentry in Frameworks */ = {isa = PBXBuildFile; productRef = 3416B28624A92D4200D5F4E0 /* Sentry */; };
 		3416B28A24A92D5A00D5F4E0 /* Diagnostics in Frameworks */ = {isa = PBXBuildFile; productRef = 3416B28924A92D5A00D5F4E0 /* Diagnostics */; };
 		3416B28D24A92D7B00D5F4E0 /* KeyboardObserving in Frameworks */ = {isa = PBXBuildFile; productRef = 3416B28C24A92D7B00D5F4E0 /* KeyboardObserving */; };
+		345A497E24AFB0CE00EC4DC2 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 3416B1AD24A9282700D5F4E0 /* Settings.bundle */; };
 		3489D73024A3C53E0035E64F /* Tests_iOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3489D72F24A3C53E0035E64F /* Tests_iOS.swift */; };
 		3489D73B24A3C53E0035E64F /* Tests_macOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3489D73A24A3C53E0035E64F /* Tests_macOS.swift */; };
 		3489D73D24A3C53E0035E64F /* PDFArchiverApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3489D71424A3C53D0035E64F /* PDFArchiverApp.swift */; };
 		3489D73E24A3C53E0035E64F /* PDFArchiverApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3489D71424A3C53D0035E64F /* PDFArchiverApp.swift */; };
+		349E1FA524AFBBA500488E00 /* DocumentInformationForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 349E1FA424AFBBA500488E00 /* DocumentInformationForm.swift */; };
+		349E1FA624AFBBA500488E00 /* DocumentInformationForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 349E1FA424AFBBA500488E00 /* DocumentInformationForm.swift */; };
 		34A53FA124AA656B008A3377 /* ShareExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 34A53F9724AA656B008A3377 /* ShareExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		34A53FA724AA65CB008A3377 /* ShareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34A53FA524AA65CA008A3377 /* ShareViewController.swift */; };
 		34A53FA824AA65CB008A3377 /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 34A53FA624AA65CB008A3377 /* MainInterface.storyboard */; };
@@ -327,6 +329,7 @@
 		3489D73624A3C53E0035E64F /* Tests macOS.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Tests macOS.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		3489D73A24A3C53E0035E64F /* Tests_macOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests_macOS.swift; sourceTree = "<group>"; };
 		3489D73C24A3C53E0035E64F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		349E1FA424AFBBA500488E00 /* DocumentInformationForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentInformationForm.swift; sourceTree = "<group>"; };
 		34A53F9724AA656B008A3377 /* ShareExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = ShareExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		34A53F9E24AA656B008A3377 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		34A53FA524AA65CA008A3377 /* ShareViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShareViewController.swift; sourceTree = "<group>"; };
@@ -419,6 +422,7 @@
 				3416B16424A9282700D5F4E0 /* TagTabView.swift */,
 				3416B16524A9282700D5F4E0 /* TagTabViewModel.swift */,
 				3416B16624A9282700D5F4E0 /* TagView.swift */,
+				349E1FA424AFBBA500488E00 /* DocumentInformationForm.swift */,
 			);
 			path = TagTab;
 			sourceTree = "<group>";
@@ -857,8 +861,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				3416B23E24A9282800D5F4E0 /* Config.xcconfig in Resources */,
-				3416B23A24A9282800D5F4E0 /* Settings.bundle in Resources */,
 				3416B24024A9282800D5F4E0 /* LaunchScreen.storyboard in Resources */,
+				345A497E24AFB0CE00EC4DC2 /* Settings.bundle in Resources */,
 				3416B23C24A9282800D5F4E0 /* Assets.xcassets in Resources */,
 				3416B21824A9282800D5F4E0 /* Localizable.strings in Resources */,
 			);
@@ -940,7 +944,7 @@
 		};
 		34A53F7F24AA6431008A3377 /* SettingsVersion */ = {
 			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
+			buildActionMask = 8;
 			files = (
 			);
 			inputFileListPaths = (
@@ -952,7 +956,7 @@
 			);
 			outputPaths = (
 			);
-			runOnlyForDeploymentPostprocessing = 0;
+			runOnlyForDeploymentPostprocessing = 1;
 			shellPath = /bin/sh;
 			shellScript = "# Source: https://stackoverflow.com/a/39030153\ncd \"${BUILT_PRODUCTS_DIR}\"\nversion=$(/usr/libexec/PlistBuddy -c \"Print CFBundleShortVersionString\" \"${INFOPLIST_PATH}\")\nbuild=$(/usr/libexec/PlistBuddy -c \"Print CFBundleVersion\" \"${INFOPLIST_PATH}\")\n/usr/libexec/PlistBuddy -c \"Set PreferenceSpecifiers:0:DefaultValue $version ($build)\" \"${WRAPPER_NAME}/Settings.bundle/Root.plist\"\n";
 		};
@@ -1022,6 +1026,7 @@
 				3416B1B624A9282800D5F4E0 /* MoreTabView.swift in Sources */,
 				3416B26124A9284E00D5F4E0 /* Document.swift in Sources */,
 				3416B1C624A9282800D5F4E0 /* View.swift in Sources */,
+				349E1FA524AFBBA500488E00 /* DocumentInformationForm.swift in Sources */,
 				3416B1D024A9282800D5F4E0 /* Log.swift in Sources */,
 				3416B20E24A9282800D5F4E0 /* Configuration.swift in Sources */,
 				3416B26B24A9284E00D5F4E0 /* TagParser.swift in Sources */,
@@ -1109,6 +1114,7 @@
 				3416B1B724A9282800D5F4E0 /* MoreTabView.swift in Sources */,
 				3416B26224A9284E00D5F4E0 /* Document.swift in Sources */,
 				3416B1C724A9282800D5F4E0 /* View.swift in Sources */,
+				349E1FA624AFBBA500488E00 /* DocumentInformationForm.swift in Sources */,
 				3416B1D124A9282800D5F4E0 /* Log.swift in Sources */,
 				3416B20F24A9282800D5F4E0 /* Configuration.swift in Sources */,
 				3416B26C24A9284E00D5F4E0 /* TagParser.swift in Sources */,
@@ -1370,6 +1376,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.16;
+				MARKETING_VERSION = 2.3.5;
 				PRODUCT_BUNDLE_IDENTIFIER = de.juliankahnert.PDFArchiver;
 				PRODUCT_NAME = PDFArchiver;
 				SDKROOT = macosx;
@@ -1394,6 +1401,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.16;
+				MARKETING_VERSION = 2.3.5;
 				PRODUCT_BUNDLE_IDENTIFIER = de.juliankahnert.PDFArchiver;
 				PRODUCT_NAME = PDFArchiver;
 				SDKROOT = macosx;

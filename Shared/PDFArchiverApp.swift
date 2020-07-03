@@ -19,7 +19,6 @@ struct PDFArchiverApp: App {
     @Environment(\.scenePhase) private var scenePhase
 
     private var isInitialized = Atomic(false)
-    private let viewModel = MainTabViewModel()
     private var isCurrentlyProcessing = Atomic(false)
 
 //    @SceneBuilder
@@ -104,8 +103,11 @@ struct PDFArchiverApp: App {
 
         if !urls.isEmpty {
             DispatchQueue.main.async {
+
+                // TODO: add this
+
                 // show scan tab with document processing, after importing a document
-                self.viewModel.currentTab = .scan
+//                self.viewModel.currentTab = .scan
             }
         }
 
@@ -138,7 +140,7 @@ extension PDFArchiverApp {
         @Environment(\.scenePhase) var scenePhase
         var app: PDFArchiverApp
         var body: some View {
-            MainTabView(viewModel: app.viewModel)
+            MainTabView()
                 .accentColor(Color(.paDarkGray))
                 .environmentObject(OrientationInfo())
                 .onChange(of: scenePhase) { phase in
