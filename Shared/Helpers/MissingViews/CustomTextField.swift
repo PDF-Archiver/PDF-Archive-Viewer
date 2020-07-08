@@ -28,22 +28,21 @@ struct CustomTextField: UIViewRepresentable {
         }
 
         func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-            if let text = textField.text {
-                customTextField.onCommit(text)
-            }
+            customTextField.onCommit()
             return true
         }
 
         @objc
         func tappedButton(sender: UIBarButtonItem) {
             guard let title = sender.title else { return }
-            customTextField.onCommit(title)
+            customTextField.text = title
+            customTextField.onCommit()
         }
     }
 
     @Binding var text: String
     var placeholder: String
-    var onCommit: (String) -> Void
+    var onCommit: () -> Void
     var isFirstResponder: Bool = false
     var suggestions: [String]
 

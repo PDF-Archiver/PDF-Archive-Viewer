@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		340EA92724B641E20066B4BE /* TagView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 340EA92424B641E20066B4BE /* TagView.swift */; };
+		340EA92824B641E20066B4BE /* TagView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 340EA92424B641E20066B4BE /* TagView.swift */; };
+		340EA92924B641E20066B4BE /* DocumentInformationForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 340EA92524B641E20066B4BE /* DocumentInformationForm.swift */; };
+		340EA92A24B641E20066B4BE /* DocumentInformationForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 340EA92524B641E20066B4BE /* DocumentInformationForm.swift */; };
 		3416B1B624A9282800D5F4E0 /* MoreTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3416B16024A9282700D5F4E0 /* MoreTabView.swift */; };
 		3416B1B724A9282800D5F4E0 /* MoreTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3416B16024A9282700D5F4E0 /* MoreTabView.swift */; };
 		3416B1B824A9282800D5F4E0 /* AboutMeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3416B16124A9282700D5F4E0 /* AboutMeView.swift */; };
@@ -17,8 +21,6 @@
 		3416B1BD24A9282800D5F4E0 /* TagTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3416B16424A9282700D5F4E0 /* TagTabView.swift */; };
 		3416B1BE24A9282800D5F4E0 /* TagTabViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3416B16524A9282700D5F4E0 /* TagTabViewModel.swift */; };
 		3416B1BF24A9282800D5F4E0 /* TagTabViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3416B16524A9282700D5F4E0 /* TagTabViewModel.swift */; };
-		3416B1C024A9282800D5F4E0 /* TagView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3416B16624A9282700D5F4E0 /* TagView.swift */; };
-		3416B1C124A9282800D5F4E0 /* TagView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3416B16624A9282700D5F4E0 /* TagView.swift */; };
 		3416B1C224A9282800D5F4E0 /* IAPViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3416B16724A9282700D5F4E0 /* IAPViewModel.swift */; };
 		3416B1C324A9282800D5F4E0 /* IAPViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3416B16724A9282700D5F4E0 /* IAPViewModel.swift */; };
 		3416B1C424A9282800D5F4E0 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3416B16924A9282700D5F4E0 /* Constants.swift */; };
@@ -59,12 +61,8 @@
 		3416B1E724A9282800D5F4E0 /* IntroView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3416B17E24A9282700D5F4E0 /* IntroView.swift */; };
 		3416B1E824A9282800D5F4E0 /* PlaceholderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3416B17F24A9282700D5F4E0 /* PlaceholderView.swift */; };
 		3416B1E924A9282800D5F4E0 /* PlaceholderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3416B17F24A9282700D5F4E0 /* PlaceholderView.swift */; };
-		3416B1EA24A9282800D5F4E0 /* CustomDatePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3416B18024A9282700D5F4E0 /* CustomDatePicker.swift */; };
-		3416B1EB24A9282800D5F4E0 /* CustomDatePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3416B18024A9282700D5F4E0 /* CustomDatePicker.swift */; };
 		3416B1EC24A9282800D5F4E0 /* DetailRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3416B18124A9282700D5F4E0 /* DetailRowView.swift */; };
 		3416B1ED24A9282800D5F4E0 /* DetailRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3416B18124A9282700D5F4E0 /* DetailRowView.swift */; };
-		3416B1EE24A9282800D5F4E0 /* CustomTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3416B18224A9282700D5F4E0 /* CustomTextField.swift */; };
-		3416B1EF24A9282800D5F4E0 /* CustomTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3416B18224A9282700D5F4E0 /* CustomTextField.swift */; };
 		3416B1F024A9282800D5F4E0 /* TagListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3416B18324A9282700D5F4E0 /* TagListView.swift */; };
 		3416B1F124A9282800D5F4E0 /* TagListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3416B18324A9282700D5F4E0 /* TagListView.swift */; };
 		3416B1F224A9282800D5F4E0 /* SupportMailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3416B18424A9282700D5F4E0 /* SupportMailView.swift */; };
@@ -177,14 +175,15 @@
 		3416B28424A92D1E00D5F4E0 /* SwiftUIX in Frameworks */ = {isa = PBXBuildFile; productRef = 3416B28324A92D1E00D5F4E0 /* SwiftUIX */; };
 		3416B28724A92D4200D5F4E0 /* Sentry in Frameworks */ = {isa = PBXBuildFile; productRef = 3416B28624A92D4200D5F4E0 /* Sentry */; };
 		3416B28A24A92D5A00D5F4E0 /* Diagnostics in Frameworks */ = {isa = PBXBuildFile; productRef = 3416B28924A92D5A00D5F4E0 /* Diagnostics */; };
-		3416B28D24A92D7B00D5F4E0 /* KeyboardObserving in Frameworks */ = {isa = PBXBuildFile; productRef = 3416B28C24A92D7B00D5F4E0 /* KeyboardObserving */; };
 		345A497E24AFB0CE00EC4DC2 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 3416B1AD24A9282700D5F4E0 /* Settings.bundle */; };
+		3482112124B6547700F51764 /* InputAccessoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3482112024B6547700F51764 /* InputAccessoryView.swift */; };
+		3482112224B6547700F51764 /* InputAccessoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3482112024B6547700F51764 /* InputAccessoryView.swift */; };
+		3482112424B65BC000F51764 /* CustomTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3482112324B65BC000F51764 /* CustomTextField.swift */; };
+		3482112524B65BC000F51764 /* CustomTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3482112324B65BC000F51764 /* CustomTextField.swift */; };
 		3489D73024A3C53E0035E64F /* Tests_iOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3489D72F24A3C53E0035E64F /* Tests_iOS.swift */; };
 		3489D73B24A3C53E0035E64F /* Tests_macOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3489D73A24A3C53E0035E64F /* Tests_macOS.swift */; };
 		3489D73D24A3C53E0035E64F /* PDFArchiverApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3489D71424A3C53D0035E64F /* PDFArchiverApp.swift */; };
 		3489D73E24A3C53E0035E64F /* PDFArchiverApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3489D71424A3C53D0035E64F /* PDFArchiverApp.swift */; };
-		349E1FA524AFBBA500488E00 /* DocumentInformationForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 349E1FA424AFBBA500488E00 /* DocumentInformationForm.swift */; };
-		349E1FA624AFBBA500488E00 /* DocumentInformationForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 349E1FA424AFBBA500488E00 /* DocumentInformationForm.swift */; };
 		34A53FA124AA656B008A3377 /* ShareExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 34A53F9724AA656B008A3377 /* ShareExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		34A53FA724AA65CB008A3377 /* ShareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34A53FA524AA65CA008A3377 /* ShareViewController.swift */; };
 		34A53FA824AA65CB008A3377 /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 34A53FA624AA65CB008A3377 /* MainInterface.storyboard */; };
@@ -234,12 +233,13 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		340EA92424B641E20066B4BE /* TagView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TagView.swift; sourceTree = "<group>"; };
+		340EA92524B641E20066B4BE /* DocumentInformationForm.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DocumentInformationForm.swift; sourceTree = "<group>"; };
 		3416B16024A9282700D5F4E0 /* MoreTabView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MoreTabView.swift; sourceTree = "<group>"; };
 		3416B16124A9282700D5F4E0 /* AboutMeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AboutMeView.swift; sourceTree = "<group>"; };
 		3416B16224A9282700D5F4E0 /* MoreTabViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MoreTabViewModel.swift; sourceTree = "<group>"; };
 		3416B16424A9282700D5F4E0 /* TagTabView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TagTabView.swift; sourceTree = "<group>"; };
 		3416B16524A9282700D5F4E0 /* TagTabViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TagTabViewModel.swift; sourceTree = "<group>"; };
-		3416B16624A9282700D5F4E0 /* TagView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TagView.swift; sourceTree = "<group>"; };
 		3416B16724A9282700D5F4E0 /* IAPViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IAPViewModel.swift; sourceTree = "<group>"; };
 		3416B16924A9282700D5F4E0 /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		3416B16A24A9282700D5F4E0 /* View.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = View.swift; sourceTree = "<group>"; };
@@ -260,9 +260,7 @@
 		3416B17D24A9282700D5F4E0 /* IntroViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IntroViewController.swift; sourceTree = "<group>"; };
 		3416B17E24A9282700D5F4E0 /* IntroView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IntroView.swift; sourceTree = "<group>"; };
 		3416B17F24A9282700D5F4E0 /* PlaceholderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaceholderView.swift; sourceTree = "<group>"; };
-		3416B18024A9282700D5F4E0 /* CustomDatePicker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomDatePicker.swift; sourceTree = "<group>"; };
 		3416B18124A9282700D5F4E0 /* DetailRowView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailRowView.swift; sourceTree = "<group>"; };
-		3416B18224A9282700D5F4E0 /* CustomTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomTextField.swift; sourceTree = "<group>"; };
 		3416B18324A9282700D5F4E0 /* TagListView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TagListView.swift; sourceTree = "<group>"; };
 		3416B18424A9282700D5F4E0 /* SupportMailView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SupportMailView.swift; sourceTree = "<group>"; };
 		3416B18524A9282700D5F4E0 /* SearchField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchField.swift; sourceTree = "<group>"; };
@@ -318,6 +316,8 @@
 		3416B25824A9284E00D5F4E0 /* Atomic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Atomic.swift; sourceTree = "<group>"; };
 		3416B25924A9284E00D5F4E0 /* String.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
 		3416B25A24A9284E00D5F4E0 /* DateParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DateParser.swift; sourceTree = "<group>"; };
+		3482112024B6547700F51764 /* InputAccessoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputAccessoryView.swift; sourceTree = "<group>"; };
+		3482112324B65BC000F51764 /* CustomTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomTextField.swift; sourceTree = "<group>"; };
 		3489D71424A3C53D0035E64F /* PDFArchiverApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFArchiverApp.swift; sourceTree = "<group>"; };
 		3489D71B24A3C53E0035E64F /* PDFArchiver.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PDFArchiver.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3489D72324A3C53E0035E64F /* PDFArchiver.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PDFArchiver.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -329,7 +329,6 @@
 		3489D73624A3C53E0035E64F /* Tests macOS.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Tests macOS.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		3489D73A24A3C53E0035E64F /* Tests_macOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests_macOS.swift; sourceTree = "<group>"; };
 		3489D73C24A3C53E0035E64F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		349E1FA424AFBBA500488E00 /* DocumentInformationForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentInformationForm.swift; sourceTree = "<group>"; };
 		34A53F9724AA656B008A3377 /* ShareExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = ShareExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		34A53F9E24AA656B008A3377 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		34A53FA524AA65CA008A3377 /* ShareViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShareViewController.swift; sourceTree = "<group>"; };
@@ -350,7 +349,6 @@
 				3416B27B24A92CD900D5F4E0 /* LoggingKit in Frameworks */,
 				3416B27E24A92CEC00D5F4E0 /* SwiftyStoreKit in Frameworks */,
 				34A5CF8224A93A3C002409EF /* StoreKit.framework in Frameworks */,
-				3416B28D24A92D7B00D5F4E0 /* KeyboardObserving in Frameworks */,
 				3416B28A24A92D5A00D5F4E0 /* Diagnostics in Frameworks */,
 				3416B28124A92D0500D5F4E0 /* PaperOnboarding in Frameworks */,
 				3416B28424A92D1E00D5F4E0 /* SwiftUIX in Frameworks */,
@@ -419,10 +417,10 @@
 		3416B16324A9282700D5F4E0 /* TagTab */ = {
 			isa = PBXGroup;
 			children = (
+				340EA92524B641E20066B4BE /* DocumentInformationForm.swift */,
 				3416B16424A9282700D5F4E0 /* TagTabView.swift */,
 				3416B16524A9282700D5F4E0 /* TagTabViewModel.swift */,
-				3416B16624A9282700D5F4E0 /* TagView.swift */,
-				349E1FA424AFBBA500488E00 /* DocumentInformationForm.swift */,
+				340EA92424B641E20066B4BE /* TagView.swift */,
 			);
 			path = TagTab;
 			sourceTree = "<group>";
@@ -484,19 +482,19 @@
 		3416B17924A9282700D5F4E0 /* MissingViews */ = {
 			isa = PBXGroup;
 			children = (
+				3482112324B65BC000F51764 /* CustomTextField.swift */,
 				3416B17A24A9282700D5F4E0 /* Alert.swift */,
 				3416B17B24A9282700D5F4E0 /* Stack.swift */,
 				3416B17C24A9282700D5F4E0 /* Intro */,
 				3416B17F24A9282700D5F4E0 /* PlaceholderView.swift */,
-				3416B18024A9282700D5F4E0 /* CustomDatePicker.swift */,
 				3416B18124A9282700D5F4E0 /* DetailRowView.swift */,
-				3416B18224A9282700D5F4E0 /* CustomTextField.swift */,
 				3416B18324A9282700D5F4E0 /* TagListView.swift */,
 				3416B18424A9282700D5F4E0 /* SupportMailView.swift */,
 				3416B18524A9282700D5F4E0 /* SearchField.swift */,
 				3416B18624A9282700D5F4E0 /* ClearButton.swift */,
 				3416B18724A9282700D5F4E0 /* ActivityView.swift */,
 				3416B18824A9282700D5F4E0 /* LoadingView.swift */,
+				3482112024B6547700F51764 /* InputAccessoryView.swift */,
 			);
 			path = MissingViews;
 			sourceTree = "<group>";
@@ -719,7 +717,6 @@
 				3416B28324A92D1E00D5F4E0 /* SwiftUIX */,
 				3416B28624A92D4200D5F4E0 /* Sentry */,
 				3416B28924A92D5A00D5F4E0 /* Diagnostics */,
-				3416B28C24A92D7B00D5F4E0 /* KeyboardObserving */,
 			);
 			productName = iOS;
 			productReference = 3489D71B24A3C53E0035E64F /* PDFArchiver.app */;
@@ -840,7 +837,6 @@
 				3416B28224A92D1E00D5F4E0 /* XCRemoteSwiftPackageReference "SwiftUIX" */,
 				3416B28524A92D4200D5F4E0 /* XCRemoteSwiftPackageReference "sentry-cocoa" */,
 				3416B28824A92D5A00D5F4E0 /* XCRemoteSwiftPackageReference "Diagnostics" */,
-				3416B28B24A92D7B00D5F4E0 /* XCRemoteSwiftPackageReference "KeyboardObserving" */,
 			);
 			productRefGroup = 3489D71C24A3C53E0035E64F /* Products */;
 			projectDirPath = "";
@@ -975,7 +971,6 @@
 				3416B27324A9284E00D5F4E0 /* Atomic.swift in Sources */,
 				3416B1DA24A9282800D5F4E0 /* StorageHelper+Errors.swift in Sources */,
 				3416B20C24A9282800D5F4E0 /* AppStoreReviewRequest.swift in Sources */,
-				3416B1C024A9282800D5F4E0 /* TagView.swift in Sources */,
 				3416B22A24A9282800D5F4E0 /* ArchiveView.swift in Sources */,
 				3416B23624A9282800D5F4E0 /* DocumentDetailView.swift in Sources */,
 				3416B1D424A9282800D5F4E0 /* AlertViewModel.swift in Sources */,
@@ -991,14 +986,13 @@
 				3416B25F24A9284E00D5F4E0 /* DocumentManager.swift in Sources */,
 				3416B1E824A9282800D5F4E0 /* PlaceholderView.swift in Sources */,
 				3416B21024A9282800D5F4E0 /* KeyCommandHostingController.swift in Sources */,
-				3416B1EE24A9282800D5F4E0 /* CustomTextField.swift in Sources */,
 				3416B21C24A9282800D5F4E0 /* IAPView.swift in Sources */,
-				3416B1EA24A9282800D5F4E0 /* CustomDatePicker.swift in Sources */,
 				3416B22E24A9282800D5F4E0 /* DocumentView.swift in Sources */,
 				3416B1F024A9282800D5F4E0 /* TagListView.swift in Sources */,
 				3416B1C224A9282800D5F4E0 /* IAPViewModel.swift in Sources */,
 				3416B1FA24A9282800D5F4E0 /* LoadingView.swift in Sources */,
 				3416B22C24A9282800D5F4E0 /* DocumentDetailViewModel.swift in Sources */,
+				340EA92724B641E20066B4BE /* TagView.swift in Sources */,
 				3416B26D24A9284E00D5F4E0 /* ContentParseOperation.swift in Sources */,
 				3416B22824A9282800D5F4E0 /* DocumentsQuery.swift in Sources */,
 				34F69CAE24A3DB5A00AD5ACC /* ArchiveStore.swift in Sources */,
@@ -1016,6 +1010,7 @@
 				3416B27724A9284E00D5F4E0 /* DateParser.swift in Sources */,
 				3489D73D24A3C53E0035E64F /* PDFArchiverApp.swift in Sources */,
 				3416B1D224A9282800D5F4E0 /* UIColor.swift in Sources */,
+				3482112424B65BC000F51764 /* CustomTextField.swift in Sources */,
 				3416B21424A9282800D5F4E0 /* ScanTabView.swift in Sources */,
 				3416B1E624A9282800D5F4E0 /* IntroView.swift in Sources */,
 				3416B1E224A9282800D5F4E0 /* Stack.swift in Sources */,
@@ -1026,7 +1021,8 @@
 				3416B1B624A9282800D5F4E0 /* MoreTabView.swift in Sources */,
 				3416B26124A9284E00D5F4E0 /* Document.swift in Sources */,
 				3416B1C624A9282800D5F4E0 /* View.swift in Sources */,
-				349E1FA524AFBBA500488E00 /* DocumentInformationForm.swift in Sources */,
+				3482112124B6547700F51764 /* InputAccessoryView.swift in Sources */,
+				340EA92924B641E20066B4BE /* DocumentInformationForm.swift in Sources */,
 				3416B1D024A9282800D5F4E0 /* Log.swift in Sources */,
 				3416B20E24A9282800D5F4E0 /* Configuration.swift in Sources */,
 				3416B26B24A9284E00D5F4E0 /* TagParser.swift in Sources */,
@@ -1063,7 +1059,6 @@
 				3416B27424A9284E00D5F4E0 /* Atomic.swift in Sources */,
 				3416B1DB24A9282800D5F4E0 /* StorageHelper+Errors.swift in Sources */,
 				3416B20D24A9282800D5F4E0 /* AppStoreReviewRequest.swift in Sources */,
-				3416B1C124A9282800D5F4E0 /* TagView.swift in Sources */,
 				3416B22B24A9282800D5F4E0 /* ArchiveView.swift in Sources */,
 				3416B23724A9282800D5F4E0 /* DocumentDetailView.swift in Sources */,
 				3416B1D524A9282800D5F4E0 /* AlertViewModel.swift in Sources */,
@@ -1079,14 +1074,13 @@
 				3416B26024A9284E00D5F4E0 /* DocumentManager.swift in Sources */,
 				3416B1E924A9282800D5F4E0 /* PlaceholderView.swift in Sources */,
 				3416B21124A9282800D5F4E0 /* KeyCommandHostingController.swift in Sources */,
-				3416B1EF24A9282800D5F4E0 /* CustomTextField.swift in Sources */,
 				3416B21D24A9282800D5F4E0 /* IAPView.swift in Sources */,
-				3416B1EB24A9282800D5F4E0 /* CustomDatePicker.swift in Sources */,
 				3416B22F24A9282800D5F4E0 /* DocumentView.swift in Sources */,
 				3416B1F124A9282800D5F4E0 /* TagListView.swift in Sources */,
 				3416B1C324A9282800D5F4E0 /* IAPViewModel.swift in Sources */,
 				3416B1FB24A9282800D5F4E0 /* LoadingView.swift in Sources */,
 				3416B22D24A9282800D5F4E0 /* DocumentDetailViewModel.swift in Sources */,
+				340EA92824B641E20066B4BE /* TagView.swift in Sources */,
 				3416B26E24A9284E00D5F4E0 /* ContentParseOperation.swift in Sources */,
 				3416B22924A9282800D5F4E0 /* DocumentsQuery.swift in Sources */,
 				34F69CAF24A3DB5A00AD5ACC /* ArchiveStore.swift in Sources */,
@@ -1104,6 +1098,7 @@
 				3416B27824A9284E00D5F4E0 /* DateParser.swift in Sources */,
 				3489D73E24A3C53E0035E64F /* PDFArchiverApp.swift in Sources */,
 				3416B1D324A9282800D5F4E0 /* UIColor.swift in Sources */,
+				3482112524B65BC000F51764 /* CustomTextField.swift in Sources */,
 				3416B21524A9282800D5F4E0 /* ScanTabView.swift in Sources */,
 				3416B1E724A9282800D5F4E0 /* IntroView.swift in Sources */,
 				3416B1E324A9282800D5F4E0 /* Stack.swift in Sources */,
@@ -1114,7 +1109,8 @@
 				3416B1B724A9282800D5F4E0 /* MoreTabView.swift in Sources */,
 				3416B26224A9284E00D5F4E0 /* Document.swift in Sources */,
 				3416B1C724A9282800D5F4E0 /* View.swift in Sources */,
-				349E1FA624AFBBA500488E00 /* DocumentInformationForm.swift in Sources */,
+				3482112224B6547700F51764 /* InputAccessoryView.swift in Sources */,
+				340EA92A24B641E20066B4BE /* DocumentInformationForm.swift in Sources */,
 				3416B1D124A9282800D5F4E0 /* Log.swift in Sources */,
 				3416B20F24A9282800D5F4E0 /* Configuration.swift in Sources */,
 				3416B26C24A9284E00D5F4E0 /* TagParser.swift in Sources */,
@@ -1658,14 +1654,6 @@
 				minimumVersion = 1.7.0;
 			};
 		};
-		3416B28B24A92D7B00D5F4E0 /* XCRemoteSwiftPackageReference "KeyboardObserving" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/nickffox/KeyboardObserving";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 0.3.0;
-			};
-		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -1698,11 +1686,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 3416B28824A92D5A00D5F4E0 /* XCRemoteSwiftPackageReference "Diagnostics" */;
 			productName = Diagnostics;
-		};
-		3416B28C24A92D7B00D5F4E0 /* KeyboardObserving */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 3416B28B24A92D7B00D5F4E0 /* XCRemoteSwiftPackageReference "KeyboardObserving" */;
-			productName = KeyboardObserving;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

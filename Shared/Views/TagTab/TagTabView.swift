@@ -6,7 +6,6 @@
 //  Copyright © 2019 Julian Kahnert. All rights reserved.
 //
 
-import KeyboardObserving
 import SwiftUI
 
 struct TagTabView: View {
@@ -22,27 +21,24 @@ struct TagTabView: View {
         NavigationView {
             if viewModel.showLoadingView {
                 LoadingView()
-            } else {
-                if viewModel.currentDocument != nil {
-                    GeometryReader { geometry in
-                        Stack {
-                            if self.shouldShowDocumentList(width: geometry.size.width) {
-                                self.documentsList
-                                    .frame(maxWidth: self.size(of: .documentList, width: geometry.size.width))
-                            }
-                            self.pdfView
-                                .frame(maxWidth: self.size(of: .pdf, width: geometry.size.width), minHeight: 325.0, maxHeight: .infinity, alignment: .center)
-                            self.documentInformation
-                                .frame(maxWidth: self.size(of: .documentInformation, width: geometry.size.width))
+            } else if viewModel.currentDocument != nil {
+                GeometryReader { geometry in
+                    Stack(spacing: 8) {
+                        if shouldShowDocumentList(width: geometry.size.width) {
+                            documentsList
+                                .frame(maxWidth: size(of: .documentList, width: geometry.size.width))
                         }
+                        pdfView
+                            .frame(maxWidth: size(of: .pdf, width: geometry.size.width), minHeight: 175.0, maxHeight: .infinity, alignment: .center)
+                        documentInformation
+                            .frame(maxWidth: size(of: .documentInformation, width: geometry.size.width))
+                            .keyboardPadding()
                     }
-                    .keyboardObserving(offset: 16.0)
-                    .padding(EdgeInsets(top: 0.0, leading: 8.0, bottom: 0.0, trailing: 8.0))
-                    .navigationBarTitle(Text("Document"), displayMode: .inline)
-                    .navigationBarItems(leading: deleteNavBarView, trailing: saveNavBarView)
-                } else {
-                    PlaceholderView(name: "No iCloud Drive documents found. Please scan and tag documents first.")
                 }
+                .navigationBarTitle(Text("Document"), displayMode: .inline)
+                .navigationBarItems(leading: deleteNavBarView, trailing: saveNavBarView)
+            } else {
+                PlaceholderView(name: "No iCloud Drive documents found. Please scan and tag documents first.")
             }
         }
         .navigationViewStyle(StackNavigationViewStyle())
@@ -105,51 +101,12 @@ struct TagTabView: View {
     }
 
     private var documentInformation: some View {
-        Form {
-//        VStack(alignment: .leading, spacing: 16.0) {
-//            datePicker
-            DatePicker("Date", selection: $viewModel.date, displayedComponents: .date)
-            TextField("Description", text: $viewModel.specification)
-                .modifier(ClearButton(text: $viewModel.specification))
-            documentTags
-            suggestedTags
-            Spacer()
-        }
-    }
-
-    // MARK: Single Components
-
-    private var datePicker: some View {
-        HStack {
-            Spacer()
-            CustomDatePicker(date: $viewModel.date)
-            Spacer()
-        }
-    }
-
-    private var documentTags: some View {
-        VStack(alignment: .leading) {
-            Text("Document Tags")
-                .font(.caption)
-            TagListView(tagViewNamespace: namespace, tags: $viewModel.documentTags, isEditable: true, isMultiLine: true, tapHandler: viewModel.documentTagTapped(_:))
-                .font(.body)
-            CustomTextField(text: $viewModel.documentTagInput,
-                            placeholder: "Enter Tag",
-                            onCommit: viewModel.saveTag,
-                            isFirstResponder: false,
-                            suggestions: viewModel.inputAccessoryViewSuggestions)
-                .frame(maxHeight: 22)
-                .padding(EdgeInsets(top: 4.0, leading: 0.0, bottom: 4.0, trailing: 0.0))
-        }
-    }
-
-    private var suggestedTags: some View {
-        VStack(alignment: .leading) {
-            Text("Suggested Tags")
-                .font(.caption)
-            TagListView(tagViewNamespace: namespace, tags: $viewModel.suggestedTags, isEditable: false, isMultiLine: true, tapHandler: viewModel.suggestedTagTapped(_:))
-                .font(.body)
-        }
+        DocumentInformationForm(date: $viewModel.date,
+                                specification: $viewModel.specification,
+                                tags: $viewModel.documentTags,
+                                tagInput: $viewModel.documentTagInput,
+                                suggestedTags: $viewModel.suggestedTags,
+                                inputAccessoryViewSuggestions: $viewModel.inputAccessoryViewSuggestions)
     }
 
     // MARK: - Layout Helpers

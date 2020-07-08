@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SwiftUIX
 
 struct DocumentInformationForm: View {
 
@@ -21,8 +22,6 @@ struct DocumentInformationForm: View {
 
     var body: some View {
         Form {
-//        VStack(alignment: .leading, spacing: 16.0) {
-//            datePicker
             DatePicker("Date", selection: $date, displayedComponents: .date)
             TextField("Description", text: $specification)
                 .modifier(ClearButton(text: $specification))
@@ -30,18 +29,29 @@ struct DocumentInformationForm: View {
             suggestedTagsView
             Spacer()
         }
+        .buttonStyle(BorderlessButtonStyle())
     }
 
     private func documentTagTapped(_ tag: String) {
-        print("hello2")
+        tags.removeAll { $0 == tag }
+        insertAndSort($suggestedTags, tag: tag)
     }
 
-    private func saveTag(_ tag: String) {
-        print("hello")
+    private func saveCurrentTag() {
+        let tag = tagInput
+        tagInput = ""
+        insertAndSort($tags, tag: tag)
     }
 
     private func suggestedTagTapped(_ tag: String) {
-        print("hello3")
+        suggestedTags.removeAll { $0 == tag }
+        insertAndSort($tags, tag: tag)
+    }
+
+    private func insertAndSort(_ tags: Binding<[String]>, tag: String) {
+        var uniqueTags = Set(tags.wrappedValue)
+        uniqueTags.insert(tag)
+        tags.wrappedValue = uniqueTags.sorted()
     }
 
     private var documentTagsView: some View {
@@ -56,11 +66,23 @@ struct DocumentInformationForm: View {
                 .font(.body)
             CustomTextField(text: $tagInput,
                             placeholder: "Enter Tag",
-                            onCommit: saveTag,
+                            onCommit: saveCurrentTag,
                             isFirstResponder: false,
                             suggestions: self.inputAccessoryViewSuggestions)
                 .frame(maxHeight: 22)
                 .padding(EdgeInsets(top: 4.0, leading: 0.0, bottom: 4.0, trailing: 0.0))
+            // TODO: switch to this
+//            CocoaTextField("Enter Tag",
+//                      text: $tagInput,
+//                      onEditingChanged: { value in
+//                        print("Got value: \(value)")
+//                      },
+//                      onCommit: saveCurrentTag)
+//                .inputAccessoryView {
+//                    InputAccessoryView(items: inputAccessoryViewSuggestions) { tag in
+//                        insertAndSort($tags, tag: tag)
+//                    }
+//                }
         }
     }
 
@@ -79,12 +101,24 @@ struct DocumentInformationForm: View {
 }
 
 struct DocumentInformationForm_Previews: PreviewProvider {
+
+    struct PreviewContentView: View {
+        @State var tagInput: String = "test"
+        @State var tags: [String] = ["bill", "clothes"]
+        @State var suggestedTags: [String] = ["tag1", "tag2", "tag3"]
+
+        var body: some View {
+            DocumentInformationForm(date: .constant(Date()),
+                                    specification: .constant("Blue Pullover"),
+                                    tags: $tags,
+                                    tagInput: $tagInput,
+                                    suggestedTags: $suggestedTags,
+                                    inputAccessoryViewSuggestions: .constant([]))
+                }
+        }
+
     static var previews: some View {
-        DocumentInformationForm(date: .constant(Date()),
-                                specification: .constant("Blue Pullover"),
-                                tags: .constant(["bill", "clothes"]),
-                                tagInput: .constant("te"),
-                                suggestedTags: .constant(["tag1", "tag2", "tag3"]),
-                                inputAccessoryViewSuggestions: .constant([]))
+        PreviewContentView()
+            .previewLayout(.sizeThatFits)
     }
 }

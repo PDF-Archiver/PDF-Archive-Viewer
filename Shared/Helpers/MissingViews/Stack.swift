@@ -10,29 +10,52 @@ import SwiftUI
 
 struct Stack<Content: View>: View {
 
+    var spacing: CGFloat
     var content: Content
 
-    init(@ViewBuilder content: @escaping () -> Content) {
+    init(spacing: CGFloat = 16, @ViewBuilder content: @escaping () -> Content) {
+        self.spacing = spacing
         self.content = content()
     }
 
     var body: some View {
-        GeometryReader { geometry -> AnyView in
-            if UIDevice.current.userInterfaceIdiom == .phone || geometry.size.width * 1.5 < geometry.size.height {
-                return AnyView(
-                    ScrollView(showsIndicators: false) {
-                        VStack(alignment: .center, spacing: 16) {
-                            self.content
-                        }
-                    }
-                )
+        GeometryReader { geometry in
+            if geometry.size.width * 1.3 < geometry.size.height {
+                VStack(alignment: .center, spacing: spacing) {
+                    content
+                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
             } else {
-                return AnyView(
-                    HStack(alignment: .center, spacing: 16) {
-                        self.content
-                    }
-                )
+                HStack(alignment: .center, spacing: spacing) {
+                    content
+                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
+        }
+    }
+}
+
+struct Stack_Previews: PreviewProvider {
+    static var previews: some View {
+        Group {
+            Stack {
+                Text("Text 1")
+                    .padding(.all, 20)
+                    .backgroundColor(.green)
+                Text("Text 2")
+                    .padding(.all, 20)
+                    .backgroundColor(.blue)
+            }
+            .previewLayout(.fixed(width: 800.0, height: 200.0))
+            Stack {
+                Text("Text 1")
+                    .padding(.all, 20)
+                    .backgroundColor(.green)
+                Text("Text 2")
+                    .padding(.all, 20)
+                    .backgroundColor(.blue)
+            }
+            .previewLayout(.fixed(width: 200.0, height: 800.0))
         }
     }
 }

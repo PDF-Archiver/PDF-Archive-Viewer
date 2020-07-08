@@ -58,14 +58,15 @@ class TagTabViewModel: ObservableObject {
             .map { $0.trimmingCharacters(in: .whitespacesAndNewlines).lowercased() }
             .map { tagName -> [String] in
                 let tags: Set<String>
-                if tagName.isEmpty {
+                if tagName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
                     tags = self.getAssociatedTags(from: self.documentTags)
                 } else {
                     tags = self.archive.getAvailableTags(with: [tagName])
                 }
 
                 let sortedTags = tags
-                    .subtracting(self.currentDocument?.tags ?? [])
+                    .subtracting(Set(self.documentTags))
+                    .subtracting(Set([Constants.documentTagPlaceholder]))
                     .sorted { lhs, rhs in
                         if lhs.starts(with: tagName) {
                             if rhs.starts(with: tagName) {
@@ -169,6 +170,20 @@ class TagTabViewModel: ObservableObject {
                 self.suggestedTags = []
             }
             .store(in: &disposables)
+
+        $documentTags
+            .removeDuplicates()
+            .map { tags -> [String] in
+                let tmpTags = tags.map { $0.lowercased().slugified(withSeparator: "") }
+                    .filter { !$0.isEmpty }
+
+                self.selectionFeedback.prepare()
+                self.selectionFeedback.selectionChanged()
+
+                return Set(tmpTags).sorted()
+            }
+            .receive(on: DispatchQueue.main)
+            .assign(to: $documentTags)
     }
 
     func saveTag(_ tagName: String) {
@@ -183,27 +198,6 @@ class TagTabViewModel: ObservableObject {
         var tags = Set(documentTags)
         tags.insert(input)
         documentTags = Array(tags).sorted()
-    }
-
-    func documentTagTapped(_ tagName: String) {
-        guard let index = documentTags.firstIndex(of: tagName) else { return }
-        documentTags.remove(at: index)
-
-        let newTags = Set(suggestedTags).union([tagName])
-        suggestedTags = Array(newTags).sorted()
-
-        selectionFeedback.prepare()
-        selectionFeedback.selectionChanged()
-    }
-
-    func suggestedTagTapped(_ tagName: String) {
-        guard let index = suggestedTags.firstIndex(of: tagName) else { return }
-        suggestedTags.remove(at: index)
-
-        saveTag(tagName)
-
-        selectionFeedback.prepare()
-        selectionFeedback.selectionChanged()
     }
 
     func saveDocument() {

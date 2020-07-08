@@ -1,7 +1,5 @@
 name: Diagnostics, nameSpecified: , owner: WeTransfer, version: 1.7.0
 
-name: KeyboardObserving, nameSpecified: , owner: nickffox, version: 0.3.0
-
 name: LoggingKit, nameSpecified: , owner: PDF-Archiver, version: 1.1.4
 
 name: LogModel, nameSpecified: , owner: PDF-Archiver, version: 0.0.4

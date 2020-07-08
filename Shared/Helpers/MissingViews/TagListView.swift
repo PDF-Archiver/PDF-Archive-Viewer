@@ -58,6 +58,7 @@ struct TagListView_Previews: PreviewProvider {
     @State static var tags = ["tag1", "tag2    ", "    tag3", "   ", "tag4"]
     static var previews: some View {
         TagListView(tagViewNamespace: namespace, tags: $tags, isEditable: true, isMultiLine: true, tapHandler: nil)
+            .previewLayout(.sizeThatFits)
     }
 }
 

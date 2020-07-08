@@ -8,7 +8,11 @@
 
 import SwiftUI
 
-struct TagView: View {
+struct TagView: View, Identifiable {
+
+    var id: String {
+        tagName
+    }
 
     let tagViewNamespace: Namespace.ID
     let tagName: String
@@ -35,9 +39,34 @@ struct TagView: View {
         }
         .padding(EdgeInsets(top: 2.0, leading: 5.0, bottom: 2.0, trailing: 5.0))
         .foregroundColor(.white)
-        .background(Color(.paLightRed))
+        // TODO: fix this
+//        .background(Color(.paLightRed))
+        .background(Color.red)
         .cornerRadius(8.0)
         .transition(.opacity)
         .animation(.spring())
+    }
+}
+
+struct TagView_Previews: PreviewProvider {
+    struct TagTempView: View {
+        @Namespace var namespace
+        var tagName = "tag1"
+        var isEditable = true
+        var tapHandler: ((String) -> Void) = { tag in
+            print("Tapped on tag: \(tag)")
+        }
+
+        var body: some View {
+            TagView(tagViewNamespace: namespace,
+                    tagName: tagName,
+                    isEditable: isEditable,
+                    tapHandler: tapHandler)
+        }
+    }
+
+    static var previews: some View {
+        TagTempView()
+            .previewLayout(.sizeThatFits)
     }
 }
