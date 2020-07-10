@@ -6,6 +6,7 @@
 //  Copyright © 2019 Julian Kahnert. All rights reserved.
 //
 
+import Combine
 import SwiftUI
 
 struct MainTabView: View {
@@ -57,13 +58,20 @@ struct MainTabView: View {
                         Text("Archive")
                     }
                 }.tag(Tabs.archive)
-            MoreTabView(viewModel: viewModel.moreViewModel)
+//            MoreTabView(viewModel: viewModel.moreViewModel)
+            testView
                 .tabItem {
                     VStack {
                         Image(systemName: "ellipsis")
                         Text("More")
                     }
                 }.tag(Tabs.more)
+        }
+    }
+
+    private var testView: some View {
+        List(viewModel.items) { document in
+            Text(document.filename)
         }
     }
 
@@ -82,9 +90,9 @@ struct MainTabView: View {
     }
 }
 
-struct MainTabView_Previews: PreviewProvider {
-    @State static var viewModel = MainTabViewModel()
-    static var previews: some View {
-        MainTabView(viewModel: viewModel)
-    }
-}
+//struct MainTabView_Previews: PreviewProvider {
+//    @State static var viewModel = MainTabViewModel()
+//    static var previews: some View {
+//        MainTabView(viewModel: viewModel)
+//    }
+//}

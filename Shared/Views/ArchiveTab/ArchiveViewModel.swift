@@ -7,6 +7,7 @@
 //
 // swiftlint:disable function_body_length
 
+import ArchiveCore
 import Combine
 import Foundation
 import os.log
@@ -26,20 +27,20 @@ class ArchiveViewModel: ObservableObject, SystemLogging {
     @Published var showLoadingView = true
 
     private var disposables = Set<AnyCancellable>()
-    private let archive: Archive
+    private let archiveStore: ArchiveStore
     private let notificationFeedback = UINotificationFeedbackGenerator()
     private let selectionFeedback = UISelectionFeedbackGenerator()
 
-    init(_ archive: Archive = DocumentService.archive) {
-        self.archive = archive
+    init(_ archiveStore: ArchiveStore = ArchiveStore.shared) {
+        self.archiveStore = archiveStore
 
         // MARK: - Combine Stuff
-        NotificationCenter.default.publisher(for: .documentChanges)
+        archiveStore.$documents
             .receive(on: DispatchQueue.main)
             .map { _ -> Bool in
                 if self.showLoadingView {
                     DispatchQueue.main.async {
-                        self.years = ["All"] + Array(archive.years.sorted().reversed().prefix(3))
+                        self.years = ["All"] + Array(archiveStore.years.sorted().reversed().prefix(3))
                     }
                 }
                 return false
@@ -65,18 +66,16 @@ class ArchiveViewModel: ObservableObject, SystemLogging {
         $searchText
             .debounce(for: .milliseconds(300), scheduler: DispatchQueue.global(qos: .userInitiated))
             .removeDuplicates()
-            .combineLatest($scopeSelecton, NotificationCenter.default.publisher(for: .documentChanges))
-            .map { (searchterm, searchscopeSelection, _) -> [Document] in
+            .combineLatest($scopeSelecton, archiveStore.$documents)
+            .map { (searchterm, searchscopeSelection, documents) -> [Document] in
 
                 let searchscope = self.years[searchscopeSelection]
-                let scope: SearchScope
+                var searchterms: [String] = []
                 if CharacterSet.decimalDigits.isSuperset(of: CharacterSet(charactersIn: searchscope)) {
-                    scope = .year(year: searchscope)
-                } else {
-                    scope = .all
+                    // found a year - it should be used as a searchterm
+                    searchterms.append(searchscope)
                 }
 
-                let searchterms: [String]
                 if searchterm.isEmpty {
                     searchterms = []
                 } else {
@@ -85,30 +84,22 @@ class ArchiveViewModel: ObservableObject, SystemLogging {
                         .components(separatedBy: .whitespacesAndNewlines)
                 }
 
-                return self.archive.get(scope: scope, searchterms: searchterms, status: .tagged)
+                // TODO: add filter
+                return documents
+                    .filter { $0.taggingStatus == .tagged }
+                    .filter(by: searchterms)
                     .sorted()
                     .reversed()
+
+//                return self.archive.get(scope: scope, searchterms: searchterms, status: .tagged)
+//                    .sorted()
+//                    .reversed()
             }
             .receive(on: DispatchQueue.main)
             .sink { [weak self] documents in
                 guard let self = self else { return }
 
-                if #available(iOS 14, *) {
-                    // no need for this in iOS 14 <3
-                    self.documents = documents
-                } else {
-                    // workaround to skip creation of large SwiftUI List Diffs
-                    if self.documents.count + documents.count < 500 {
-                        self.documents = documents
-                    } else {
-                        // seems to improve the performance A LOT - from: https://stackoverflow.com/a/58329615
-                        // => no need to build a diff
-                        self.documents = []
-                        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(10)) {
-                            self.documents = documents
-                        }
-                    }
-                }
+                self.documents = documents
             }
             .store(in: &disposables)
     }
@@ -122,15 +113,15 @@ class ArchiveViewModel: ObservableObject, SystemLogging {
 
             // update the UI directly, by setting/updating the download status of this document
             // and triggering a notification
-            document.downloadStatus = .downloading(percentDownloaded: 0.0)
-            archive.update(document)
-            NotificationCenter.default.post(Notification(name: .documentChanges))
+//            document.downloadStatus = .downloading
+//            archive.update(document)
+//            NotificationCenter.default.post(Notification(name: .documentChanges))
 
             notificationFeedback.notificationOccurred(.success)
 
         case .local:
             os_log("Already local", log: ArchiveViewModel.log, type: .error)
-        case .downloading(percentDownloaded: _):
+        case .downloading:
             os_log("Already downloading", log: ArchiveViewModel.log, type: .error)
         }
     }
@@ -139,7 +130,7 @@ class ArchiveViewModel: ObservableObject, SystemLogging {
         notificationFeedback.prepare()
         for index in offsets {
             let deletedDocument = documents.remove(at: index)
-            deletedDocument.delete(in: archive)
+//            deletedDocument.delete(in: archive)
         }
         notificationFeedback.notificationOccurred(.success)
     }

@@ -63,9 +63,9 @@ struct DocumentView: View {
 }
 
 // this is only needed, because a ViewBuilder could not be used with "if case ..." statements
-fileprivate extension DownloadStatus {
+fileprivate extension Document.DownloadStatus {
     var isDownloading: Bool {
-        if case DownloadStatus.downloading(_) = self {
+        if case Document.DownloadStatus.downloading = self {
             return true
         } else {
             return false
@@ -73,7 +73,7 @@ fileprivate extension DownloadStatus {
     }
 
     var isLocal: Bool {
-        if case DownloadStatus.local = self {
+        if case Document.DownloadStatus.local = self {
             return true
         } else {
             return false
@@ -81,8 +81,8 @@ fileprivate extension DownloadStatus {
     }
 
     var percentageDownloading: CGFloat {
-        if case DownloadStatus.downloading(let percentDownloaded) = self {
-            return CGFloat(percentDownloaded)
+        if case Document.DownloadStatus.downloading = self {
+            return CGFloat(0.0)
         } else {
             return 0.0
         }
@@ -95,7 +95,7 @@ struct DocumentView_Previews: PreviewProvider {
                                                      formattedDate: "30.10.2019",
                                                      formattedSize: "1,2 MB",
                                                      sortedTags: ["bill", "ikea"],
-                                                     downloadStatus: .downloading(percentDownloaded: 0.33))
+                                                     downloadStatus: .downloading)
     static var previews: some View {
         DocumentView(viewModel: documentViewModel, showTagStatus: false)
             .preferredColorScheme(.light)

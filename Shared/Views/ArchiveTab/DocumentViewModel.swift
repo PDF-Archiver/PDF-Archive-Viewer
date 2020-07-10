@@ -21,8 +21,8 @@ class DocumentViewModel: ObservableObject {
     @Published var formattedDate: String
     @Published var formattedSize: String
     @Published var sortedTags: [String]
-    @Published var downloadStatus: DownloadStatus
-    @Published var taggingStatus: TaggingStatus
+    @Published var downloadStatus: Document.DownloadStatus
+    @Published var taggingStatus: Document.TaggingStatus
 
     init(_ document: Document) {
         let document = document.cleaned()
@@ -40,7 +40,7 @@ class DocumentViewModel: ObservableObject {
 
     #if DEBUG
     /// This should only be used for testing!
-    init(specification: String, formattedDate: String, formattedSize: String, sortedTags: [String], downloadStatus: DownloadStatus) {
+    init(specification: String, formattedDate: String, formattedSize: String, sortedTags: [String], downloadStatus: Document.DownloadStatus) {
         self.specification = specification
         self.formattedDate = formattedDate
         self.formattedSize = formattedSize

@@ -33,26 +33,27 @@ class TagTabViewModel: ObservableObject {
         return "\(filteredDocuments.count) / \(documents.count)"
     }
 
-    private let archive: Archive
+    private let archiveStore: ArchiveStore
+    private let tagStore: TagStore
     private var disposables = Set<AnyCancellable>()
     private let notificationFeedback = UINotificationFeedbackGenerator()
     private let selectionFeedback = UISelectionFeedbackGenerator()
 
-    init(archive: Archive = DocumentService.archive) {
-        self.archive = archive
+    init(archiveStore: ArchiveStore = ArchiveStore.shared, tagStore: TagStore = TagStore.shared) {
+        self.archiveStore = archiveStore
+        self.tagStore = tagStore
 
         // MARK: - Combine Stuff
-        NotificationCenter.default.publisher(for: .documentChanges)
+//        NotificationCenter.default.publisher(for: .documentChanges)
+        archiveStore.$state
+            .map { state in
+
+                print(self.archiveStore.documents.count)
+                return state == .uninitialized
+            }
             .receive(on: DispatchQueue.main)
-            .map { _ in false }
             .assign(to: \.showLoadingView, on: self)
             .store(in: &disposables)
-
-        // we assume that all documents should be loaded after 10 seconds
-        // force the disappear of the loading view
-        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(10)) {
-            self.showLoadingView = false
-        }
 
         $documentTagInput
             .map { $0.trimmingCharacters(in: .whitespacesAndNewlines).lowercased() }
@@ -61,7 +62,7 @@ class TagTabViewModel: ObservableObject {
                 if tagName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
                     tags = self.getAssociatedTags(from: self.documentTags)
                 } else {
-                    tags = self.archive.getAvailableTags(with: [tagName])
+                    tags = self.tagStore.getAvailableTags(with: [tagName])
                 }
 
                 let sortedTags = tags
@@ -88,9 +89,9 @@ class TagTabViewModel: ObservableObject {
             .assign(to: \.inputAccessoryViewSuggestions, on: self)
             .store(in: &disposables)
 
-        NotificationCenter.default.publisher(for: .documentChanges)
-            .map { _ in
-                DocumentService.archive.get(scope: .all, searchterms: [], status: .untagged)
+        ArchiveStore.shared.$documents
+            .map { documents in
+                documents.filter { $0.taggingStatus == .untagged }
             }
             .removeDuplicates()
             .compactMap { newUntaggedDocuments in
@@ -217,7 +218,8 @@ class TagTabViewModel: ObservableObject {
         notificationFeedback.prepare()
         do {
             try document.rename(archivePath: path, slugify: true)
-            DocumentService.archive.archive(document)
+            // TODO: add this
+//            DocumentService.archive.archive(document)
 
             currentDocument = getNewDocument()
 
@@ -242,31 +244,35 @@ class TagTabViewModel: ObservableObject {
         notificationFeedback.notificationOccurred(.success)
 
         // delete document in archive
-        currentDocument?.delete(in: DocumentService.archive)
+        guard let currentDocument = currentDocument else { return }
+//        currentDocument?.delete(in: DocumentService.archive)
+        archiveStore.documents.removeAll { $0 == currentDocument }
 
         // delete document from document list
-        documents.removeAll { $0.filename == currentDocument?.filename }
+        documents.removeAll { $0.filename == currentDocument.filename }
 
         // remove the current document and clear the vie
-        currentDocument = getNewDocument()
+        self.currentDocument = getNewDocument()
     }
 
     private func getNewDocument() -> Document? {
         // swiftlint:disable:next sorted_first_last
-        DocumentService.archive.get(scope: .all, searchterms: [], status: .untagged)
+//        DocumentService.archive.get(scope: .all, searchterms: [], status: .untagged)
+        archiveStore.documents
+            .filter { $0.taggingStatus == .untagged }
             .sorted { $0.filename < $1.filename }
             .first { $0.downloadStatus == .local }
     }
 
     private func getAssociatedTags(from documentTags: [String]) -> Set<String> {
         guard let firstDocumentTag = documentTags.first?.lowercased() else { return [] }
-        var tags = archive.getSimilarTags(for: firstDocumentTag)
+        var tags = tagStore.getSimilarTags(for: firstDocumentTag)
         for documentTag in documentTags.dropFirst() {
 
             // enforce that tags is not empty, because all intersection will be also empty otherwise
             guard !tags.isEmpty else { break }
 
-            tags.formIntersection(archive.getSimilarTags(for: documentTag.lowercased()))
+            tags.formIntersection(tagStore.getSimilarTags(for: documentTag.lowercased()))
         }
         return tags
     }

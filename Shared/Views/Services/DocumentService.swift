@@ -8,14 +8,14 @@
 
 // TODO: remove this
 /// Singleton responsible for accessing and searching documents.
-enum DocumentService {
-
-    static let archive = Archive()
-
-    static let documentsQuery: DocumentsQuery = {
-        let query = DocumentsQuery()
-        // setup data delegate
-        query.documentsQueryDelegate = DocumentService.archive
-        return query
-    }()
-}
+//enum DocumentService {
+//
+//    static let archive = Archive()
+//
+//    static let documentsQuery: DocumentsQuery = {
+//        let query = DocumentsQuery()
+//        // setup data delegate
+//        query.documentsQueryDelegate = DocumentService.archive
+//        return query
+//    }()
+//}

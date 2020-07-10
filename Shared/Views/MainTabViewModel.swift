@@ -28,7 +28,20 @@ class MainTabViewModel: ObservableObject {
     private var disposables = Set<AnyCancellable>()
     private let selectionFeedback = UISelectionFeedbackGenerator()
 
+    @Published var items: [Document] = []
+
     init() {
+
+        ArchiveStore.shared.$documents
+            .map { documents in
+                documents.filter { $0.taggingStatus == .untagged }
+            }
+            .removeDuplicates()
+            .receive(on: DispatchQueue.main)
+            .sink { documents in
+                self.items = documents
+            }
+            .store(in: &disposables)
 
         scanViewModel.objectWillChange
             .sink { _ in
@@ -104,11 +117,55 @@ class MainTabViewModel: ObservableObject {
                 self.alertViewModel = notification.object as? AlertViewModel
             }
             .store(in: &disposables)
+
+        // TODO: change container!?
+        DispatchQueue.global(qos: .userInteractive).async {
+            let path = FileManager.default.url(forUbiquityContainerIdentifier: nil)!.appendingPathComponent("Documents")
+            ArchiveStore.shared.update(archiveFolder: path, observedFolders: [])
+        }
+
+        // TODO: refactor/move this
+        guard let url = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: Constants.sharedContainerIdentifier) else {
+            Log.send(.critical, "Failed to get url for forSecurityApplicationGroupIdentifier.")
+            return
+        }
+        let urls = ((try? FileManager.default.contentsOfDirectory(at: url, includingPropertiesForKeys: [], options: [.skipsHiddenFiles, .skipsSubdirectoryDescendants])) ?? [])
+            .filter { !$0.hasDirectoryPath }
+
+        if !urls.isEmpty {
+            DispatchQueue.main.async {
+
+                // show scan tab with document processing, after importing a document
+                self.currentTab = .scan
+            }
+        }
+
+        for url in urls {
+            self.handle(url: url)
+        }
     }
 
     func showSubscriptionDismissed() {
         guard !IAP.service.appUsagePermitted() && currentTab == .tag else { return }
         currentTab = .archive
+    }
+
+    // MARK: - Helper Functions
+
+    private func handle(url: URL) {
+        Log.send(.info, "Handling shared document", extra: ["filetype": url.pathExtension])
+
+        do {
+            _ = url.startAccessingSecurityScopedResource()
+            try StorageHelper.handle(url)
+            url.stopAccessingSecurityScopedResource()
+        } catch let error {
+            url.stopAccessingSecurityScopedResource()
+            Log.send(.error, "Unable to handle file.", extra: ["filetype": url.pathExtension, "error": error.localizedDescription])
+            try? FileManager.default.removeItem(at: url)
+
+            AlertViewModel.createAndPost(message: error, primaryButtonTitle: "OK")
+        }
     }
 
     private func validateSubscriptionState(of selectedTab: MainTabView.Tabs) {
