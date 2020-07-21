@@ -7,7 +7,7 @@
 
 import Combine
 
-public final class TagStore: SystemLogging {
+public final class TagStore {
 
     public static let shared = TagStore()
 

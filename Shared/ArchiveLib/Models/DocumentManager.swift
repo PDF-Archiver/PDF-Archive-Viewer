@@ -21,7 +21,7 @@
 //    func archive(_ document: Document)
 //}
 //
-//class DocumentManager: SystemLogging {
+//class DocumentManager {
 //
 //    private(set) var documents = Atomic(Set<Document>())
 //    private(set) var tagIndex = Atomic(TagIndex<String>())

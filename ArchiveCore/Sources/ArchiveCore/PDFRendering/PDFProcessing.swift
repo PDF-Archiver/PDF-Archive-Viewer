@@ -10,13 +10,14 @@
 import PDFKit
 import UIKit
 import Vision
+import Logging
 
 public enum PDFProcessingError: Error {
     case unttaggedDocumentsPathNotFound
     case pdfNotFound
 }
 
-public class PDFProcessing: Operation {
+public class PDFProcessing: Operation, Log {
 
     public typealias ProgressHandler = ((Float) -> Void)
 
@@ -55,7 +56,7 @@ public class PDFProcessing: Operation {
 
             // signal the start of the operation
             let start = Date()
-//            Log.send(.info, "Process a document.")
+            log.info("Process a document.")
             progressHandler?(Float(0))
 
             let path: URL
@@ -84,7 +85,7 @@ public class PDFProcessing: Operation {
 
             // log the processing time
             let timeDiff = Date().timeIntervalSinceReferenceDate - start.timeIntervalSinceReferenceDate
-//            Log.send(.info, "Processing completed", extra: ["processing_time": String(timeDiff), "document_page_count": String(document.pageCount)])
+            log.info("Process completed.", metadata: ["processing_time": "\(timeDiff)", "document_page_count": "\(document.pageCount)"])
             progressHandler?(Float(1))
         } catch let error {
             self.error = error
@@ -154,7 +155,7 @@ public class PDFProcessing: Operation {
             let textBoxRequests = VNDetectTextRectanglesRequest { (request, error) in
 
                 if let error = error {
-//                    Log.send(.error, "Error in text recognition.", extra: ["error": error.localizedDescription])
+                    Self.log.error("Error in text recognition.", metadata: ["error": "\(error.localizedDescription)"])
                     return
                 }
 
@@ -178,7 +179,7 @@ public class PDFProcessing: Operation {
                     let textRecognitionRequest = VNRecognizeTextRequest { (request, error) in
 
                         if let error = error {
-//                            Log.send(.error, "Error in text recognition.", extra: ["error": error.localizedDescription])
+                            Self.log.error("Error in text recognition.", metadata: ["error": "\(error.localizedDescription)"])
                             return
                         }
 
@@ -255,11 +256,6 @@ public class PDFProcessing: Operation {
                       y: observation.boundingBox.applying(transform).origin.y,
                       width: observation.boundingBox.applying(transform).width,
                       height: observation.boundingBox.applying(transform).height)
-    }
-
-    private func assertAndLog(_ message: String, extra: [String: String] = [:]) {
-//        Log.send(.error, message, extra: extra)
-        assertionFailure(message)
     }
 
     // MARK: - Helper Types

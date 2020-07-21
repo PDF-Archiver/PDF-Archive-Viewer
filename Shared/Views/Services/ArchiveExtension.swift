@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import os.log
 
 enum ArchiveError: Error {
     case parsingError
@@ -116,7 +115,7 @@ enum ArchiveError: Error {
 //                documentStatus = .iCloudDrive
 //            }
 //        default:
-//            Log.send(.error, "Unkown download status.", extra: ["status": downloadingStatus])
+//            log.error("Unkown download status.", metadata: ["status": downloadingStatus])
 //            fatalError("The downloading status '\(downloadingStatus)' was not handled correctly!")
 //        }
 //

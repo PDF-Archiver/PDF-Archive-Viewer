@@ -8,7 +8,7 @@
 import Combine
 import Foundation
 
-public final class ArchiveStore: ObservableObject {
+public final class ArchiveStore: ObservableObject, Log {
 
     public enum State {
         case uninitialized, cachedDocuments, live
@@ -81,9 +81,9 @@ public final class ArchiveStore: ObservableObject {
             let data = try Data(contentsOf: Self.savePath)
             documents = try JSONDecoder().decode([Document].self, from: data)
             state = .cachedDocuments
+            log.info("Documents loaded.")
         } catch {
-//            Log.send(.error, "JSON decoding error", extra: ["error": error.localizedDescription])
-            print(error)
+            log.error("JSON decoding error", metadata: ["error": "\(error.localizedDescription)"])
 
             try? FileManager.default.removeItem(at: Self.savePath)
         }
@@ -93,9 +93,9 @@ public final class ArchiveStore: ObservableObject {
         do {
             let data = try JSONEncoder().encode(documents)
             try data.write(to: Self.savePath)
+            log.info("Documents saved.")
         } catch {
-            print(error)
-//            Log.send(.error, "JSON encoding error", extra: ["error": error.localizedDescription])
+            log.error("JSON encoding error", metadata: ["error": "\(error.localizedDescription)"])
         }
     }
 
@@ -129,6 +129,7 @@ public final class ArchiveStore: ObservableObject {
             documents.append(Document(path: file, size: values?.totalFileAllocatedSize, downloadStatus: downloadState))
         }
         self.documents = documents
+        log.info("Found \(documents.count) documents.")
         self.state = .live
         DispatchQueue.global(qos: .background).async {
             self.saveDocuments()

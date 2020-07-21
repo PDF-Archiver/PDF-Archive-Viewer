@@ -8,7 +8,7 @@
 //
 
 import LogModel
-import os.log
+import LoggingKit
 import StoreKit
 import SwiftyStoreKit
 
@@ -23,18 +23,18 @@ public extension IAPServiceDelegate {
     func found(requestsRunning: Int) {}
 }
 
-public class IAPService: NSObject, SystemLogging {
+public class IAPService: NSObject, Log {
 
     private static let productIdentifiers = Set(["SUBSCRIPTION_MONTHLY_IOS", "SUBSCRIPTION_YEARLY_IOS_NEW"])
 
     private var expiryDate: Date? {
         get {
             let expiryDate = UserDefaults.standard.subscriptionExpiryDate
-            os_log("Getting new expiry date: %@", log: IAPService.log, type: .debug, expiryDate?.description ?? "NULL")
+            log.debug("Getting new expiry date: \(expiryDate?.description ?? "")")
             return expiryDate
         }
         set {
-            os_log("Setting new expiry date: %@", log: IAPService.log, type: .debug, newValue?.description ?? "NULL")
+            log.debug("Setting new expiry date: \(newValue?.description ?? "")")
             UserDefaults.standard.subscriptionExpiryDate = newValue
         }
     }
@@ -108,22 +108,21 @@ public class IAPService: NSObject, SystemLogging {
     }
 
     public func buyProduct(_ product: SKProduct) {
-        os_log("Buying %@ ...", log: IAPService.log, type: .info, product.productIdentifier)
+        log.info("Buying \(product.productIdentifier) ...")
 
         requestsRunning += 1
         SwiftyStoreKit.purchaseProduct(product, quantity: 1, atomically: true) { result in
             self.requestsRunning -= 1
             switch result {
             case .success(let purchase):
-                Log.send(.info, "Purchse successfull: \(purchase.productId)")
-                os_log("Purchase successfull: %@", log: IAPService.log, type: .debug, purchase.productId)
+                Self.log.info("Purchse successfull: \(purchase.productId)")
                 self.fetchReceipt()
 
                 // validate receipt and save new expiry date
                 self.saveNewExpiryDateOfReceipt()
 
             case .error(let error):
-                os_log("Purchase failed with error: %@", log: IAPService.log, type: .error, error.localizedDescription)
+                Self.log.error("Purchase failed with error.", metadata: ["error": "\(error.localizedDescription)"])
             }
         }
     }
@@ -132,7 +131,7 @@ public class IAPService: NSObject, SystemLogging {
         if let product = products.first(where: { $0.productIdentifier == productIdentifier }) {
             buyProduct(product)
         } else {
-            os_log("Could not find any product for id: %@", log: IAPService.log, type: .error, productIdentifier)
+            log.error("Could not find any product for id: \(productIdentifier)")
         }
     }
 
@@ -141,11 +140,11 @@ public class IAPService: NSObject, SystemLogging {
         SwiftyStoreKit.restorePurchases(atomically: true) { results in
             self.requestsRunning -= 1
             if !results.restoreFailedPurchases.isEmpty {
-                os_log("Restore Failed: %@", log: IAPService.log, type: .error, results.restoreFailedPurchases)
+                Self.log.error("Restore Failed: \(results.restoreFailedPurchases)")
             } else if !results.restoredPurchases.isEmpty {
-                os_log("Restore Success: %@", log: IAPService.log, type: .debug, results.restoredPurchases)
+                Self.log.debug("Restore Success: \(results.restoredPurchases)")
             } else {
-                os_log("Nothing to Restore", log: IAPService.log, type: .info)
+                Self.log.info("Nothing to Restore")
             }
         }
     }
@@ -153,16 +152,16 @@ public class IAPService: NSObject, SystemLogging {
     // MARK: - Helper Functions
 
     fileprivate func saveNewExpiryDateOfReceipt(with service: AppleReceiptValidator.VerifyReceiptURLType = .production) {
-        os_log("external start", log: IAPService.log, type: .info)
+        log.info("external start")
 
         // create apple validator
         let appleValidator = AppleReceiptValidator(service: service, sharedSecret: Constants.appStoreConnectSharedSecret)
 
         SwiftyStoreKit.verifyReceipt(using: appleValidator) { result in
             defer {
-                os_log("Internal end", log: IAPService.log, type: .info)
+                Self.log.info("Internal end")
             }
-            os_log("Internal start", log: IAPService.log, type: .info)
+            Self.log.info("Internal start")
 
             switch result {
             case .success(let receipt):
@@ -174,7 +173,7 @@ public class IAPService: NSObject, SystemLogging {
                     switch purchaseResult {
                     case .purchased(let expiryDate, _):
 
-                        os_log("%@ is valid until %@", log: IAPService.log, type: .debug, productId, expiryDate.description)
+                        Self.log.debug("Product (id: \(productId)) is valid until \(expiryDate.description)")
 
                         // set new expiration date
                         self.expiryDate = expiryDate
@@ -185,14 +184,14 @@ public class IAPService: NSObject, SystemLogging {
                         return
 
                     case .expired(let expiryDate, _):
-                        os_log("%@ has expired since %@", log: IAPService.log, type: .debug, productId, expiryDate.description)
+                        Self.log.debug("Product (id: \(productId)) has expired since \(expiryDate.description)")
                     case .notPurchased:
-                        os_log("The user has never purchased %@", log: IAPService.log, type: .debug, productId)
+                        Self.log.debug("The user has never purchased \(productId)")
                     }
                 }
 
             case .error(let error):
-                os_log("Receipt verification failed %@", log: IAPService.log, type: .error, error.localizedDescription)
+                Self.log.error("Receipt verification failed", metadata: ["error": "\(error.localizedDescription)"])
                 if service == .production {
                     self.saveNewExpiryDateOfReceipt(with: .sandbox)
                 }
@@ -207,16 +206,16 @@ public class IAPService: NSObject, SystemLogging {
 
             switch result {
             case .success:
-                os_log("Fetching receipt was successful.", log: IAPService.log, type: .debug)
+                Self.log.debug("Fetching receipt was successful.")
             case .error(let error):
-                os_log("Fetch receipt failed: %@", log: IAPService.log, type: .debug, error.localizedDescription)
+                Self.log.debug("Fetch receipt failed.", metadata: ["error": "\(error.localizedDescription)"])
                 if appStart {
-                    os_log("Receipt not found, exit the app!", log: IAPService.log, type: .error)
+                    Self.log.error("Receipt not found, exit the app!")
                     exit(173)
 
                 } else if !forceRefresh {
                     // we do not run in an infinite recurse situation since this will only be reached, if no forceRefresh was issued
-                    os_log("Receipt not found, refreshing receipt.", log: IAPService.log, type: .info)
+                    Self.log.info("Receipt not found, refreshing receipt.")
                     self.fetchReceipt(forceRefresh: true, appStart: false)
                 }
             }
@@ -230,11 +229,11 @@ public class IAPService: NSObject, SystemLogging {
             self.products = result.retrievedProducts
 
             if !result.retrievedProducts.isEmpty {
-                os_log("Found %@ products.", log: IAPService.log, type: .debug, String(result.retrievedProducts.count))
+                Self.log.debug("Found \(result.retrievedProducts.count) products.")
             } else if let invalidProductId = result.invalidProductIDs.first {
-                os_log("Invalid product identifier:  %@", log: IAPService.log, type: .info, invalidProductId)
+                Self.log.info("Invalid product identifier: \(invalidProductId)")
             } else {
-                os_log("Retrieving product infos errored:  %@", log: IAPService.log, type: .info, result.error?.localizedDescription ?? "")
+                Self.log.info("Retrieving product infos errored: \(result.error?.localizedDescription ?? "")")
             }
         }
     }

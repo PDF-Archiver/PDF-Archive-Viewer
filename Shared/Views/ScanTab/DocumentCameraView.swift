@@ -6,10 +6,11 @@
 //  Copyright © 2019 Julian Kahnert. All rights reserved.
 //
 
+import LoggingKit
 import SwiftUI
 import VisionKit
 
-struct DocumentCameraView: UIViewControllerRepresentable {
+struct DocumentCameraView: UIViewControllerRepresentable, Log {
 
     private let controller = VNDocumentCameraViewController()
     private let isShown: Binding<Bool>
@@ -59,7 +60,7 @@ struct DocumentCameraView: UIViewControllerRepresentable {
         }
 
         func documentCameraViewController(_ controller: VNDocumentCameraViewController, didFailWithError error: Error) {
-            Log.send(.error, "Scan did fail with error.", extra: ["error": error.localizedDescription])
+            log.error("Scan did fail with error.", metadata: ["error": "\(error.localizedDescription)"])
             self.isShown.wrappedValue = false
         }
     }

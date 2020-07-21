@@ -7,14 +7,13 @@
 
 import Combine
 import Foundation
-import os.log
 
 //public protocol ArchiveDelegate: AnyObject {
 //    func archive(_ archive: Archive, didAddDocument document: Document)
 //    func archive(_ archive: Archive, didRemoveDocuments documents: Set<Document>)
 //}
 //
-//public class Archive: DocumentManagerHandling, SystemLogging {
+//public class Archive: DocumentManagerHandling {
 //
 //    private let taggedDocumentManager = DocumentManager()
 //    private let untaggedDocumentManager = DocumentManager()

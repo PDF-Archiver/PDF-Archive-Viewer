@@ -13,8 +13,7 @@
 // This is the Browser Query which manages results form an `NSMetadataQuery` to compute which documents to show in the Browser UI / animations to display when cells move.
 // */
 //
-//import os.log
-//import UIKit
+////import UIKit
 //
 ///// Protocol to handle file changes from the DocumentsQuery class.
 /////
@@ -29,7 +28,7 @@
 ///// The DocumentBrowserQuery wraps an `NSMetadataQuery` to insulate us from the
 ///// queueing and animation concerns. It runs the query and computes animations
 ///// from the results set.
-//class DocumentsQuery: SystemLogging {
+//class DocumentsQuery {
 //
 //    private let notContainsTempPath = NSPredicate(format: "(NOT (%K CONTAINS[c] %@)) AND (NOT (%K CONTAINS[c] %@))", NSMetadataItemPathKey, "/\(StorageHelper.Paths.tempFolderName)/", NSMetadataItemPathKey, "/.Trash/")
 //    private var metadataQuery: NSMetadataQuery

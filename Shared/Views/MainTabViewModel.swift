@@ -8,9 +8,10 @@
 // swiftlint:disable function_body_length
 
 import Combine
+import LoggingKit
 import SwiftUI
 
-class MainTabViewModel: ObservableObject {
+class MainTabViewModel: ObservableObject, Log {
     @Published var currentTab = UserDefaults.standard.lastSelectedTabIndex
     @Published var showTutorial = !UserDefaults.standard.tutorialShown
 
@@ -61,7 +62,7 @@ class MainTabViewModel: ObservableObject {
             .sink { selectedTab in
                 // save the selected index for the next app start
                 UserDefaults.standard.lastSelectedTabIndex = selectedTab
-                Log.send(.info, "Changed tab.", extra: ["selectedTab": String(selectedTab.rawValue)])
+                Self.log.info("Changed tab.", metadata: ["selectedTab": "\(selectedTab.rawValue)"])
 
                 self.selectionFeedback.prepare()
                 self.selectionFeedback.selectionChanged()
@@ -126,7 +127,7 @@ class MainTabViewModel: ObservableObject {
 
         // TODO: refactor/move this
         guard let url = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: Constants.sharedContainerIdentifier) else {
-            Log.send(.critical, "Failed to get url for forSecurityApplicationGroupIdentifier.")
+            log.critical("Failed to get url for forSecurityApplicationGroupIdentifier.")
             return
         }
         let urls = ((try? FileManager.default.contentsOfDirectory(at: url, includingPropertiesForKeys: [], options: [.skipsHiddenFiles, .skipsSubdirectoryDescendants])) ?? [])
@@ -153,7 +154,7 @@ class MainTabViewModel: ObservableObject {
     // MARK: - Helper Functions
 
     private func handle(url: URL) {
-        Log.send(.info, "Handling shared document", extra: ["filetype": url.pathExtension])
+        log.info("Handling shared document", metadata: ["filetype": "\(url.pathExtension)"])
 
         do {
             _ = url.startAccessingSecurityScopedResource()
@@ -161,7 +162,7 @@ class MainTabViewModel: ObservableObject {
             url.stopAccessingSecurityScopedResource()
         } catch let error {
             url.stopAccessingSecurityScopedResource()
-            Log.send(.error, "Unable to handle file.", extra: ["filetype": url.pathExtension, "error": error.localizedDescription])
+            log.error("Unable to handle file.", metadata: ["filetype": "\(url.pathExtension)", "error": "\(error.localizedDescription)"])
             try? FileManager.default.removeItem(at: url)
 
             AlertViewModel.createAndPost(message: error, primaryButtonTitle: "OK")

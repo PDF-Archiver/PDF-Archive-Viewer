@@ -7,8 +7,9 @@
 //
 
 import Foundation
+import LoggingKit
 
-extension UserDefaults {
+extension UserDefaults: Log {
 
     private enum Names: String {
         case tutorialShown = "tutorial-v1"
@@ -63,7 +64,7 @@ extension UserDefaults {
             return level
         }
         set {
-            Log.send(.info, "PDF Quality Changed.", extra: ["quality": String(newValue.rawValue)])
+            log.info("PDF Quality Changed.", metadata: ["quality": "\(newValue.rawValue)"])
             UserDefaults.standard.set(newValue.rawValue, forKey: Names.pdfQuality.rawValue)
         }
     }

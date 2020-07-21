@@ -9,9 +9,10 @@
 
 import Combine
 import MessageUI
+import LoggingKit
 import SwiftUI
 
-class MoreTabViewModel: ObservableObject {
+class MoreTabViewModel: ObservableObject, Log {
 
     static let mailRecipients = ["support@pdf-archiver.io"]
     static let mailSubject = "PDF Archiver: iOS Support"
@@ -45,30 +46,30 @@ class MoreTabViewModel: ObservableObject {
     }
 
     func showIntro() {
-        Log.send(.info, "More table view show: intro")
+        log.info("More table view show: intro")
 //        NotificationCenter.default.post(name: .introChanges, object: true)
     }
 
     func showPermissions() {
-        Log.send(.info, "More table view show: app permissions")
+        log.info("More table view show: app permissions")
         guard let link = URL(string: UIApplication.openSettingsURLString) else { fatalError("Could not find settings url!") }
         UIApplication.shared.open(link)
     }
 
     func resetApp() {
-        Log.send(.info, "More table view show: reset app")
+        log.info("More table view show: reset app")
         // remove all temporary files
         if let tempImagePath = StorageHelper.Paths.tempImagePath {
             try? FileManager.default.removeItem(at: tempImagePath)
         } else {
-            Log.send(.error, "Could not find tempImagePath.")
+            log.error("Could not find tempImagePath.")
         }
 
         // remove all user defaults
         if let bundleIdentifier = Bundle.main.bundleIdentifier {
             UserDefaults.standard.removePersistentDomain(forName: bundleIdentifier)
         } else {
-            Log.send(.error, "Bundle Identifier not found.")
+            log.error("Bundle Identifier not found.")
         }
 
         AlertViewModel.createAndPost(title: "Reset App", message: "Please restart the app to complete the reset.", primaryButtonTitle: "OK")
@@ -91,7 +92,7 @@ class MoreTabViewModel: ObservableObject {
     }
 
     func showSupport() {
-        Log.send(.info, "More table view show: support")
+        log.info("More table view show: support")
         if MFMailComposeViewController.canSendMail() {
             isShowingMailView = true
         } else {

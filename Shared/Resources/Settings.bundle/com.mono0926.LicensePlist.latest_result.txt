@@ -1,18 +1,18 @@
 name: Diagnostics, nameSpecified: , owner: WeTransfer, version: 1.7.0
 
-name: LoggingKit, nameSpecified: , owner: PDF-Archiver, version: 1.1.4
+name: LoggingKit, nameSpecified: , owner: PDF-Archiver, version: 1.1.7
 
 name: LogModel, nameSpecified: , owner: PDF-Archiver, version: 0.0.4
 
 name: paper-onboarding, nameSpecified: , owner: Ramotion, version: 6.1.5
 
-name: sentry-cocoa, nameSpecified: , owner: getsentry, version: 5.1.6
+name: sentry-cocoa, nameSpecified: , owner: getsentry, version: 5.1.9
 
-name: swift-log, nameSpecified: , owner: apple, version: 1.2.0
+name: swift-log, nameSpecified: , owner: apple, version: 1.4.0
 
 name: SwiftUIX, nameSpecified: , owner: SwiftUIX, version: 
 
-name: SwiftyStoreKit, nameSpecified: , owner: bizz84, version: 0.16.0
+name: SwiftyStoreKit, nameSpecified: , owner: bizz84, version: 0.16.1
 
 add-version-numbers: true
 

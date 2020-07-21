@@ -77,7 +77,6 @@
 		3416B26024A9284E00D5F4E0 /* DocumentManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3416B24C24A9284E00D5F4E0 /* DocumentManager.swift */; };
 		3416B26324A9284E00D5F4E0 /* Tag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3416B24E24A9284E00D5F4E0 /* Tag.swift */; };
 		3416B26424A9284E00D5F4E0 /* Tag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3416B24E24A9284E00D5F4E0 /* Tag.swift */; };
-		3416B27B24A92CD900D5F4E0 /* LoggingKit in Frameworks */ = {isa = PBXBuildFile; productRef = 3416B27A24A92CD900D5F4E0 /* LoggingKit */; };
 		3416B27E24A92CEC00D5F4E0 /* SwiftyStoreKit in Frameworks */ = {isa = PBXBuildFile; productRef = 3416B27D24A92CEC00D5F4E0 /* SwiftyStoreKit */; };
 		3416B28124A92D0500D5F4E0 /* PaperOnboarding in Frameworks */ = {isa = PBXBuildFile; productRef = 3416B28024A92D0500D5F4E0 /* PaperOnboarding */; };
 		3416B28424A92D1E00D5F4E0 /* SwiftUIX in Frameworks */ = {isa = PBXBuildFile; productRef = 3416B28324A92D1E00D5F4E0 /* SwiftUIX */; };
@@ -110,6 +109,7 @@
 		343A0A5F24C2384000824F75 /* FilledButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 343A0A2424C228DE00824F75 /* FilledButtonStyle.swift */; };
 		343A0A6024C2384000824F75 /* WidthSyncedRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 343A0A2324C228DE00824F75 /* WidthSyncedRow.swift */; };
 		343A0A6124C2384000824F75 /* SubscriptionButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 343A0A2524C228DE00824F75 /* SubscriptionButtonStyle.swift */; };
+		343DCDD024C38AC100965627 /* LoggingKit in Frameworks */ = {isa = PBXBuildFile; productRef = 343DCDCF24C38AC100965627 /* LoggingKit */; };
 		345A497E24AFB0CE00EC4DC2 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 3416B1AD24A9282700D5F4E0 /* Settings.bundle */; };
 		347BD2E224C2275600C38DB9 /* Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 347BD2D324C2275500C38DB9 /* Alert.swift */; };
 		347BD2E324C2275600C38DB9 /* Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 347BD2D324C2275500C38DB9 /* Alert.swift */; };
@@ -283,7 +283,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3416B28724A92D4200D5F4E0 /* Sentry in Frameworks */,
-				3416B27B24A92CD900D5F4E0 /* LoggingKit in Frameworks */,
+				343DCDD024C38AC100965627 /* LoggingKit in Frameworks */,
 				3416B27E24A92CEC00D5F4E0 /* SwiftyStoreKit in Frameworks */,
 				34A5CF8224A93A3C002409EF /* StoreKit.framework in Frameworks */,
 				3416B28A24A92D5A00D5F4E0 /* Diagnostics in Frameworks */,
@@ -614,13 +614,13 @@
 			);
 			name = iOS;
 			packageProductDependencies = (
-				3416B27A24A92CD900D5F4E0 /* LoggingKit */,
 				3416B27D24A92CEC00D5F4E0 /* SwiftyStoreKit */,
 				3416B28024A92D0500D5F4E0 /* PaperOnboarding */,
 				3416B28324A92D1E00D5F4E0 /* SwiftUIX */,
 				3416B28624A92D4200D5F4E0 /* Sentry */,
 				3416B28924A92D5A00D5F4E0 /* Diagnostics */,
 				343A0A5424C2339900824F75 /* ArchiveCore */,
+				343DCDCF24C38AC100965627 /* LoggingKit */,
 			);
 			productName = iOS;
 			productReference = 3489D71B24A3C53E0035E64F /* PDFArchiver.app */;
@@ -735,12 +735,12 @@
 			);
 			mainGroup = 3489D70E24A3C53D0035E64F;
 			packageReferences = (
-				3416B27924A92CD900D5F4E0 /* XCRemoteSwiftPackageReference "LoggingKit" */,
 				3416B27C24A92CEC00D5F4E0 /* XCRemoteSwiftPackageReference "SwiftyStoreKit" */,
 				3416B27F24A92D0500D5F4E0 /* XCRemoteSwiftPackageReference "paper-onboarding" */,
 				3416B28224A92D1E00D5F4E0 /* XCRemoteSwiftPackageReference "SwiftUIX" */,
 				3416B28524A92D4200D5F4E0 /* XCRemoteSwiftPackageReference "sentry-cocoa" */,
 				3416B28824A92D5A00D5F4E0 /* XCRemoteSwiftPackageReference "Diagnostics" */,
+				343DCDCE24C38AC100965627 /* XCRemoteSwiftPackageReference "LoggingKit" */,
 			);
 			productRefGroup = 3489D71C24A3C53E0035E64F /* Products */;
 			projectDirPath = "";
@@ -1465,14 +1465,6 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		3416B27924A92CD900D5F4E0 /* XCRemoteSwiftPackageReference "LoggingKit" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/PDF-Archiver/LoggingKit";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.1.4;
-			};
-		};
 		3416B27C24A92CEC00D5F4E0 /* XCRemoteSwiftPackageReference "SwiftyStoreKit" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/bizz84/SwiftyStoreKit";
@@ -1513,14 +1505,17 @@
 				minimumVersion = 1.7.0;
 			};
 		};
+		343DCDCE24C38AC100965627 /* XCRemoteSwiftPackageReference "LoggingKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/PDF-Archiver/LoggingKit";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.1.7;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		3416B27A24A92CD900D5F4E0 /* LoggingKit */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 3416B27924A92CD900D5F4E0 /* XCRemoteSwiftPackageReference "LoggingKit" */;
-			productName = LoggingKit;
-		};
 		3416B27D24A92CEC00D5F4E0 /* SwiftyStoreKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 3416B27C24A92CEC00D5F4E0 /* XCRemoteSwiftPackageReference "SwiftyStoreKit" */;
@@ -1549,6 +1544,11 @@
 		343A0A5424C2339900824F75 /* ArchiveCore */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = ArchiveCore;
+		};
+		343DCDCF24C38AC100965627 /* LoggingKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 343DCDCE24C38AC100965627 /* XCRemoteSwiftPackageReference "LoggingKit" */;
+			productName = LoggingKit;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

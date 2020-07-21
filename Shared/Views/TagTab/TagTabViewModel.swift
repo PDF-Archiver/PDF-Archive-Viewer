@@ -8,10 +8,11 @@
 // swiftlint:disable force_unwrapping function_body_length
 
 import Combine
+import LoggingKit
 import PDFKit
 import SwiftUI
 
-class TagTabViewModel: ObservableObject {
+class TagTabViewModel: ObservableObject, Log {
 
     // set this property manually
     @Published var documents = [Document]()
@@ -162,7 +163,7 @@ class TagTabViewModel: ObservableObject {
                     }
 
                 } else {
-                    Log.send(.error, "Could not present document.")
+                    Self.log.error("Could not present document.")
                     self.pdfDocument = PDFDocument()
 //                    assertionFailure("Could not present document.")
                 }
@@ -229,7 +230,7 @@ class TagTabViewModel: ObservableObject {
             AppStoreReviewRequest.shared.incrementCount()
 
         } catch {
-            Log.send(.error, "Error in PDFProcessing!", extra: ["error": error.localizedDescription])
+            log.error("Error in PDFProcessing!", metadata: ["error": "\(error.localizedDescription)"])
             AlertViewModel.createAndPost(title: "Save failed!",
                                          message: error,
                                          primaryButtonTitle: "OK")

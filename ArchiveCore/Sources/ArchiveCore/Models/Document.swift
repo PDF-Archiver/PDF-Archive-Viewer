@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import os.log
 #if os(OSX)
 import Quartz.PDFKit
 #else

@@ -7,8 +7,8 @@
 //
 
 import Foundation
-import os.log
 import PDFKit
+import LoggingKit
 import UIKit
 import Vision
 
@@ -18,7 +18,7 @@ extension Notification.Name {
     }
 }
 
-public class ImageConverter: SystemLogging {
+public class ImageConverter: Log {
 
     static let shared = ImageConverter()
 
@@ -37,12 +37,12 @@ public class ImageConverter: SystemLogging {
     private init() {}
 
     public func saveProcessAndSaveTempImages(at path: URL) {
-        os_log("Start processing images", log: ImageConverter.log, type: .debug)
+        log.debug("Start processing images")
 
         let currentlyProcessingImageIds = queue.operations.compactMap { ($0 as? PDFProcessing)?.documentId }
         let imageIds = StorageHelper.loadImageIds().subtracting(currentlyProcessingImageIds)
         guard !imageIds.isEmpty else {
-            os_log("Could not find new images to process. Skipping ...", log: ImageConverter.log, type: .info)
+            log.info("Could not find new images to process. Skipping ...")
             return
         }
 

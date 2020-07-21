@@ -7,21 +7,44 @@
 //
 
 import Diagnostics
+import Foundation
 import LogModel
+import Logging
+import LoggingKit
 import MetricKit
-import os.log
 import Sentry
 import UIKit
 
-class AppDelegate: UIResponder, UIApplicationDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate, Log {
+
+    private static let logger: RestLogger = {
+//        let endpoint = URL(string: "https://logs-develop.pdf-archiver.io/v1/addBatch")!
+        let endpoint = URL(string: "https://logs.pdf-archiver.io/v1/addBatch")!
+        var logger = RestLogger(endpoint: endpoint,
+                                username: Constants.logUser,
+                                password: Constants.logPassword,
+                                shouldSend: {
+                                    AppEnvironment.get() != .develop
+//                                        true
+                                })
+
+        // set the level
+        logger.logLevel = .warning
+        return logger
+    }()
+
+    private var backgroundCompletionHandler: (() -> Void)?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 
-        DispatchQueue.global().async {
+        LoggingSystem.bootstrap { label in
 
-            // TODO: how do we do this with SwiftUI only
-            // start logging service by sending old events (if needed)
-            //Log.sendOrPersistInBackground(application)
+            var sysLogger = StreamLogHandler.standardOutput(label: label)
+            sysLogger.logLevel = .trace
+            return MultiplexLogHandler([sysLogger, Self.logger])
+        }
+
+        DispatchQueue.global().async {
 
             // start IAP service
             _ = IAP.service
@@ -32,14 +55,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //            _ = DocumentService.documentsQuery
         }
 
-        DispatchQueue.global(qos: .background).async {
-
-        }
-
         do {
             try DiagnosticsLogger.setup()
         } catch {
-            Log.send(.warning, "Failed to setup the Diagnostics Logger")
+            log.warning("Failed to setup the Diagnostics Logger")
         }
 
         // Create a Sentry client and start crash handler
@@ -66,16 +85,42 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func applicationDidEnterBackground(_ application: UIApplication) {
-        // send logs in background
-        Log.sendOrPersistInBackground(application)
+        // persist all logs when the app enters background
+        sendOrPersistLogs()
     }
 
     func applicationDidReceiveMemoryWarning(_ application: UIApplication) {
-        Log.send(.warning, "Did receive memory warning.")
+        log.warning("Did receive memory warning.")
+        sendOrPersistLogs()
     }
 
     func applicationWillTerminate(_ application: UIApplication) {
         MXMetricManager.shared.remove(self)
+    }
+
+    // MARK: Log handling
+
+    func application(_ application: UIApplication, handleEventsForBackgroundURLSession identifier: String, completionHandler: @escaping () -> Void) {
+        // save the completion handler for the next time the app is active
+        backgroundCompletionHandler = completionHandler
+    }
+
+    private func sendOrPersistLogs() {
+        // send logs in background
+        // TODO: test sending logs
+        let config = URLSessionConfiguration.background(withIdentifier: "LogUpload")
+        config.isDiscretionary = true
+        config.sessionSendsLaunchEvents = true
+        let backgroundSession = URLSession(configuration: config, delegate: self, delegateQueue: nil)
+        Self.logger.sendOrPersist(with: backgroundSession)
+    }
+}
+extension AppDelegate: URLSessionDelegate {
+    func urlSessionDidFinishEvents(forBackgroundURLSession session: URLSession) {
+        DispatchQueue.main.async {
+            // handle the completion of the background url session and call the completion handler
+            (UIApplication.shared.delegate as? AppDelegate)?.backgroundCompletionHandler?()
+        }
     }
 }
 
@@ -83,18 +128,17 @@ extension AppDelegate: MXMetricManagerSubscriber {
     func didReceive(_ payloads: [MXMetricPayload]) {
         for payload in payloads {
 
-            var extra: [String: String] = [:]
-            extra["appBuildVersion"] = payload.metaData?.applicationBuildVersion
-            extra["osVersion"] = payload.metaData?.osVersion
-            extra["regionFormat"] = payload.metaData?.regionFormat
-            extra["deviceType"] = payload.metaData?.deviceType
-            extra["appVersion"] = payload.latestApplicationVersion
-            extra["timeStampBegin"] = payload.timeStampBegin.description
-            extra["timeStampEnd"] = payload.timeStampEnd.description
-            extra["cumulativeCPUTime"] = payload.cpuMetrics?.cumulativeCPUTime.description
-            extra["raw"] = String(data: payload.jsonRepresentation(), encoding: .utf8)
-
-            Log.send(.info, "MXMetricPayload", extra: extra)
+            log.info("MXMetricPayload", metadata: [
+                "appBuildVersion": "\(payload.metaData?.applicationBuildVersion ?? "")",
+                "osVersion": "\(payload.metaData?.osVersion ?? "")",
+                "regionFormat": "\(payload.metaData?.regionFormat ?? "")",
+                "deviceType": "\(payload.metaData?.deviceType ?? "")",
+                "appVersion": "\(payload.latestApplicationVersion)",
+                "timeStampBegin": "\(payload.timeStampBegin.description)",
+                "timeStampEnd": "\(payload.timeStampEnd.description)",
+                "cumulativeCPUTime": "\(payload.cpuMetrics?.cumulativeCPUTime.description ?? "")",
+                "raw": "\(String(data: payload.jsonRepresentation(), encoding: .utf8) ?? "")"
+            ])
         }
     }
 }

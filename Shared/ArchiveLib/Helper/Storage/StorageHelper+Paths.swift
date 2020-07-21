@@ -7,20 +7,18 @@
 //
 
 import Foundation
+import LoggingKit
 import UIKit.UIAlertController
 
 extension StorageHelper {
-    enum Paths {
+    enum Paths: Log {
 
         static let untaggedFolderName = "untagged"
         static let tempFolderName = "temp"
 
         static var archivePath: URL? = {
             guard let containerUrl = FileManager.default.url(forUbiquityContainerIdentifier: nil) else {
-
-                // TODO: fix this in simulator
-//                assertionFailure("Could not find default container identifier.")
-                Log.send(.error, "Could not find default container identifier.")
+                Self.log.assertOrError("Could not find default container identifier.")
                 return nil
             }
             return containerUrl.appendingPathComponent("Documents")

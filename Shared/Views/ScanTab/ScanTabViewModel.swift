@@ -9,11 +9,11 @@
 import AVKit
 import Combine
 import Foundation
-import os.log
+import LoggingKit
 import SwiftUI
 import VisionKit
 
-class ScanTabViewModel: ObservableObject {
+class ScanTabViewModel: ObservableObject, Log {
     @Published var showDocumentScan: Bool = false
     @Published var progressValue: CGFloat = 0.0
     @Published var progressLabel: String = ""
@@ -45,7 +45,7 @@ class ScanTabViewModel: ObservableObject {
         notificationFeedback.prepare()
         let authorizationStatus = AVCaptureDevice.authorizationStatus(for: .video)
         if authorizationStatus ==  .denied || authorizationStatus == .restricted {
-            Log.send(.info, "Authorization status blocks camera access. Switch to preferences.")
+            log.info("Authorization status blocks camera access. Switch to preferences.")
 
             notificationFeedback.notificationOccurred(.warning)
             AlertViewModel.createAndPost(title: "Need Camera Access",
@@ -58,7 +58,7 @@ class ScanTabViewModel: ObservableObject {
                                          secondaryButton: .cancel())
         } else {
 
-            Log.send(.info, "Start scanning a document.")
+            log.info("Start scanning a document.")
             showDocumentScan = true
             notificationFeedback.notificationOccurred(.success)
 

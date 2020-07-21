@@ -10,10 +10,10 @@
 import ArchiveCore
 import Combine
 import Foundation
-import os.log
+import LoggingKit
 import UIKit
 
-class ArchiveViewModel: ObservableObject, SystemLogging {
+class ArchiveViewModel: ObservableObject, Log {
 
     static func createDetail(with document: Document) -> DocumentDetailView {
         let viewModel = DocumentDetailViewModel(document)
@@ -120,9 +120,9 @@ class ArchiveViewModel: ObservableObject, SystemLogging {
             notificationFeedback.notificationOccurred(.success)
 
         case .local:
-            os_log("Already local", log: ArchiveViewModel.log, type: .error)
+            log.assertOrError("Already local")
         case .downloading:
-            os_log("Already downloading", log: ArchiveViewModel.log, type: .error)
+            log.assertOrError("Already downloading")
         }
     }
 
