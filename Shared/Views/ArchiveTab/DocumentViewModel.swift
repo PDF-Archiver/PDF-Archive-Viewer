@@ -25,7 +25,6 @@ class DocumentViewModel: ObservableObject {
     @Published var taggingStatus: Document.TaggingStatus
 
     init(_ document: Document) {
-        let document = document.cleaned()
         specification = document.specificationCapitalized.isEmpty ? "―" : document.specificationCapitalized
         if let date = document.date {
             formattedDate = DocumentViewModel.formatter.string(from: date)

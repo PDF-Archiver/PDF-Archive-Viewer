@@ -92,7 +92,9 @@ extension DocumentError: LocalizedError {
 }
 
 /// Main structure which contains a document.
-public class Document: Identifiable, Codable {
+public struct Document: Identifiable, Codable, Searchable, Log {
+
+    public let id = UUID()
 
     // MARK: ArchiveLib essentials
 
@@ -177,28 +179,25 @@ public class Document: Identifiable, Codable {
         filename = localizedName ?? documentPath.lastPathComponent
         folder = documentPath.deletingLastPathComponent().lastPathComponent
         downloadStatus = documentDownloadStatus
-//        taggingStatus = documentTaggingStatus
 
         if let byteSize = byteSize {
             size = ByteCountFormatter.string(fromByteCount: Int64(byteSize), countStyle: .file)
         }
 
-        tags = []
-        date = Date()
-        specification = ""
-        DispatchQueue.global().async {
-            // parse the current filename
-            let parsedFilename = Document.parseFilename(self.filename)
-            self.tags = Set(parsedFilename.tagNames ?? [])
+        // parse the current filename and add finder file tags
+        let parsedFilename = Document.parseFilename(self.filename)
+        self.tags = Set(parsedFilename.tagNames ?? []).union(documentPath.fileTags)
+            .filter { !$0.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty && $0 != Constants.documentTagPlaceholder }
 
-            // add finder file tags
-            self.tags.formUnion(self.path.fileTags)
+        // set the date
+        self.date = parsedFilename.date
 
-            // set the date
-            self.date = parsedFilename.date
-
-            // set the specification
-            self.specification = parsedFilename.specification ?? ""
+        // set the specification
+        let specification = parsedFilename.specification ?? ""
+        if specification.contains(Constants.documentDescriptionPlaceholder) {
+            self.specification = ""
+        } else {
+            self.specification = specification
         }
     }
 
@@ -311,7 +310,7 @@ public class Document: Identifiable, Codable {
     /// ATTENTION: This method needs security access!
     ///
     /// - Parameter tagManager: TagManager that will be used when adding new tags.
-    public func parseContent(_ options: ParsingOptions) {
+    public mutating func parseContent(_ options: ParsingOptions) {
 
         // skip the calculations if the OptionSet is empty
         guard !options.isEmpty else { return }
@@ -350,7 +349,7 @@ public class Document: Identifiable, Codable {
     ///   - archivePath: Path of the archive, where the document should be saved.
     ///   - slugify: Should the document name be slugified?
     /// - Throws: Renaming might fail and throws an error, e.g. because a document with this filename already exists.
-    public func rename(archivePath: URL, slugify: Bool) throws {
+    public mutating func rename(archivePath: URL, slugify: Bool) throws {
 
         if slugify {
             specification = specification.slugified(withSeparator: "-")
@@ -391,12 +390,6 @@ public class Document: Identifiable, Codable {
         path.fileTags = tags.sorted()
     }
 
-    /// Save the tags of this document in the filesystem.
-    @available(*, deprecated, message: "Use 'url.fileTags' instead.")
-    public func saveTagsToFilesystem() {
-        path.fileTags = tags.sorted()
-    }
-
     private static func getFilenameDate(_ raw: String) -> (date: Date, rawDate: String)? {
         if let groups = raw.capturedGroups(withRegex: "([\\d-]+)--") {
             let rawDate = groups[0]
@@ -429,24 +422,12 @@ public class Document: Identifiable, Codable {
         return "\(dateStr)--\(newSpecification)__\(tagStr).pdf"
     }
 
-    public func cleaned() -> Document {
-        // cleanup the found document
-        tags = tags.filter { !$0.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty && $0 != Constants.documentTagPlaceholder }
-
-        if specification.contains(Constants.documentDescriptionPlaceholder) {
-            specification = ""
-        }
-
-        return self
-    }
-
-    public func download() {
+    public mutating func download() {
         do {
-            try FileManager.default.startDownloadingUbiquitousItem(at: path)
+            try FileManager.default.startDownloadingUbiquitousItem(at: _path)
             downloadStatus = .downloading
         } catch {
-            assertionFailure("Could not download document '\(filename)' - errored:\n\(error.localizedDescription)")
-//            os_log("%s", log: Document.log, type: .debug, error.localizedDescription)
+            log.assertOrError("Document download error.", metadata: ["error": "\(error.localizedDescription)"])
         }
     }
 
@@ -471,7 +452,10 @@ public class Document: Identifiable, Codable {
 //        }
 //    }
 
-    public private(set) lazy var searchTerm = filename.lowercased()
+//    public private(set) lazy var searchTerm = filename.lowercased()
+    public var searchTerm: String {
+        filename.lowercased()
+    }
 }
 
 extension Document: Hashable, Comparable {
@@ -499,10 +483,11 @@ extension Document: Hashable, Comparable {
     }
 }
 
-extension Document: Searchable {
+extension Document: CustomStringConvertible {
 
-    // Searchable stubs
-//    public private(set) lazy var searchTerm = filename.lowercased()
+    public var description: String {
+        filename
+    }
 }
 
 extension Document: CustomComparable {

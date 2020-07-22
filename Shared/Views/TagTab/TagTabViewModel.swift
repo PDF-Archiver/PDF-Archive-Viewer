@@ -99,7 +99,7 @@ class TagTabViewModel: ObservableObject, Log {
 
                 let sortedDocuments = newUntaggedDocuments.sorted { $0.filename < $1.filename }
 
-                // save new documents
+                // tagged documents should be first in the list
                 var currentDocuments = self.documents.filter { $0.taggingStatus == .tagged }
                 currentDocuments.append(contentsOf: sortedDocuments)
                 DispatchQueue.main.async {
@@ -107,9 +107,17 @@ class TagTabViewModel: ObservableObject, Log {
                 }
 
                 // download new documents
-                newUntaggedDocuments
+                let untaggedDocuments = newUntaggedDocuments
                     .filter { $0.downloadStatus == .iCloudDrive }
-                    .forEach { $0.download() }
+                    .map { document -> Document in
+                        var document = document
+                        document.download()
+                        return document
+                    }
+                let taggedDocuments = archiveStore.documents.filter { $0.taggingStatus == .tagged }
+
+                // save documents
+                archiveStore.documents = [untaggedDocuments, taggedDocuments].flatMap { $0 }
 
                 guard self.currentDocument == nil || !newUntaggedDocuments.contains(self.currentDocument!)  else { return nil }
 
@@ -132,11 +140,11 @@ class TagTabViewModel: ObservableObject, Log {
             .store(in: &disposables)
 
         $currentDocument
-            .compactMap { $0?.cleaned() }
             .removeDuplicates()
             .receive(on: DispatchQueue.main)
             .sink { document in
-                if let pdfDocument = PDFDocument(url: document.path) {
+                if let document = document,
+                   let pdfDocument = PDFDocument(url: document.path) {
                     self.pdfDocument = pdfDocument
 
                     // try to parse suggestions from document content
@@ -162,14 +170,18 @@ class TagTabViewModel: ObservableObject, Log {
                         }
                     }
 
+                    self.specification = document.specification
+                    self.documentTags = document.tags.sorted()
+                    self.suggestedTags = []
+
                 } else {
                     Self.log.error("Could not present document.")
                     self.pdfDocument = PDFDocument()
 //                    assertionFailure("Could not present document.")
+                    self.specification = ""
+                    self.documentTags = []
+                    self.suggestedTags = []
                 }
-                self.specification = document.specification
-                self.documentTags = document.tags.sorted()
-                self.suggestedTags = []
             }
             .store(in: &disposables)
 
@@ -203,7 +215,7 @@ class TagTabViewModel: ObservableObject, Log {
     }
 
     func saveDocument() {
-        guard let document = currentDocument else { return }
+        guard var document = currentDocument else { return }
         guard let path = StorageHelper.Paths.archivePath else {
             assertionFailure("Could not find a iCloud Drive url.")
             AlertViewModel.createAndPost(title: "Attention",
@@ -221,6 +233,9 @@ class TagTabViewModel: ObservableObject, Log {
             try document.rename(archivePath: path, slugify: true)
             // TODO: add this
 //            DocumentService.archive.archive(document)
+            var filteredDocuments = archiveStore.documents.filter { $0.id != document.id }
+            filteredDocuments.append(document)
+            archiveStore.documents = filteredDocuments
 
             currentDocument = getNewDocument()
 

@@ -69,13 +69,7 @@ class ArchiveViewModel: ObservableObject, Log {
             .combineLatest($scopeSelecton, archiveStore.$documents)
             .map { (searchterm, searchscopeSelection, documents) -> [Document] in
 
-                let searchscope = self.years[searchscopeSelection]
                 var searchterms: [String] = []
-                if CharacterSet.decimalDigits.isSuperset(of: CharacterSet(charactersIn: searchscope)) {
-                    // found a year - it should be used as a searchterm
-                    searchterms.append(searchscope)
-                }
-
                 if searchterm.isEmpty {
                     searchterms = []
                 } else {
@@ -84,16 +78,17 @@ class ArchiveViewModel: ObservableObject, Log {
                         .components(separatedBy: .whitespacesAndNewlines)
                 }
 
-                // TODO: add filter
+                let searchscope = self.years[searchscopeSelection]
+                if CharacterSet.decimalDigits.isSuperset(of: CharacterSet(charactersIn: searchscope)) {
+                    // found a year - it should be used as a searchterm
+                    searchterms.append(searchscope)
+                }
+
                 return documents
                     .filter { $0.taggingStatus == .tagged }
                     .filter(by: searchterms)
                     .sorted()
                     .reversed()
-
-//                return self.archive.get(scope: scope, searchterms: searchterms, status: .tagged)
-//                    .sorted()
-//                    .reversed()
             }
             .receive(on: DispatchQueue.main)
             .sink { [weak self] documents in
@@ -105,11 +100,18 @@ class ArchiveViewModel: ObservableObject, Log {
     }
 
     func tapped(_ document: Document) {
+        log.debug("Tapped document: \(document.filename)")
         switch document.downloadStatus {
         case .iCloudDrive:
 
+            var document = document
+
             // trigger download of the selected document
             document.download()
+
+            var filteredDocuments = archiveStore.documents.filter { $0.id != document.id }
+            filteredDocuments.append(document)
+            archiveStore.documents = filteredDocuments
 
             // update the UI directly, by setting/updating the download status of this document
             // and triggering a notification
