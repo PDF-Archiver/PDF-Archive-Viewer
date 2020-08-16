@@ -6,7 +6,7 @@ name: LogModel, nameSpecified: LogModel, owner: PDF-Archiver, version: 0.0.4
 
 name: paper-onboarding, nameSpecified: PaperOnboarding, owner: Ramotion, version: 6.1.5
 
-name: sentry-cocoa, nameSpecified: Sentry, owner: getsentry, version: 5.1.9
+name: sentry-cocoa, nameSpecified: Sentry, owner: getsentry, version: 5.2.0
 
 name: swift-log, nameSpecified: swift-log, owner: apple, version: 1.4.0
 

@@ -101,7 +101,7 @@ import Foundation
 //    }
 //
 //    // TODO: make this private
-//    func add(from path: URL, size: Int?, downloadStatus: Document.DownloadStatus, status: Document.TaggingStatus, parse parsingOptions: ParsingOptions = []) {
+//    func add(from path: URL, size: Int?, downloadStatus: FileChange.DownloadStatus, status: Document.TaggingStatus, parse parsingOptions: ParsingOptions = []) {
 //
 //        // swiftlint:disable first_where
 //        switch status {
@@ -182,7 +182,7 @@ import Foundation
 //        taggedDocumentManager.add(document)
 //    }
 //
-//    public func update(from path: URL, size: Int?, downloadStatus: Document.DownloadStatus, status: Document.TaggingStatus, parse parsingOptions: ParsingOptions = []) -> Document {
+//    public func update(from path: URL, size: Int?, downloadStatus: FileChange.DownloadStatus, status: Document.TaggingStatus, parse parsingOptions: ParsingOptions = []) -> Document {
 //
 ////        let documentId: UUID
 ////        if let foundDocument = get(scope: .all, searchterms: [path.lastPathComponent], status: status).first {

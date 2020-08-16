@@ -21,7 +21,7 @@ class DocumentViewModel: ObservableObject {
     @Published var formattedDate: String
     @Published var formattedSize: String
     @Published var sortedTags: [String]
-    @Published var downloadStatus: Document.DownloadStatus
+    @Published var downloadStatus: FileChange.DownloadStatus
     @Published var taggingStatus: Document.TaggingStatus
 
     init(_ document: Document) {
@@ -39,7 +39,7 @@ class DocumentViewModel: ObservableObject {
 
     #if DEBUG
     /// This should only be used for testing!
-    init(specification: String, formattedDate: String, formattedSize: String, sortedTags: [String], downloadStatus: Document.DownloadStatus) {
+    init(specification: String, formattedDate: String, formattedSize: String, sortedTags: [String], downloadStatus: FileChange.DownloadStatus) {
         self.specification = specification
         self.formattedDate = formattedDate
         self.formattedSize = formattedSize

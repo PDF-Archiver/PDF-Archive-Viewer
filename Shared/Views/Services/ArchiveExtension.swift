@@ -43,7 +43,7 @@ enum ArchiveError: Error {
 //
 //        // get first 10 untagged documents
 //        let untaggedDocuments = get(scope: .all, searchterms: [], status: .untagged)
-//        for document in Array(untaggedDocuments).sorted().reversed().prefix(10) where document.downloadStatus == .iCloudDrive {
+//        for document in Array(untaggedDocuments).sorted().reversed().prefix(10) where FileChange.DownloadStatus == .iCloudDrive {
 //            document.download()
 //        }
 //
@@ -90,7 +90,7 @@ enum ArchiveError: Error {
 //        return documents
 //    }
 //
-//    private func parseMetadataItem(_ metadataItem: NSMetadataItem) throws -> (path: URL, size: Int?, status: Document.DownloadStatus) {
+//    private func parseMetadataItem(_ metadataItem: NSMetadataItem) throws -> (path: URL, size: Int?, status: FileChange.DownloadStatus) {
 //
 //        // get the document path
 //        guard let documentPath = metadataItem.value(forAttribute: NSMetadataItemURLKey) as? URL else { throw ArchiveError.parsingError }
@@ -100,7 +100,7 @@ enum ArchiveError: Error {
 //        // - NSMetadataUbiquitousItemDownloadingStatusNotDownloaded
 //        guard let downloadingStatus = metadataItem.value(forAttribute: NSMetadataUbiquitousItemDownloadingStatusKey) as? String else { throw ArchiveError.parsingError }
 //
-//        var documentStatus: Document.DownloadStatus
+//        var documentStatus: FileChange.DownloadStatus
 //        switch downloadingStatus {
 //        case "NSMetadataUbiquitousItemDownloadingStatusCurrent", "NSMetadataUbiquitousItemDownloadingStatusDownloaded":
 //            documentStatus = .local

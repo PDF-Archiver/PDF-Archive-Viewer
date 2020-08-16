@@ -71,7 +71,7 @@ struct MainTabView: View {
 
     private var testView: some View {
         List(viewModel.items) { document in
-            Text(document.filename)
+            Text(document.path.lastPathComponent)
         }
     }
 

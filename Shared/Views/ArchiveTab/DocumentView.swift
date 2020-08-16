@@ -12,7 +12,7 @@ import SwiftUIX
 struct DocumentView: View {
 
     @Namespace var namespace
-    let viewModel: DocumentViewModel
+    @ObservedObject var viewModel: Document
     let showTagStatus: Bool
 
     var body: some View {
@@ -39,9 +39,9 @@ struct DocumentView: View {
 
     var titleSubtitle: some View {
         VStack(alignment: .leading) {
-            Text(viewModel.specification)
+            Text(viewModel.specification.capitalized)
                 .font(.body)
-            Text(viewModel.formattedDate)
+            Text((viewModel.date ?? Date()).description(with: .current))
                 .font(.caption)
                 .foregroundColor(.gray)
         }
@@ -50,22 +50,22 @@ struct DocumentView: View {
     var status: some View {
         VStack {
             Image(systemName: "icloud.and.arrow.down")
-            Text(viewModel.formattedSize)
+            Text(viewModel.size)
                 .font(.caption)
         }
         .foregroundColor(.gray)
     }
 
     var tags: some View {
-        TagListView(tagViewNamespace: namespace, tags: .constant(viewModel.sortedTags), isEditable: false, isMultiLine: false, tapHandler: nil)
+        TagListView(tagViewNamespace: namespace, tags: .constant(viewModel.tags.sorted()), isEditable: false, isMultiLine: false, tapHandler: nil)
             .font(.caption)
     }
 }
 
 // this is only needed, because a ViewBuilder could not be used with "if case ..." statements
-fileprivate extension Document.DownloadStatus {
+fileprivate extension FileChange.DownloadStatus {
     var isDownloading: Bool {
-        if case Document.DownloadStatus.downloading = self {
+        if case FileChange.DownloadStatus.downloading = self {
             return true
         } else {
             return false
@@ -73,7 +73,7 @@ fileprivate extension Document.DownloadStatus {
     }
 
     var isLocal: Bool {
-        if case Document.DownloadStatus.local = self {
+        if case FileChange.DownloadStatus.local = self {
             return true
         } else {
             return false
@@ -81,7 +81,7 @@ fileprivate extension Document.DownloadStatus {
     }
 
     var percentageDownloading: CGFloat {
-        if case Document.DownloadStatus.downloading = self {
+        if case FileChange.DownloadStatus.downloading = self {
             return CGFloat(0.0)
         } else {
             return 0.0
@@ -95,9 +95,10 @@ struct DocumentView_Previews: PreviewProvider {
                                                      formattedDate: "30.10.2019",
                                                      formattedSize: "1,2 MB",
                                                      sortedTags: ["bill", "ikea"],
-                                                     downloadStatus: .downloading)
+                                                     downloadStatus: .downloading(percent: 0.123))
     static var previews: some View {
-        DocumentView(viewModel: documentViewModel, showTagStatus: false)
+        let document = Document.create()
+        DocumentView(viewModel: document, showTagStatus: false)
             .preferredColorScheme(.light)
             .environment(\.sizeCategory, .extraExtraLarge)
             .previewLayout(.sizeThatFits)

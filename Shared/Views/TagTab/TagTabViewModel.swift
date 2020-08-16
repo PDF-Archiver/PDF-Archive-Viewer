@@ -108,7 +108,7 @@ class TagTabViewModel: ObservableObject, Log {
 
                 // download new documents
                 let untaggedDocuments = newUntaggedDocuments
-                    .filter { $0.downloadStatus == .iCloudDrive }
+                    .filter { $0.downloadStatus == .remote }
                     .map { document -> Document in
                         var document = document
                         document.download()
@@ -185,19 +185,20 @@ class TagTabViewModel: ObservableObject, Log {
             }
             .store(in: &disposables)
 
-        $documentTags
-            .removeDuplicates()
-            .map { tags -> [String] in
-                let tmpTags = tags.map { $0.lowercased().slugified(withSeparator: "") }
-                    .filter { !$0.isEmpty }
-
-                self.selectionFeedback.prepare()
-                self.selectionFeedback.selectionChanged()
-
-                return Set(tmpTags).sorted()
-            }
-            .receive(on: DispatchQueue.main)
-            .assign(to: $documentTags)
+        // TODO: fix this
+//        $documentTags
+//            .removeDuplicates()
+//            .map { tags -> [String] in
+//                let tmpTags = tags.map { $0.lowercased().slugified(withSeparator: "") }
+//                    .filter { !$0.isEmpty }
+//
+//                self.selectionFeedback.prepare()
+//                self.selectionFeedback.selectionChanged()
+//
+//                return Set(tmpTags).sorted()
+//            }
+//            .receive(on: DispatchQueue.main)
+//            .assign(to: $documentTags)
     }
 
     func saveTag(_ tagName: String) {

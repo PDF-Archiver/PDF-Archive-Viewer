@@ -40,13 +40,13 @@ struct ArchiveView: View {
 
     var documentsView: some View {
         List {
-            ForEach(viewModel.documents) { document in
+            ForEach(ArchiveStore.shared.documents) { document in
                 if document.downloadStatus == .local {
                     NavigationLink(destination: ArchiveViewModel.createDetail(with: document)) {
-                        DocumentView(viewModel: DocumentViewModel(document), showTagStatus: false)
+                        DocumentView(viewModel: document, showTagStatus: false)
                     }
                 } else {
-                    DocumentView(viewModel: DocumentViewModel(document), showTagStatus: false)
+                    DocumentView(viewModel: document, showTagStatus: false)
                         .onTapGesture {
                             self.viewModel.tapped(document)
                         }

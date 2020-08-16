@@ -122,7 +122,7 @@ class MainTabViewModel: ObservableObject, Log {
         // TODO: change container!?
         DispatchQueue.global(qos: .userInteractive).async {
             let path = FileManager.default.url(forUbiquityContainerIdentifier: nil)!.appendingPathComponent("Documents")
-            ArchiveStore.shared.update(archiveFolder: path, observedFolders: [])
+            ArchiveStore.shared.update(archiveFolder: path, untaggedFolders: [])
         }
 
         // TODO: refactor/move this

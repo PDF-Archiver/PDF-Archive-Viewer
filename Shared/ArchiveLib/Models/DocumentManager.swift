@@ -17,7 +17,7 @@
 //    func remove(_ removableDocuments: Set<Document>)
 ////    func removeAll(_ status: TaggingStatus)
 //    func update(_ document: Document)
-//    func update(from path: URL, size: Int?, downloadStatus: Document.DownloadStatus, status: Document.TaggingStatus, parse: ParsingOptions) -> Document
+//    func update(from path: URL, size: Int?, downloadStatus: FileChange.DownloadStatus, status: Document.TaggingStatus, parse: ParsingOptions) -> Document
 //    func archive(_ document: Document)
 //}
 //

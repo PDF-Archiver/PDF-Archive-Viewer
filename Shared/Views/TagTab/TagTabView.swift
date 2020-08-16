@@ -32,7 +32,7 @@ struct TagTabView: View {
                             .frame(maxWidth: size(of: .pdf, width: geometry.size.width), minHeight: 175.0, maxHeight: .infinity, alignment: .center)
                         documentInformation
                             .frame(maxWidth: size(of: .documentInformation, width: geometry.size.width))
-                            .keyboardPadding()
+//                            .keyboardPadding()
                     }
                 }
                 .navigationBarTitle(Text("Document"), displayMode: .inline)
@@ -85,7 +85,7 @@ struct TagTabView: View {
                             .fill(Color.systemBlue)
                             .frame(width: 8, height: 8)
                             .opacity(document == self.viewModel.currentDocument ? 1 : 0)
-                        DocumentView(viewModel: DocumentViewModel(document), showTagStatus: true)
+                        DocumentView(viewModel: document, showTagStatus: true)
                     }
                     .contentShape(Rectangle())
                     .onTapGesture {

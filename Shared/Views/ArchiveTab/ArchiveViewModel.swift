@@ -102,7 +102,7 @@ class ArchiveViewModel: ObservableObject, Log {
     func tapped(_ document: Document) {
         log.debug("Tapped document: \(document.filename)")
         switch document.downloadStatus {
-        case .iCloudDrive:
+        case .remote:
 
             var document = document
 
@@ -115,7 +115,7 @@ class ArchiveViewModel: ObservableObject, Log {
 
             // update the UI directly, by setting/updating the download status of this document
             // and triggering a notification
-//            document.downloadStatus = .downloading
+//            FileChange.DownloadStatus = .downloading
 //            archive.update(document)
 //            NotificationCenter.default.post(Notification(name: .documentChanges))
 
