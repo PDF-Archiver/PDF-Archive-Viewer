@@ -7,15 +7,15 @@
 
 import Logging
 
-protocol Log {
+public protocol Log {
     var log: Logger { get }
 }
 
 extension Log {
-    static var log: Logger {
+    public static var log: Logger {
         Logger(label: String(describing: self))
     }
-    var log: Logger {
+    public var log: Logger {
         Self.log
     }
 }

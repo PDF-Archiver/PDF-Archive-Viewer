@@ -16,7 +16,8 @@ let package = Package(
             targets: ["ArchiveCore"])
     ],
     dependencies: [
-        .package(url: "https://github.com/apple/swift-log.git", from: "1.0.0")
+        .package(url: "https://github.com/apple/swift-log.git", from: "1.0.0"),
+        .package(url: "https://github.com/onmyway133/DeepDiff.git", from: "2.3.1")
     ],
     targets: [
         // Targets are the basic building blocks of a package. A target can define a module or a test suite.
@@ -24,7 +25,8 @@ let package = Package(
         .target(
             name: "ArchiveCore",
             dependencies: [
-                .product(name: "Logging", package: "swift-log")
+                .product(name: "Logging", package: "swift-log"),
+                "DeepDiff"
             ]),
         .testTarget(
             name: "ArchiveCoreTests",

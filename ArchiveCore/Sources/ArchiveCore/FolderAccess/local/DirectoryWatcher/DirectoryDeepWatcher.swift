@@ -8,19 +8,18 @@
 
 import Foundation
 
-class DirectoryDeepWatcher: NSObject {
+class DirectoryDeepWatcher: NSObject, Log {
     private var watchedUrl: URL
 
     typealias SourceObject = (source: DispatchSourceFileSystemObject, descriptor: Int32, url: URL)
     private var sources = [SourceObject]()
-    private var queue: DispatchQueue?
+    private let queue = DispatchQueue.global(qos: .background)
 
     var onFolderNotification: ((URL) -> Void)?
 
     //init
     init(watchedUrl: URL) {
         self.watchedUrl = watchedUrl
-        self.queue = DispatchQueue.global()
     }
 
     static func watch(_ url: URL) -> DirectoryDeepWatcher? {
@@ -33,7 +32,7 @@ class DirectoryDeepWatcher: NSObject {
         let enumerator = FileManager.default.enumerator(at: url,
                                                         includingPropertiesForKeys: [.creationDateKey, .isDirectoryKey],
                                                         options: [.skipsHiddenFiles]) { (url, error) -> Bool in
-            print("directoryEnumerator error at \(url): ", error)
+            log.assertOrCritical("Directory enumerator error", metadata: ["error": "\(error.localizedDescription)", "url": "\(url.path)"])
             return true
         }
 
@@ -44,29 +43,6 @@ class DirectoryDeepWatcher: NSObject {
         }
 
         return directoryWatcher
-    }
-
-    func watch(_ url: URL) -> Bool {
-        if !self.sources.isEmpty {
-            self.stopWatching()
-        }
-
-        guard let sourceObject = self.createSource(from: url) else { return false }
-
-        self.sources.append(sourceObject)
-
-        let enumerator = FileManager.default.enumerator(at: url,
-                                                        includingPropertiesForKeys: [.creationDateKey, .isDirectoryKey],
-                                                        options: [.skipsHiddenFiles]) { (url, error) -> Bool in
-            print("directoryEnumerator error at \(url): ", error)
-            return true
-        }
-
-        return self.startWatching(with: enumerator!)
-    }
-
-    func resetWatching() -> Bool {
-        return self.watch(self.watchedUrl)
     }
 
     private func createSource(from url: URL) -> SourceObject? {
@@ -82,7 +58,7 @@ class DirectoryDeepWatcher: NSObject {
             let enumerator = FileManager.default.enumerator(at: url,
                                                             includingPropertiesForKeys: [.creationDateKey, .isDirectoryKey],
                                                             options: [.skipsHiddenFiles]) { (url, error) -> Bool in
-                print("directoryEnumerator error at \(url): ", error)
+                Self.log.assertOrCritical("Directory enumerator error", metadata: ["error": "\(error.localizedDescription)", "url": "\(url.path)"])
                 return true
             }
 
