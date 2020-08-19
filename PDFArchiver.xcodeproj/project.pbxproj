@@ -148,7 +148,6 @@
 		34A53FA724AA65CB008A3377 /* ShareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34A53FA524AA65CA008A3377 /* ShareViewController.swift */; };
 		34A53FA824AA65CB008A3377 /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 34A53FA624AA65CB008A3377 /* MainInterface.storyboard */; };
 		34A5CF8224A93A3C002409EF /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34A5CF8124A93A3C002409EF /* StoreKit.framework */; };
-		34CD3EEB24EB2ACE00DBA3B2 /* FileChange.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34CD3EEA24EB2ACE00DBA3B2 /* FileChange.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -276,7 +275,6 @@
 		34A53FA924AA65E8008A3377 /* ShareExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ShareExtension.entitlements; sourceTree = "<group>"; };
 		34A5CF7F24A93A28002409EF /* PDFArchiver.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = PDFArchiver.entitlements; sourceTree = "<group>"; };
 		34A5CF8124A93A3C002409EF /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS14.0.sdk/System/Library/Frameworks/StoreKit.framework; sourceTree = DEVELOPER_DIR; };
-		34CD3EEA24EB2ACE00DBA3B2 /* FileChange.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FileChange.swift; path = ArchiveCore/Sources/ArchiveCore/FolderAccess/FileChange.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -502,7 +500,6 @@
 		3489D70E24A3C53D0035E64F = {
 			isa = PBXGroup;
 			children = (
-				34CD3EEA24EB2ACE00DBA3B2 /* FileChange.swift */,
 				347D0CE224BF923A00061707 /* ArchiveCore */,
 				3498723924BE2DE600ADE587 /* AppDelegate.swift */,
 				3489D71324A3C53D0035E64F /* Shared */,
@@ -881,7 +878,6 @@
 				3416B25B24A9284E00D5F4E0 /* Archive.swift in Sources */,
 				347BD2F224C2275600C38DB9 /* TagListView.swift in Sources */,
 				3416B23024A9282800D5F4E0 /* DocumentViewModel.swift in Sources */,
-				34CD3EEB24EB2ACE00DBA3B2 /* FileChange.swift in Sources */,
 				343A0A5A24C2383D00824F75 /* FilledButtonStyle.swift in Sources */,
 				343A0A5B24C2383D00824F75 /* WidthSyncedRow.swift in Sources */,
 				3416B26324A9284E00D5F4E0 /* Tag.swift in Sources */,

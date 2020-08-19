@@ -6,13 +6,17 @@
 //
 
 import Foundation
+import LoggingKit
 
 // TODO: add WebDAV support. An example Swift Package with several FileProvider Implementations is: https://github.com/amosavian/FileProvider
 // example implementations: https://github.com/amosavian/FileProvider/blob/master/Sources/FileProvider.swift
 public protocol FolderProvider: class, Log {
     typealias FolderChangeHandler = (FolderProvider, [FileChange]) -> Void
 
-    var type: FolderType { get }
+    static func canHandle(_ url: URL) -> Bool
+
+    var baseUrl: URL { get }
+//    var type: FolderType { get }
 //    var folderDidChange: FolderChangeHandler? { get }
 
     init(baseUrl: URL, _ handler: @escaping FolderChangeHandler)

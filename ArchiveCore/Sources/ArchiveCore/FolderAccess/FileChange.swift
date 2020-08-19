@@ -9,7 +9,7 @@ import DeepDiff
 
 public enum FileChange {
     case added(Details)
-//    case updated(Details)
+    case updated(Details)
     case removed(URL)
 
     public struct Details: Equatable {
@@ -22,11 +22,11 @@ public enum FileChange {
 
 extension FileChange.Details: DiffAware {
     public typealias DiffId = URL
-    
+
     public var diffId: URL {
         url
     }
-    
+
     public static func compareContent(_ a: FileChange.Details, _ b: FileChange.Details) -> Bool {
         a == b
     }

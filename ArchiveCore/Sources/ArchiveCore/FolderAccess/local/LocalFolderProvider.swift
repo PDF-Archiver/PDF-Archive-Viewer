@@ -8,36 +8,46 @@
 import DeepDiff
 import Foundation
 
-class LocalFileProvider: FolderProvider {
+class LocalFolderProvider: FolderProvider {
 
-    var type: FolderType = .local
-    private let baseUrl: URL
+//    var type: FolderType = .local
+    let baseUrl: URL
     private let folderDidChange: FolderChangeHandler
-    
+
     private let watcher: DirectoryDeepWatcher
     private let fileManager = FileManager.default
     private let fileProperties: [URLResourceKey] = [.ubiquitousItemDownloadingStatusKey, .ubiquitousItemIsDownloadingKey, .fileSizeKey, .localizedNameKey]
-    
+
     private var currentFiles: [FileChange.Details] = []
 
     required init(baseUrl: URL, _ handler: @escaping (FolderProvider, [FileChange]) -> Void) {
         self.baseUrl = baseUrl
         self.folderDidChange = handler
 
-        // TODO: start watching
         guard let watcher = DirectoryDeepWatcher.watch(baseUrl) else {
             preconditionFailure("Could not create local watcher.")
         }
         self.watcher = watcher
         watcher.onFolderNotification = { [weak self] folder in
             guard let self = self else { return }
-//            self.folderDidChange(self, )
+
+            let changes = self.createChanges()
+            self.folderDidChange(self, changes)
         }
-        
-        
+
+        DispatchQueue.global(qos: .background).async {
+            // build initial changes
+            let changes = self.createChanges()
+            self.folderDidChange(self, changes)
+        }
     }
-    
+
     // MARK: - API
+
+    static func canHandle(_ url: URL) -> Bool {
+        FileManager.default.isReadableFile(atPath: url.path) &&
+            FileManager.default.isWritableFile(atPath: url.path)
+    }
 
     func save(data: Data, at url: URL) throws {
         try data.write(to: url)
@@ -59,20 +69,20 @@ class LocalFileProvider: FolderProvider {
     func rename(from source: URL, to destination: URL) throws {
         try fileManager.moveItem(at: source, to: destination)
     }
-    
+
     // MARK: - Helper Functions
-    
+
     private func createChanges() -> [FileChange] {
         let oldFiles = currentFiles
         let newFiles = baseUrl.getFilesRecursive(fileProperties: fileProperties)
             .compactMap { url -> FileChange.Details? in
-                
+
                 guard let resourceValues = try? url.resourceValues(forKeys: Set(fileProperties)),
                       let fileSize = resourceValues.fileSize else {
                     log.assertOrError("Could not fetch resource values from url.", metadata: ["url": "\(url.path)"])
                     return nil
                 }
-                
+
                 let downloadStatus = getDownloadStatus(from: resourceValues)
                 let filename: String
                 if downloadStatus == .local {
@@ -87,9 +97,9 @@ class LocalFileProvider: FolderProvider {
                 return FileChange.Details(url: url, filename: filename, size: fileSize, downloadStatus: downloadStatus)
             }
             .sorted { $0.url.path < $1.url.path }
-        
+
         currentFiles = newFiles
-        
+
         return diff(old: oldFiles, new: newFiles)
             .flatMap { change -> [FileChange] in
                 switch change {
@@ -99,13 +109,14 @@ class LocalFileProvider: FolderProvider {
                         return [.removed(deleteDetails.item.url)]
                     case .replace(let replaceDetails):
                         return [.removed(replaceDetails.oldItem.url), .added(replaceDetails.newItem)]
-                    case .move(_):
-                        // we are not interested in the
+                    case .move:
+                        assertionFailure("This should not happen, since we sort the document by path.")
+                        // we are not interested in moved documents
                         return []
                 }
             }
     }
-    
+
     private func getDownloadStatus(from values: URLResourceValues) -> FileChange.DownloadStatus {
         let downloadStatus: FileChange.DownloadStatus
         if values.ubiquitousItemIsDownloading ?? false {

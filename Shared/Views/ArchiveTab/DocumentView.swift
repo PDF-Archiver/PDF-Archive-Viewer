@@ -41,7 +41,7 @@ struct DocumentView: View {
         VStack(alignment: .leading) {
             Text(viewModel.specification.capitalized)
                 .font(.body)
-            Text((viewModel.date ?? Date()).description(with: .current))
+            Text(viewModel.date ?? Date(), style: .date)
                 .font(.caption)
                 .foregroundColor(.gray)
         }
@@ -91,11 +91,11 @@ fileprivate extension FileChange.DownloadStatus {
 
 #if DEBUG
 struct DocumentView_Previews: PreviewProvider {
-    static let documentViewModel = DocumentViewModel(specification: "Ikea Bill",
-                                                     formattedDate: "30.10.2019",
-                                                     formattedSize: "1,2 MB",
-                                                     sortedTags: ["bill", "ikea"],
-                                                     downloadStatus: .downloading(percent: 0.123))
+//    static let documentViewModel = DocumentViewModel(specification: "Ikea Bill",
+//                                                     formattedDate: "30.10.2019",
+//                                                     formattedSize: "1,2 MB",
+//                                                     sortedTags: ["bill", "ikea"],
+//                                                     downloadStatus: .downloading(percent: 0.123))
     static var previews: some View {
         let document = Document.create()
         DocumentView(viewModel: document, showTagStatus: false)

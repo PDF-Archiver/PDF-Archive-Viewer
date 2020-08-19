@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import LoggingKit
 #if os(OSX)
 import Quartz.PDFKit
 #else
@@ -28,11 +29,18 @@ public final class Document: ObservableObject, Identifiable, Codable, Log {
     public internal(set) var path: URL
     public internal(set) var filename: String
 
-    public init(path: URL, taggingStatus: TaggingStatus, downloadStatus: FileChange.DownloadStatus, byteSize: Int64) {
+    public convenience init(from details: FileChange.Details, with taggingStatus: TaggingStatus) {
+        self.init(path: details.url,
+                  taggingStatus: taggingStatus,
+                  downloadStatus: details.downloadStatus,
+                  byteSize: details.size)
+    }
+
+    public init(path: URL, taggingStatus: TaggingStatus, downloadStatus: FileChange.DownloadStatus, byteSize: Int) {
         self.path = path
         self.filename = (try? path.resourceValues(forKeys: [.localizedNameKey]).localizedName) ?? path.lastPathComponent
         self.taggingStatus = taggingStatus
-        self.size = ByteCountFormatter.string(fromByteCount: byteSize, countStyle: .file)
+        self.size = ByteCountFormatter.string(fromByteCount: Int64(byteSize), countStyle: .file)
         self.downloadStatus = downloadStatus
     }
 
@@ -128,7 +136,7 @@ public final class Document: ObservableObject, Identifiable, Codable, Log {
         return "\(dateStr)--\(specification)__\(tagStr).pdf"
     }
 
-    func update(with downloadStatus: FileChange.DownloadStatus, contentParsingOptions: ParsingOptions) {
+    func updateProperties(with downloadStatus: FileChange.DownloadStatus, contentParsingOptions: ParsingOptions) {
         filename = (try? path.resourceValues(forKeys: [.localizedNameKey]).localizedName) ?? self.path.lastPathComponent
 
         // parse the current filename and add finder file tags

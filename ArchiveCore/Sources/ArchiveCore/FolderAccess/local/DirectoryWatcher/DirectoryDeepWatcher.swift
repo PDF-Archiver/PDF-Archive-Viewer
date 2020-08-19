@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import LoggingKit
 
 class DirectoryDeepWatcher: NSObject, Log {
     private var watchedUrl: URL

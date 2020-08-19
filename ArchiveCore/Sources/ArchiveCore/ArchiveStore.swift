@@ -7,6 +7,7 @@
 
 import Combine
 import Foundation
+import LoggingKit
 
 public final class ArchiveStore: ObservableObject, Log {
 
@@ -14,6 +15,12 @@ public final class ArchiveStore: ObservableObject, Log {
         case uninitialized, cachedDocuments, live
     }
 
+    private static let availableProvider: [FolderProvider.Type] = [
+        ICloudFolderProvider.self,
+        LocalFolderProvider.self
+    ]
+
+    private static let fileProperties: [URLResourceKey] = [.ubiquitousItemDownloadingStatusKey, .ubiquitousItemIsDownloadingKey, .fileSizeKey, .localizedNameKey]
     private static let savePath: URL = {
         guard let url = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first else { fatalError("No cache dir found.")}
         return url.appendingPathComponent("ArchiveData.json")
@@ -24,15 +31,14 @@ public final class ArchiveStore: ObservableObject, Log {
     @Published public var documents: [Document] = []
     @Published public var years: Set<String> = []
 
-    private var archiveFolder: URL!
     private var untaggedFolders: [URL] = []
 
-    private let fileProperties: [URLResourceKey] = [.ubiquitousItemDownloadingStatusKey, .ubiquitousItemIsDownloadingKey, .fileSizeKey, .localizedNameKey]
-    private var contents = [URL: [Document]]()
-    private var watchers = [DirectoryDeepWatcher]()
+    private let queue = DispatchQueue(label: "ArchiveStoreQueue", qos: .utility)
+    private var providers: [FolderProvider] = []
+    private var contents: [URL: [Document]] = [:]
 
     private init() {
-        DispatchQueue.global().async {
+        DispatchQueue.global(qos: .userInitiated).async {
             self.loadDocuments()
         }
     }
@@ -40,104 +46,81 @@ public final class ArchiveStore: ObservableObject, Log {
     // MARK: Public API
 
     public func update(archiveFolder: URL, untaggedFolders: [URL]) {
-        var observedFolders = untaggedFolders
-        self.archiveFolder = archiveFolder
+        self.untaggedFolders = untaggedFolders
+        let observedFolders = [[archiveFolder], untaggedFolders].flatMap { $0 }
 
-        contents = [:]
+        queue.sync {
+            contents = [:]
+        }
         try? FileManager.default.removeItem(at: Self.savePath)
 
-        observedFolders.append(archiveFolder)
-        for folder in observedFolders {
-
-            guard let watcher = DirectoryDeepWatcher.watch(folder) else { continue }
-            watchers.append(watcher)
-            watcher.onFolderNotification = { [weak self] folder in
-                self?.folderDidChange(folder)
-                self?.updateDocuments()
+        providers = observedFolders.map { folder in
+            guard let provider = Self.availableProvider.first(where: { $0.canHandle(folder) }) else {
+                preconditionFailure("Could not find a FolderProvider for: \(folder.path)")
             }
-
-            folderDidChange(folder)
-        }
-
-        updateDocuments()
-    }
-
-    // MARK: Load & Save
-
-    private func loadDocuments() {
-        do {
-            let data = try Data(contentsOf: Self.savePath)
-            documents = try JSONDecoder().decode([Document].self, from: data)
-            state = .cachedDocuments
-            log.info("\(documents.count) documents loaded.")
-        } catch {
-            log.error("JSON decoding error", metadata: ["error": "\(error.localizedDescription)"])
-
-            try? FileManager.default.removeItem(at: Self.savePath)
-        }
-    }
-
-    private func saveDocuments() {
-        do {
-            let data = try JSONEncoder().encode(documents)
-            try data.write(to: Self.savePath)
-            log.info("Documents saved.")
-        } catch {
-            log.error("JSON encoding error", metadata: ["error": "\(error.localizedDescription)"])
+            return provider.init(baseUrl: folder, folderDidChange(_:_:))
         }
     }
 
     // MARK: Helper Function
 
-    private func folderDidChange(_ folderUrl: URL) {
+    private func folderDidChange(_ provider: FolderProvider, _ changes: [FileChange]) {
+        queue.sync {
+            for change in changes {
 
-        let oldDocuments = contents[folderUrl] ?? []
-        let newUrls = folderUrl.getFilesRecursive(fileProperties: fileProperties)
+                var document: Document?
+                var contentParsingOptions: ParsingOptions?
 
-        contents[folderUrl] = newUrls.map { url in
+                switch change {
+                    case .added(let details):
+                        let taggingStatus = getTaggingStatus(of: details.url)
+                        document = Document(from: details, with: taggingStatus)
 
-            let taggingStatus = getTaggingStatus(of: url)
+                        // parse document content only for untagged documents
+                        contentParsingOptions = taggingStatus == .untagged ? .all : []
 
-            // get a document or create a new one
-            let document: Document
-            let parsingOptions: ParsingOptions
-            if let foundDocument = oldDocuments.first(where: { $0.path == url }) {
-                document = foundDocument
-                parsingOptions = []
-            } else {
+                    case .removed(let url):
+                        contents[provider.baseUrl]?.removeAll { $0.path == url }
 
-                // TODO: get filesize from provider
-                let size: Int64 = 123
+                    case .updated(let details):
+                        if let foundDocument = contents[provider.baseUrl]?.first(where: { $0.path == details.url }) {
+                            document = foundDocument
+                        } else {
+                            let taggingStatus = getTaggingStatus(of: details.url)
+                            document = Document(from: details, with: taggingStatus)
+                        }
 
-                document = Document(path: url, taggingStatus: taggingStatus, downloadStatus: .downloading(percent: 0.1234), byteSize: size)
+                        contents[provider.baseUrl]?.removeAll { $0.path == details.url }
 
-                // only parse untagged documents
-                parsingOptions = taggingStatus == .untagged ? .all : []
+                        contentParsingOptions = []
+                }
+
+                if let document = document {
+                    contents[provider.baseUrl, default: []].append(document)
+                    contents[provider.baseUrl]?.sort()
+
+                    // trigger update of the document properties
+                    if let contentParsingOptions = contentParsingOptions {
+                        DispatchQueue.global(qos: .userInitiated).async {
+                            // TODO: add this as an WorkItem to an queue and save documents after the last has been written
+                            document.updateProperties(with: document.downloadStatus, contentParsingOptions: contentParsingOptions)
+                        }
+                    }
+                }
             }
-
-            // TODO: abstract this be moving it to a fileprovider
-            // update the download status
-            let values = try? url.resourceValues(forKeys: Set(fileProperties))
-            let downloadStatus: FileChange.DownloadStatus
-            if values?.ubiquitousItemIsDownloading ?? false {
-                downloadStatus = .downloading(percent: 0.123)
-            } else if values?.ubiquitousItemDownloadingStatus == URLUbiquitousItemDownloadingStatus.notDownloaded {
-                downloadStatus = .remote
-            } else {
-                downloadStatus = .local
-            }
-
-            document.update(with: downloadStatus, contentParsingOptions: parsingOptions)
-
-            return document
         }
+
+        updateDocuments()
     }
 
     private func updateDocuments() {
-
-        self.documents = contents
-            .flatMap { $0.value }
-            .sorted()
+        var documents = [Document]()
+        queue.sync {
+            documents = self.contents
+                .flatMap { $0.value }
+                .sorted()
+        }
+        self.documents = documents
 
         var years = Set<String>()
         for document in self.documents {
@@ -168,5 +151,30 @@ public final class ArchiveStore: ObservableObject, Log {
             !url.lastPathComponent.contains(Constants.documentTagPlaceholder) else { return .untagged }
 
         return .tagged
+    }
+
+    // MARK: Load & Save
+
+    private func loadDocuments() {
+        do {
+            let data = try Data(contentsOf: Self.savePath)
+            documents = try JSONDecoder().decode([Document].self, from: data)
+            state = .cachedDocuments
+            log.info("\(documents.count) documents loaded.")
+        } catch {
+            log.error("JSON decoding error", metadata: ["error": "\(error.localizedDescription)"])
+
+            try? FileManager.default.removeItem(at: Self.savePath)
+        }
+    }
+
+    private func saveDocuments() {
+        do {
+            let data = try JSONEncoder().encode(documents)
+            try data.write(to: Self.savePath)
+            log.info("Documents saved.")
+        } catch {
+            log.error("JSON encoding error", metadata: ["error": "\(error.localizedDescription)"])
+        }
     }
 }

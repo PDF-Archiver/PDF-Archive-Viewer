@@ -17,6 +17,7 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/apple/swift-log.git", from: "1.0.0"),
+        .package(url: "https://github.com/PDF-Archiver/LoggingKit", from: "1.0.0"),
         .package(url: "https://github.com/onmyway133/DeepDiff.git", from: "2.3.1")
     ],
     targets: [
@@ -26,6 +27,7 @@ let package = Package(
             name: "ArchiveCore",
             dependencies: [
                 .product(name: "Logging", package: "swift-log"),
+                "LoggingKit",
                 "DeepDiff"
             ]),
         .testTarget(
