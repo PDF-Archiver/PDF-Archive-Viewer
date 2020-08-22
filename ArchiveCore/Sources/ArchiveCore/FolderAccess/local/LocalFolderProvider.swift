@@ -50,12 +50,18 @@ class LocalFolderProvider: FolderProvider {
     }
 
     func save(data: Data, at url: URL) throws {
+        try fileManager.createFolderIfNotExists(url.deletingLastPathComponent())
+
+        // test if the document name already exists in archive, otherwise move it
+        if fileManager.fileExists(atPath: url.path) {
+            throw FolderProviderError.renameFailedFileAlreadyExists
+        }
+
         try data.write(to: url)
     }
 
     func startDownload(of url: URL) throws {
-        assertionFailure("Download of a local file is not supported")
-        throw FolderProviderError.notSupported
+        log.assertOrError("Download of a local file is not supported")
     }
 
     func fetch(url: URL) throws -> Data {
@@ -67,6 +73,13 @@ class LocalFolderProvider: FolderProvider {
     }
 
     func rename(from source: URL, to destination: URL) throws {
+        try fileManager.createFolderIfNotExists(destination.deletingLastPathComponent())
+
+        // test if the document name already exists in archive, otherwise move it
+        if fileManager.fileExists(atPath: destination.path) {
+            throw FolderProviderError.renameFailedFileAlreadyExists
+        }
+
         try fileManager.moveItem(at: source, to: destination)
     }
 

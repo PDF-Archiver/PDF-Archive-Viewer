@@ -58,20 +58,13 @@ struct MainTabView: View {
                         Text("Archive")
                     }
                 }.tag(Tabs.archive)
-//            MoreTabView(viewModel: viewModel.moreViewModel)
-            testView
+            MoreTabView(viewModel: viewModel.moreViewModel)
                 .tabItem {
                     VStack {
                         Image(systemName: "ellipsis")
                         Text("More")
                     }
                 }.tag(Tabs.more)
-        }
-    }
-
-    private var testView: some View {
-        List(viewModel.items) { document in
-            Text(document.path.lastPathComponent)
         }
     }
 

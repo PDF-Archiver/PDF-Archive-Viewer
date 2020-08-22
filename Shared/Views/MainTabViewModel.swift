@@ -29,20 +29,7 @@ class MainTabViewModel: ObservableObject, Log {
     private var disposables = Set<AnyCancellable>()
     private let selectionFeedback = UISelectionFeedbackGenerator()
 
-    @Published var items: [Document] = []
-
     init() {
-
-        ArchiveStore.shared.$documents
-            .map { documents in
-                documents.filter { $0.taggingStatus == .untagged }
-            }
-            .removeDuplicates()
-            .receive(on: DispatchQueue.main)
-            .sink { documents in
-                self.items = documents
-            }
-            .store(in: &disposables)
 
         scanViewModel.objectWillChange
             .sink { _ in
@@ -121,8 +108,17 @@ class MainTabViewModel: ObservableObject, Log {
 
         // TODO: change container!?
         DispatchQueue.global(qos: .userInteractive).async {
+
+//            guard let path = StorageHelper.Paths.archivePath else {
+//                assertionFailure("Could not find a iCloud Drive url.")
+//                AlertViewModel.createAndPost(title: "Attention",
+//                                             message: "Could not find iCloud Drive.",
+//                                             primaryButtonTitle: "OK")
+//                return
+//            }
+
             let path = FileManager.default.url(forUbiquityContainerIdentifier: nil)!.appendingPathComponent("Documents")
-            ArchiveStore.shared.update(archiveFolder: path, untaggedFolders: [])
+            ArchiveStore.shared.update(archiveFolder: path, untaggedFolders: [path.appendingPathComponent("untagged")])
         }
 
         // TODO: refactor/move this

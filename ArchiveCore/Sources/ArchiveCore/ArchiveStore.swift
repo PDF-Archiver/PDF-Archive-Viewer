@@ -31,13 +31,23 @@ public final class ArchiveStore: ObservableObject, Log {
     @Published public var documents: [Document] = []
     @Published public var years: Set<String> = []
 
+    private var archiveFolder: URL!
     private var untaggedFolders: [URL] = []
 
     private let queue = DispatchQueue(label: "ArchiveStoreQueue", qos: .utility)
     private var providers: [FolderProvider] = []
     private var contents: [URL: [Document]] = [:]
 
+    private var disposables = Set<AnyCancellable>()
+
     private init() {
+
+        $documents
+            .print("ArchiveStore")
+            .sink { _ in
+
+            }
+            .store(in: &disposables)
         DispatchQueue.global(qos: .userInitiated).async {
             self.loadDocuments()
         }
@@ -47,7 +57,9 @@ public final class ArchiveStore: ObservableObject, Log {
 
     public func update(archiveFolder: URL, untaggedFolders: [URL]) {
         self.untaggedFolders = untaggedFolders
-        let observedFolders = [[archiveFolder], untaggedFolders].flatMap { $0 }
+        let observedFolders = [[archiveFolder], untaggedFolders]
+            .flatMap { $0 }
+            .getUniqueParents()
 
         queue.sync {
             contents = [:]
@@ -60,6 +72,66 @@ public final class ArchiveStore: ObservableObject, Log {
             }
             return provider.init(baseUrl: folder, folderDidChange(_:_:))
         }
+    }
+
+    public func archive(_ document: Document, slugify: Bool) throws {
+        guard let documentProvider = providers.first(where: { document.path.path.hasPrefix($0.baseUrl.path) }),
+              let archiveFolder = self.archiveFolder,
+              let archiveProvider = providers.first(where: { archiveFolder.path.hasPrefix($0.baseUrl.path) }) else {
+            throw ArchiveStore.Error.providerNotFound
+        }
+
+        if slugify {
+            document.specification = document.specification.slugified(withSeparator: "-")
+        }
+
+        let foldername: String
+        let filename: String
+        (foldername, filename) = try document.getRenamingPath()
+
+        // check, if this path already exists ... create it
+        let newFilepath = archiveFolder
+            .appendingPathComponent(foldername)
+            .appendingPathComponent(filename)
+
+        if archiveProvider.baseUrl == documentProvider.baseUrl {
+            try archiveProvider.rename(from: document.path, to: newFilepath)
+        } else {
+            let documentData = try documentProvider.fetch(url: document.path)
+            try archiveProvider.save(data: documentData, at: newFilepath)
+            try documentProvider.delete(url: document.path)
+        }
+
+        // update document properties
+        document.filename = String(newFilepath.lastPathComponent)
+        document.path = newFilepath
+        document.taggingStatus = .tagged
+
+        // save file tags
+        document.path.fileTags = document.tags.sorted()
+    }
+
+    public func download(_ document: Document) throws {
+        guard let provider = providers.first(where: { document.path.path.hasPrefix($0.baseUrl.path) }) else {
+            throw ArchiveStore.Error.providerNotFound
+        }
+
+        guard document.downloadStatus == .remote else { return }
+
+        do {
+            try provider.startDownload(of: document.path)
+            document.downloadStatus = .downloading(percent: 0)
+        } catch {
+            log.assertOrError("Document download error.", metadata: ["error": "\(error.localizedDescription)"])
+            throw error
+        }
+    }
+
+    public func delete(_ document: Document) throws {
+        guard let provider = providers.first(where: { document.path.path.hasPrefix($0.baseUrl.path) }) else {
+            throw ArchiveStore.Error.providerNotFound
+        }
+        try provider.delete(url: document.path)
     }
 
     // MARK: Helper Function
@@ -84,6 +156,12 @@ public final class ArchiveStore: ObservableObject, Log {
 
                     case .updated(let details):
                         if let foundDocument = contents[provider.baseUrl]?.first(where: { $0.path == details.url }) {
+                            // update details
+                            DispatchQueue.main.async {
+                                foundDocument.downloadStatus = details.downloadStatus
+                            }
+                            foundDocument.filename = details.filename
+
                             document = foundDocument
                         } else {
                             let taggingStatus = getTaggingStatus(of: details.url)
@@ -122,6 +200,16 @@ public final class ArchiveStore: ObservableObject, Log {
         }
         self.documents = documents
 
+        updateYears()
+
+        log.info("Found \(documents.count) documents.")
+        self.state = .live
+        DispatchQueue.global(qos: .background).async {
+            self.saveDocuments()
+        }
+    }
+
+    private func updateYears() {
         var years = Set<String>()
         for document in self.documents {
             let folder = document.path.deletingLastPathComponent().lastPathComponent
@@ -130,12 +218,6 @@ public final class ArchiveStore: ObservableObject, Log {
             years.insert(folder)
         }
         self.years = years
-
-        log.info("Found \(documents.count) documents.")
-        self.state = .live
-        DispatchQueue.global(qos: .background).async {
-            self.saveDocuments()
-        }
     }
 
     func getTaggingStatus(of url: URL) -> Document.TaggingStatus {
@@ -156,11 +238,18 @@ public final class ArchiveStore: ObservableObject, Log {
     // MARK: Load & Save
 
     private func loadDocuments() {
+        guard state == .uninitialized,
+              documents.isEmpty else { return }
         do {
             let data = try Data(contentsOf: Self.savePath)
-            documents = try JSONDecoder().decode([Document].self, from: data)
+            let loadedDocuments = try JSONDecoder().decode([Document].self, from: data)
+            guard state == .uninitialized,
+                  documents.isEmpty else { return }
+            documents = loadedDocuments
             state = .cachedDocuments
             log.info("\(documents.count) documents loaded.")
+
+            updateYears()
         } catch {
             log.error("JSON decoding error", metadata: ["error": "\(error.localizedDescription)"])
 

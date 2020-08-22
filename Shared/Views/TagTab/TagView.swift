@@ -14,9 +14,6 @@ struct TagView: View, Identifiable {
         tagName
     }
 
-    @Namespace var namespace
-
-    let tagViewNamespace: Namespace.ID
     let tagName: String
     let isEditable: Bool
     let tapHandler: ((String) -> Void)?
@@ -27,7 +24,6 @@ struct TagView: View, Identifiable {
         }, label: {
             self.tag
         })
-        .matchedGeometryEffect(id: tagName, in: namespace)
     }
 
     private var tag: some View {
@@ -52,7 +48,6 @@ struct TagView: View, Identifiable {
 
 struct TagView_Previews: PreviewProvider {
     struct TagTempView: View {
-        @Namespace var namespace
         var tagName = "tag1"
         var isEditable = true
         var tapHandler: ((String) -> Void) = { tag in
@@ -60,8 +55,7 @@ struct TagView_Previews: PreviewProvider {
         }
 
         var body: some View {
-            TagView(tagViewNamespace: namespace,
-                    tagName: tagName,
+            TagView(tagName: tagName,
                     isEditable: isEditable,
                     tapHandler: tapHandler)
         }

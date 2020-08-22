@@ -110,8 +110,11 @@ class TagTabViewModel: ObservableObject, Log {
                 let untaggedDocuments = newUntaggedDocuments
                     .filter { $0.downloadStatus == .remote }
                     .map { document -> Document in
-                        var document = document
-                        document.download()
+                        do {
+                            try archiveStore.download(document)
+                        } catch {
+                            AlertViewModel.createAndPost(message: error, primaryButtonTitle: "ok")
+                        }
                         return document
                     }
                 let taggedDocuments = archiveStore.documents.filter { $0.taggingStatus == .tagged }
@@ -216,14 +219,7 @@ class TagTabViewModel: ObservableObject, Log {
     }
 
     func saveDocument() {
-        guard var document = currentDocument else { return }
-        guard let path = StorageHelper.Paths.archivePath else {
-            assertionFailure("Could not find a iCloud Drive url.")
-            AlertViewModel.createAndPost(title: "Attention",
-                                         message: "Could not find iCloud Drive.",
-                                         primaryButtonTitle: "OK")
-            return
-        }
+        guard let document = currentDocument else { return }
 
         document.date = date
         document.specification = specification.slugified(withSeparator: "-")
@@ -231,9 +227,7 @@ class TagTabViewModel: ObservableObject, Log {
 
         notificationFeedback.prepare()
         do {
-            try document.rename(archivePath: path, slugify: true)
-            // TODO: add this
-//            DocumentService.archive.archive(document)
+            try archiveStore.archive(document, slugify: true)
             var filteredDocuments = archiveStore.documents.filter { $0.id != document.id }
             filteredDocuments.append(document)
             archiveStore.documents = filteredDocuments

@@ -83,12 +83,23 @@ class ICloudFolderProvider: NSObject, FolderProvider {
     }
 
     func save(data: Data, at url: URL) throws {
+        try fileManager.createFolderIfNotExists(url.deletingLastPathComponent())
+
+        // test if the document name already exists in archive, otherwise move it
+        if fileManager.fileExists(atPath: url.path) {
+            throw FolderProviderError.renameFailedFileAlreadyExists
+        }
+
         try data.write(to: url)
     }
 
     func startDownload(of url: URL) throws {
-        assertionFailure("Download of a local file is not supported")
-        throw FolderProviderError.notSupported
+//        guard fileManager.fileExists(atPath: url.path) else {
+//            log.assertOrCritical("Could not find file at path: \(url.path)")
+//            return
+//        }
+
+        try fileManager.startDownloadingUbiquitousItem(at: url)
     }
 
     func fetch(url: URL) throws -> Data {
@@ -100,6 +111,13 @@ class ICloudFolderProvider: NSObject, FolderProvider {
     }
 
     func rename(from source: URL, to destination: URL) throws {
+        try fileManager.createFolderIfNotExists(destination.deletingLastPathComponent())
+
+        // test if the document name already exists in archive, otherwise move it
+        if fileManager.fileExists(atPath: destination.path) {
+            throw FolderProviderError.renameFailedFileAlreadyExists
+        }
+
         try fileManager.moveItem(at: source, to: destination)
     }
 
@@ -187,8 +205,6 @@ class ICloudFolderProvider: NSObject, FolderProvider {
     }
 }
 
-import LoggingKit
-extension Array: Log {}
 fileprivate extension Array where Array.Element == NSMetadataItem {
     func createDetails(_ handler: (FileChange.Details) -> FileChange) -> [FileChange] {
         self.compactMap { item -> FileChange? in

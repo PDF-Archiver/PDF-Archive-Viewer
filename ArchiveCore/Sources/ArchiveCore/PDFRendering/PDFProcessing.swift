@@ -7,6 +7,7 @@
 //
 // swiftlint:disable cyclomatic_complexity function_body_length
 
+#if canImport(UIKit)
 import PDFKit
 import UIKit
 import Vision
@@ -308,3 +309,4 @@ extension NSAttributedString {
         return NSAttributedString(string: text, attributes: attributes)
     }
 }
+#endif

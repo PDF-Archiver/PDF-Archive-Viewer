@@ -20,6 +20,7 @@ final public class OrientationInfo: ObservableObject {
     private var _observer: NSObjectProtocol?
 
     public init() {
+        #if canImport(UIKit)
         // fairly arbitrary starting value for 'flat' orientations
         if UIDevice.current.orientation.isLandscape {
             self.orientation = .landscape
@@ -38,6 +39,9 @@ final public class OrientationInfo: ObservableObject {
                 self.orientation = .landscape
             }
         }
+        #else
+        self.orientation = .landscape
+        #endif
     }
 
     deinit {

@@ -35,17 +35,24 @@ class ArchiveViewModel: ObservableObject, Log {
         self.archiveStore = archiveStore
 
         // MARK: - Combine Stuff
-        archiveStore.$documents
-            .receive(on: DispatchQueue.main)
-            .map { _ -> Bool in
-                if self.showLoadingView {
-                    DispatchQueue.main.async {
-                        self.years = ["All"] + Array(archiveStore.years.sorted().reversed().prefix(3))
-                    }
-                }
-                return false
+        archiveStore.$state
+            .map { state -> Bool in
+                state == .uninitialized
             }
+            .removeDuplicates()
+            .receive(on: DispatchQueue.main)
             .assign(to: \.showLoadingView, on: self)
+            .store(in: &disposables)
+
+        archiveStore.$years
+            .map { years -> [String] in
+                ["All"] + Array(years.sorted().reversed().prefix(3))
+            }
+            .removeDuplicates()
+            .receive(on: DispatchQueue.main)
+            .sink { years in
+                self.years = years
+            }
             .store(in: &disposables)
 
         // we assume that all documents should be loaded after 10 seconds
@@ -104,14 +111,16 @@ class ArchiveViewModel: ObservableObject, Log {
         switch document.downloadStatus {
         case .remote:
 
-            var document = document
-
             // trigger download of the selected document
-            document.download()
+            do {
+                try archiveStore.download(document)
+            } catch {
+                AlertViewModel.createAndPost(message: error, primaryButtonTitle: "ok")
+            }
 
-            var filteredDocuments = archiveStore.documents.filter { $0.id != document.id }
-            filteredDocuments.append(document)
-            archiveStore.documents = filteredDocuments
+//            var filteredDocuments = archiveStore.documents.filter { $0.id != document.id }
+//            filteredDocuments.append(document)
+//            archiveStore.documents = filteredDocuments
 
             // update the UI directly, by setting/updating the download status of this document
             // and triggering a notification
@@ -122,9 +131,9 @@ class ArchiveViewModel: ObservableObject, Log {
             notificationFeedback.notificationOccurred(.success)
 
         case .local:
-            log.assertOrError("Already local")
+            log.assertOrError("Already local - this should")
         case .downloading:
-            log.assertOrError("Already downloading")
+            log.debug("Already downloading")
         }
     }
 
@@ -132,7 +141,11 @@ class ArchiveViewModel: ObservableObject, Log {
         notificationFeedback.prepare()
         for index in offsets {
             let deletedDocument = documents.remove(at: index)
-//            deletedDocument.delete(in: archive)
+            do {
+                try archiveStore.delete(deletedDocument)
+            } catch {
+                AlertViewModel.createAndPost(message: error, primaryButtonTitle: "ok")
+            }
         }
         notificationFeedback.notificationOccurred(.success)
     }

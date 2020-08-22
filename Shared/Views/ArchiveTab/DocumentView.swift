@@ -11,7 +11,6 @@ import SwiftUIX
 
 struct DocumentView: View {
 
-    @Namespace var namespace
     @ObservedObject var viewModel: Document
     let showTagStatus: Bool
 
@@ -57,7 +56,7 @@ struct DocumentView: View {
     }
 
     var tags: some View {
-        TagListView(tagViewNamespace: namespace, tags: .constant(viewModel.tags.sorted()), isEditable: false, isMultiLine: false, tapHandler: nil)
+        TagListView(tags: .constant(viewModel.tags.sorted()), isEditable: false, isMultiLine: false, tapHandler: nil)
             .font(.caption)
     }
 }

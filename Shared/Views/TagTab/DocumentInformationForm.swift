@@ -18,8 +18,6 @@ struct DocumentInformationForm: View {
     @Binding var suggestedTags: [String]
     @Binding var inputAccessoryViewSuggestions: [String]
 
-    @Namespace private var namespace
-
     var body: some View {
         Form {
             DatePicker("Date", selection: $date, displayedComponents: .date)
@@ -58,8 +56,7 @@ struct DocumentInformationForm: View {
         VStack(alignment: .leading) {
             Text("Document Tags")
                 .font(.caption)
-            TagListView(tagViewNamespace: namespace,
-                        tags: $tags,
+            TagListView(tags: $tags,
                         isEditable: true,
                         isMultiLine: true,
                         tapHandler: documentTagTapped(_:))
@@ -90,8 +87,7 @@ struct DocumentInformationForm: View {
         VStack(alignment: .leading) {
             Text("Suggested Tags")
                 .font(.caption)
-            TagListView(tagViewNamespace: namespace,
-                        tags: $suggestedTags,
+            TagListView(tags: $suggestedTags,
                         isEditable: false,
                         isMultiLine: true,
                         tapHandler: suggestedTagTapped(_:))

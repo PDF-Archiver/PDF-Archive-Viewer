@@ -6,6 +6,7 @@
 //  Copyright © 2019 Julian Kahnert. All rights reserved.
 //
 
+#if canImport(UIKit)
 import UIKit.UIImage
 
 extension UIImage {
@@ -16,3 +17,4 @@ extension UIImage {
         return nil
     }
 }
+#endif

@@ -28,10 +28,6 @@ public protocol FolderProvider: class, Log {
     func rename(from: URL, to: URL) throws
 }
 
-enum FolderProviderError: Error {
-    case notSupported
-}
-
 public enum FolderType: Equatable {
     case iCloudDrive, local
 }
