@@ -12,22 +12,46 @@ import SwiftUIX
 struct ArchiveView: View {
     @ObservedObject var viewModel: ArchiveViewModel
 
+//    var body: some View {
+//        NavigationView {
+//            if viewModel.showLoadingView {
+//                LoadingView()
+//            } else {
+//                HStack {
+//                    VStack {
+//                        searchView
+//                        documentsView
+//                            .resignKeyboardOnDragGesture()
+//                    }
+//                    .navigationBarTitle(Text("Documents"))
+////                    emptyView
+//                }
+//            }
+//            if let document = viewModel.selectedDocument {
+//                ArchiveViewModel.createDetail(with: document)
+//            } else {
+//                emptyView
+//            }
+//        }
+//        // On iPad: force double column view
+//        .navigationViewStyle(DoubleColumnNavigationViewStyle())
+//    }
+
     var body: some View {
-        NavigationView {
-            if viewModel.showLoadingView {
-                LoadingView()
-            } else {
+
+        if viewModel.showLoadingView {
+            LoadingView()
+        } else {
+            HStack {
                 VStack {
                     searchView
                     documentsView
-                    .resignKeyboardOnDragGesture()
+                        .resignKeyboardOnDragGesture()
                 }
                 .navigationBarTitle(Text("Documents"))
+//                    emptyView
             }
-            emptyView
         }
-        // On iPad: force double column view
-        .navigationViewStyle(DoubleColumnNavigationViewStyle())
     }
 
     var searchView: some View {
@@ -41,17 +65,27 @@ struct ArchiveView: View {
     var documentsView: some View {
         List {
             ForEach(viewModel.documents) { document in
-                if document.downloadStatus == .local {
-                    NavigationLink(destination: ArchiveViewModel.createDetail(with: document)) {
-                        DocumentView(viewModel: document, showTagStatus: false)
+                DocumentView(viewModel: document, showTagStatus: false)
+                    .contentShape(Rectangle())
+                    .onTapGesture {
+                        self.viewModel.tapped(document)
                     }
-                } else {
-                    DocumentView(viewModel: document, showTagStatus: false)
-                        .onTapGesture {
-                            self.viewModel.tapped(document)
-                        }
-                }
-            }.onDelete(perform: viewModel.delete(at:))
+                //                if document.downloadStatus == .local {
+                //                    NavigationLink(destination: ArchiveViewModel.createDetail(with: document)) {
+                //                        DocumentView(viewModel: document, showTagStatus: false)
+                //                    }
+                //                } else {
+
+                //                NavigationLink(destination: ArchiveViewModel.createDetail(with: viewModel.selectedDocument ?? viewModel.documents.first!)) {
+                //                    DocumentView(viewModel: document, showTagStatus: false)
+                //                        .onTapGesture {
+                //                            self.viewModel.tapped(document)
+                //                        }
+                //                }
+                //                }
+            }
+            // TODO: fix delete
+            .onDelete(perform: viewModel.delete(at:))
         }
     }
 

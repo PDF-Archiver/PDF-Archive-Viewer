@@ -20,6 +20,7 @@ class ArchiveViewModel: ObservableObject, Log {
         return DocumentDetailView(viewModel: viewModel)
     }
 
+    @Published private(set) var selectedDocument: Document?
     @Published private(set) var documents: [Document] = []
     @Published var years: [String] = ["All", "2019", "2018", "2017"]
     @Published var scopeSelecton: Int = 0
@@ -71,7 +72,7 @@ class ArchiveViewModel: ObservableObject, Log {
 
         // filter documents, get input from Notification, searchText or searchScope
         $searchText
-            .debounce(for: .milliseconds(300), scheduler: DispatchQueue.global(qos: .userInitiated))
+            .debounce(for: .milliseconds(100), scheduler: DispatchQueue.global(qos: .userInitiated))
             .removeDuplicates()
             .combineLatest($scopeSelecton, archiveStore.$documents)
             .map { (searchterm, searchscopeSelection, documents) -> [Document] in
@@ -93,8 +94,9 @@ class ArchiveViewModel: ObservableObject, Log {
 
                 return documents
                     .filter { $0.taggingStatus == .tagged }
-                    .filter(by: searchterms)
-                    .sorted()
+                    .fuzzyMatchSorted(by: searchterms)
+//                    .filter(by: searchterms)
+//                    .sorted()
                     .reversed()
             }
             .receive(on: DispatchQueue.main)
@@ -131,7 +133,7 @@ class ArchiveViewModel: ObservableObject, Log {
             notificationFeedback.notificationOccurred(.success)
 
         case .local:
-            log.assertOrError("Already local - this should")
+            selectedDocument = document
         case .downloading:
             log.debug("Already downloading")
         }

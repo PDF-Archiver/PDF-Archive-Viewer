@@ -148,6 +148,8 @@
 		34A53FA724AA65CB008A3377 /* ShareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34A53FA524AA65CA008A3377 /* ShareViewController.swift */; };
 		34A53FA824AA65CB008A3377 /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 34A53FA624AA65CB008A3377 /* MainInterface.storyboard */; };
 		34A5CF8224A93A3C002409EF /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34A5CF8124A93A3C002409EF /* StoreKit.framework */; };
+		34BCB1FF24F9ACDC001F3F17 /* ContentView2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34BCB1FE24F9ACDC001F3F17 /* ContentView2.swift */; };
+		34BCB20024F9ACDC001F3F17 /* ContentView2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34BCB1FE24F9ACDC001F3F17 /* ContentView2.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -275,6 +277,7 @@
 		34A53FA924AA65E8008A3377 /* ShareExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ShareExtension.entitlements; sourceTree = "<group>"; };
 		34A5CF7F24A93A28002409EF /* PDFArchiver.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = PDFArchiver.entitlements; sourceTree = "<group>"; };
 		34A5CF8124A93A3C002409EF /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS14.0.sdk/System/Library/Frameworks/StoreKit.framework; sourceTree = DEVELOPER_DIR; };
+		34BCB1FE24F9ACDC001F3F17 /* ContentView2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView2.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -333,6 +336,7 @@
 				3416B19324A9282700D5F4E0 /* KeyCommandHostingController.swift */,
 				3416B19824A9282700D5F4E0 /* Localizable.strings */,
 				3416B19924A9282700D5F4E0 /* MainTabView.swift */,
+				34BCB1FE24F9ACDC001F3F17 /* ContentView2.swift */,
 				3416B1B524A9282800D5F4E0 /* MainTabViewModel.swift */,
 				3416B15F24A9282700D5F4E0 /* MoreTab */,
 				3416B19424A9282700D5F4E0 /* ScanTab */,
@@ -874,6 +878,7 @@
 				3416B23624A9282800D5F4E0 /* DocumentDetailView.swift in Sources */,
 				347BD2FA24C2275600C38DB9 /* ActivityView.swift in Sources */,
 				343A0A2124C228AB00824F75 /* UserDefaults.swift in Sources */,
+				34BCB1FF24F9ACDC001F3F17 /* ContentView2.swift in Sources */,
 				3416B22624A9282800D5F4E0 /* ArchiveExtension.swift in Sources */,
 				3416B25B24A9284E00D5F4E0 /* Archive.swift in Sources */,
 				347BD2F224C2275600C38DB9 /* TagListView.swift in Sources */,
@@ -935,6 +940,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				34BCB20024F9ACDC001F3F17 /* ContentView2.swift in Sources */,
 				343A0A3424C22DBD00824F75 /* Log.swift in Sources */,
 				3416B1BD24A9282800D5F4E0 /* TagTabView.swift in Sources */,
 				343A0A4B24C2319F00824F75 /* StorageHelper+Errors.swift in Sources */,

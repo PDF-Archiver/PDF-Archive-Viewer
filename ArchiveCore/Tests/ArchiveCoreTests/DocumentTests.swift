@@ -294,7 +294,7 @@ class DocumentTests: XCTestCase {
         // assert
         XCTAssertEqual(document.date, dateFormatter.date(from: "2010-05-12"))
         XCTAssertEqual(document.specification, "example filename")
-        XCTAssertEqual(document.specificationCapitalized, "Example Filename")
+        XCTAssertEqual(document.specification.capitalized, "Example Filename")
         XCTAssertEqual(document.tags, Set())
     }
 
@@ -309,7 +309,7 @@ class DocumentTests: XCTestCase {
         // assert
         XCTAssertEqual(document.date, dateFormatter.date(from: "2010-05-12"))
         XCTAssertEqual(document.specification, "example filename")
-        XCTAssertEqual(document.specificationCapitalized, "Example Filename")
+        XCTAssertEqual(document.specification.capitalized, "Example Filename")
         XCTAssertEqual(document.tags, Set())
     }
 
@@ -324,7 +324,7 @@ class DocumentTests: XCTestCase {
         // assert
         XCTAssertEqual(document.date, dateFormatter.date(from: "2010-05-12"))
         XCTAssertEqual(document.specification, "example filename")
-        XCTAssertEqual(document.specificationCapitalized, "Example Filename")
+        XCTAssertEqual(document.specification.capitalized, "Example Filename")
         XCTAssertEqual(document.tags, Set())
     }
 
@@ -354,7 +354,7 @@ class DocumentTests: XCTestCase {
         // assert
         XCTAssertEqual(document.date, dateFormatter.date(from: "2010-05-12"))
         XCTAssertEqual(document.specification, "15-17")
-        XCTAssertEqual(document.specificationCapitalized, "15 17")
+        XCTAssertEqual(document.specification.capitalized, "15 17")
         XCTAssertEqual(document.tags, Set())
     }
 
@@ -376,15 +376,15 @@ class DocumentTests: XCTestCase {
 //        XCTAssertEqual(newFilename!.foldername, "2010")
 //    }
 
-    func testDocumentRenameFailing() {
-
-        // setup
-        let path = URL(fileURLWithPath: "~/Downloads/2010/2010-05-12--testing-test-description__tag1_tag2.pdf")
-        let document = Document(path: path, taggingStatus: .tagged, downloadStatus: defaultDownloadStatus, byteSize: defaultSize)
-
-        // calculate & assert
-        XCTAssertThrowsError(try document.rename(archivePath: URL(string: "~/Downloads/")!, slugify: true))
-    }
+//    func testDocumentRenameFailing() {
+//
+//        // setup
+//        let path = URL(fileURLWithPath: "~/Downloads/2010/2010-05-12--testing-test-description__tag1_tag2.pdf")
+//        let document = Document(path: path, taggingStatus: .tagged, downloadStatus: defaultDownloadStatus, byteSize: defaultSize)
+//
+//        // calculate & assert
+//        XCTAssertThrowsError(try document.rename(archivePath: URL(string: "~/Downloads/")!, slugify: true))
+//    }
 
 //    func testDocumentRename() {
 //

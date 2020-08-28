@@ -41,10 +41,10 @@ extension UserDefaults: Log {
         }
     }
 
-    var lastSelectedTabIndex: MainTabView.Tabs {
+    var lastSelectedTabIndex: Tab.TabType {
         get {
             let index = UserDefaults.standard.integer(forKey: Names.lastSelectedTabIndex.rawValue)
-            return MainTabView.Tabs(rawValue: index) ?? .scan
+            return Tab.TabType(rawValue: index) ?? .scan
         }
         set {
             UserDefaults.standard.set(newValue.rawValue, forKey: Names.lastSelectedTabIndex.rawValue)

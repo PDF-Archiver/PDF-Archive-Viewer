@@ -13,6 +13,8 @@ import Quartz.PDFKit
 import PDFKit
 #endif
 
+extension Document: Searchitem {}
+
 public final class Document: ObservableObject, Identifiable, Codable, Log {
     public var id: URL {
         path
@@ -27,7 +29,12 @@ public final class Document: ObservableObject, Identifiable, Codable, Log {
 
     public let size: String
     public internal(set) var path: URL
-    public internal(set) var filename: String
+    public internal(set) var filename: String {
+        didSet {
+            term = filename.lowercased().utf8.map { UInt8($0) }
+        }
+    }
+    public private(set) lazy var term: Term = filename.lowercased().utf8.map { UInt8($0) }
 
     public convenience init(from details: FileChange.Details, with taggingStatus: TaggingStatus) {
         self.init(path: details.url,

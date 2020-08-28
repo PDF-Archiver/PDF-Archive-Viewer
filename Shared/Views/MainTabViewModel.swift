@@ -12,7 +12,30 @@ import LoggingKit
 import SwiftUI
 
 class MainTabViewModel: ObservableObject, Log {
-    @Published var currentTab = UserDefaults.standard.lastSelectedTabIndex
+
+    let tabs = [
+        Tab(name: "Scan", iconName: "doc.text.viewfinder", type: .scan),
+        Tab(name: "Tag", iconName: "tag", type: .tag),
+        Tab(name: "Archive", iconName: "archivebox", type: .archive),
+        Tab(name: "More", iconName: "ellipsis", type: .more)
+    ]
+
+    // TODO: remove example category items
+    @Published var categories = [
+        Category(name: "Archive", items: [
+            CategoryItem(type: .archive, name: "2020"),
+            CategoryItem(type: .archive, name: "2019"),
+            CategoryItem(type: .archive, name: "2018"),
+            CategoryItem(type: .archive, name: "2017")
+        ]),
+        Category(name: "Tags", items: [
+            CategoryItem(type: .tags, name: "bill"),
+            CategoryItem(type: .tags, name: "clothes"),
+            CategoryItem(type: .tags, name: "clothes")
+        ])
+    ]
+
+    @Published var currentTab: Tab.TabType? = UserDefaults.standard.lastSelectedTabIndex
     @Published var showTutorial = !UserDefaults.standard.tutorialShown
 
     var scanViewModel = ScanTabViewModel()
@@ -47,9 +70,11 @@ class MainTabViewModel: ObservableObject, Log {
             .dropFirst()
             .removeDuplicates()
             .sink { selectedTab in
+                let tab = selectedTab ?? .scan
+
                 // save the selected index for the next app start
-                UserDefaults.standard.lastSelectedTabIndex = selectedTab
-                Self.log.info("Changed tab.", metadata: ["selectedTab": "\(selectedTab.rawValue)"])
+                UserDefaults.standard.lastSelectedTabIndex = tab
+                Self.log.info("Changed tab.", metadata: ["selectedTab": "\(tab)"])
 
                 self.selectionFeedback.prepare()
                 self.selectionFeedback.selectionChanged()
@@ -71,8 +96,8 @@ class MainTabViewModel: ObservableObject, Log {
 
         // MARK: Subscription
         $currentTab
-            .sink { selectedIndex in
-                self.validateSubscriptionState(of: selectedIndex)
+            .sink { selectedTab in
+                self.validateSubscriptionState(of: selectedTab ?? .scan)
             }
             .store(in: &disposables)
 
@@ -80,7 +105,7 @@ class MainTabViewModel: ObservableObject, Log {
             .receive(on: DispatchQueue.main)
             .sink { _ in
                 self.showSubscriptionDismissed()
-                self.validateSubscriptionState(of: self.currentTab)
+                self.validateSubscriptionState(of: self.currentTab  ?? .scan)
             }
             .store(in: &disposables)
 
@@ -147,6 +172,19 @@ class MainTabViewModel: ObservableObject, Log {
         currentTab = .archive
     }
 
+    func view(for type: Tab.TabType) -> AnyView {
+        switch type {
+            case .scan:
+                return AnyView(ScanTabView(viewModel: scanViewModel))
+            case .tag:
+                return AnyView(TagTabView(viewModel: tagViewModel))
+            case .archive:
+                return AnyView(ArchiveView(viewModel: archiveViewModel))
+            case .more:
+                return AnyView(MoreTabView(viewModel: moreViewModel))
+        }
+    }
+
     // MARK: - Helper Functions
 
     private func handle(url: URL) {
@@ -165,7 +203,7 @@ class MainTabViewModel: ObservableObject, Log {
         }
     }
 
-    private func validateSubscriptionState(of selectedTab: MainTabView.Tabs) {
+    private func validateSubscriptionState(of selectedTab: Tab.TabType) {
         self.showSubscriptionView = !IAP.service.appUsagePermitted() && selectedTab == .tag
     }
 }

@@ -10,16 +10,22 @@ import Combine
 import SwiftUI
 
 struct MainTabView: View {
-    enum Tabs: Int, Hashable {
-        case scan = 0
-        case tag, archive, more
-    }
-
+    #if os(iOS)
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
+    #endif
     @StateObject var viewModel = MainTabViewModel()
 
     var body: some View {
         ZStack {
-            tabViews
+            #if os(macOS)
+            sidebar
+            #else
+            if horizontalSizeClass == .compact {
+                tabbar
+            } else {
+                sidebar
+            }
+            #endif
             if viewModel.scanViewModel.showDocumentScan {
                 documentCameraView
             }
@@ -35,36 +41,55 @@ struct MainTabView: View {
         }
     }
 
-    private var tabViews: some View {
+    private var sidebar: some View {
+        NavigationView {
+            List {
+                ForEach(viewModel.tabs) { tab in
+                    NavigationLink(destination: viewModel.view(for: tab.type), tag: tab.type, selection: $viewModel.currentTab) {
+                        Label(tab.name, systemImage: tab.iconName)
+                    }
+                }
+
+                ForEach(viewModel.categories) { canvas in
+                    Section(header: Text(canvas.name)) {
+                        ForEach(canvas.items) { item in
+                            Button(action: {
+                                // TODO: handle action
+                                print("Pressed item \(item)")
+                            }) {
+                                switch item.type {
+                                    case .archive:
+                                        Label(item.name, systemImage: "folder.fill")
+                                    case .tags:
+                                        Label(item.name, systemImage: "tag.fill")
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            .listStyle(SidebarListStyle())
+            .navigationTitle("Documents")
+
+            // TODO: start with scan tab
+            Text("Select a tab")
+
+            // TODO: handle updates when document selection changes
+            if let selectedDocument = viewModel.archiveViewModel.selectedDocument {
+                ArchiveViewModel.createDetail(with: selectedDocument)
+            }
+        }
+    }
+
+    private var tabbar: some View {
         TabView(selection: $viewModel.currentTab) {
-            ScanTabView(viewModel: viewModel.scanViewModel)
-                .tabItem {
-                    VStack {
-                        Image(systemName: "doc.text.viewfinder")
-                        Text("Scan")
+            ForEach(viewModel.tabs) { tab in
+                viewModel.view(for: tab.type)
+                    .tabItem {
+                        Label(tab.name, systemImage: tab.iconName)
                     }
-                }.tag(Tabs.scan)
-            TagTabView(viewModel: viewModel.tagViewModel)
-                .tabItem {
-                    VStack {
-                        Image(systemName: "tag")
-                        Text("Tag")
-                    }
-                }.tag(Tabs.tag)
-            ArchiveView(viewModel: viewModel.archiveViewModel)
-                .tabItem {
-                    VStack {
-                        Image(systemName: "archivebox")
-                        Text("Archive")
-                    }
-                }.tag(Tabs.archive)
-            MoreTabView(viewModel: viewModel.moreViewModel)
-                .tabItem {
-                    VStack {
-                        Image(systemName: "ellipsis")
-                        Text("More")
-                    }
-                }.tag(Tabs.more)
+                    .tag(tab)
+            }
         }
     }
 
