@@ -15,7 +15,7 @@ import MetricKit
 import Sentry
 import UIKit
 
-class AppDelegate: UIResponder, UIApplicationDelegate, Log {
+final class AppDelegate: UIResponder, UIApplicationDelegate, Log {
 
     private static let logger: RestLogger = {
 //        let endpoint = URL(string: "https://logs-develop.pdf-archiver.io/v1/addBatch")!

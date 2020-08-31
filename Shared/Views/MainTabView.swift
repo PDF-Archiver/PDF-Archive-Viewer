@@ -13,7 +13,7 @@ struct MainTabView: View {
     #if os(iOS)
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     #endif
-    @StateObject var viewModel = MainTabViewModel()
+    @StateObject var viewModel = MainNavigationViewModel()
 
     var body: some View {
         ZStack {
@@ -71,13 +71,17 @@ struct MainTabView: View {
             .listStyle(SidebarListStyle())
             .navigationTitle("Documents")
 
-            // TODO: start with scan tab
             Text("Select a tab")
 
-            // TODO: handle updates when document selection changes
-            if let selectedDocument = viewModel.archiveViewModel.selectedDocument {
-                ArchiveViewModel.createDetail(with: selectedDocument)
-            }
+            // Would be great to show a thrid column in .archive case, but this is currently not possible:
+            // https://github.com/JulianKahnert/NavigationExample
+//            if viewModel.currentTab == .archive {
+//                if let selectedDocument = viewModel.archiveViewModel.selectedDocument {
+//                    ArchiveViewModel.createDetail(with: selectedDocument)
+//                } else {
+//                    Text("Select a tab")
+//                }
+//            }
         }
     }
 
@@ -109,7 +113,7 @@ struct MainTabView: View {
 }
 
 //struct MainTabView_Previews: PreviewProvider {
-//    @State static var viewModel = MainTabViewModel()
+//    @State static var viewModel = MainNavigationViewModel()
 //    static var previews: some View {
 //        MainTabView(viewModel: viewModel)
 //    }

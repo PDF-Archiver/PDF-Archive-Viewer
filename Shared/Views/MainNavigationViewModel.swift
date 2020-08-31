@@ -1,5 +1,5 @@
 //
-//  MainTabViewModel.swift
+//  MainNavigationViewModel.swift
 //  PDFArchiver
 //
 //  Created by Julian Kahnert on 30.10.19.
@@ -11,7 +11,7 @@ import Combine
 import LoggingKit
 import SwiftUI
 
-class MainTabViewModel: ObservableObject, Log {
+final class MainNavigationViewModel: ObservableObject, Log {
 
     let tabs = [
         Tab(name: "Scan", iconName: "doc.text.viewfinder", type: .scan),

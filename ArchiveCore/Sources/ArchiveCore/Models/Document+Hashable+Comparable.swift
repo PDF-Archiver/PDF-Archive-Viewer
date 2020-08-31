@@ -1,15 +1,9 @@
 //
-//  File.swift
+//  Document+Hashable+Comparable.swift
 //  
 //
 //  Created by Julian Kahnert on 15.08.20.
 //
-
-extension Document: Searchable {
-    public var searchTerm: String {
-        path.deletingPathExtension().lastPathComponent
-    }
-}
 
 extension Document: Hashable, Comparable {
 

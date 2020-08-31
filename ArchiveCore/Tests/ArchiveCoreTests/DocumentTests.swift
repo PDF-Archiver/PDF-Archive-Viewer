@@ -9,7 +9,7 @@
 @testable import ArchiveCore
 import XCTest
 
-class DocumentTests: XCTestCase {
+final class DocumentTests: XCTestCase {
 
     let tag1 = "tag1"
     let tag2 = "tag2"

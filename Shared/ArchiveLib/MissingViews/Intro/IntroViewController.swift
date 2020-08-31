@@ -10,7 +10,7 @@
 import PaperOnboarding
 import UIKit
 
-class IntroViewController: UIViewController {
+final class IntroViewController: UIViewController {
 
     private let items = [
         OnboardingItemInfo(informationImage: #imageLiteral(resourceName: "scan"),

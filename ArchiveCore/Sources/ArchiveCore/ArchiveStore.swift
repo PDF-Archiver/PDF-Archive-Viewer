@@ -212,7 +212,7 @@ public final class ArchiveStore: ObservableObject, Log {
     private func updateYears() {
         var years = Set<String>()
         for document in self.documents {
-            let folder = document.path.deletingLastPathComponent().lastPathComponent
+            let folder = document.folder
             guard folder.isNumeric,
                   folder.count <= 4 else { continue }
             years.insert(folder)

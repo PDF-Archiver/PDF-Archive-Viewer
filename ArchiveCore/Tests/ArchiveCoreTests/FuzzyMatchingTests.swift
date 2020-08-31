@@ -9,7 +9,7 @@
 import Foundation
 import XCTest
 
-class FuzzyMatchingTests: XCTestCase {
+final class FuzzyMatchingTests: XCTestCase {
 
     private static let testFileUrl = URL(string: "https://raw.githubusercontent.com/objcio/S01E216-quick-open-optimizing-performance-part-2/master/QuickOpen/linux.txt")!
     private static let testFilenames: [String] = {

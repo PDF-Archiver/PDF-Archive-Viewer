@@ -47,12 +47,6 @@ extension Tag: Identifiable, Hashable, Comparable, CustomStringConvertible {
     public var description: String { return "\(name) (\(count))" }
 }
 
-extension Tag: Searchable {
-    public var searchTerm: String {
-        return name
-    }
-}
-
 extension Tag: CustomComparable {
     public func isBefore(_ other: Tag, _ sort: NSSortDescriptor) throws -> Bool {
         if sort.key == "name" {

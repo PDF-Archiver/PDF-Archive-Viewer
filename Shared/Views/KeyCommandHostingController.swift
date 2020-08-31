@@ -8,9 +8,9 @@
 
 import SwiftUI
 
-class KeyCommandHostingController<Content>: UIHostingController<Content> where Content: View {
+final class KeyCommandHostingController<Content>: UIHostingController<Content> where Content: View {
 
-    private let viewModel: MainTabViewModel
+    private let viewModel: MainNavigationViewModel
 
     // global shortcuts
     private let tab0 = UIKeyCommand(title: "Open Scan Tab", action: #selector(action), input: "1", modifierFlags: .command, discoverabilityTitle: "Open the Scan tab")
@@ -22,7 +22,7 @@ class KeyCommandHostingController<Content>: UIHostingController<Content> where C
     private let save = UIKeyCommand(title: "Save", action: #selector(action), input: "s", modifierFlags: .command, discoverabilityTitle: "Save current document")
     private let delete = UIKeyCommand(title: "Delete", action: #selector(action), input: "\u{8}", modifierFlags: .command, discoverabilityTitle: "Delete current document")
 
-    init(rootView: Content, viewModel: MainTabViewModel) {
+    init(rootView: Content, viewModel: MainNavigationViewModel) {
         self.viewModel = viewModel
         super.init(rootView: rootView)
     }
@@ -54,13 +54,13 @@ class KeyCommandHostingController<Content>: UIHostingController<Content> where C
         switch sender {
         case save:
             guard viewModel.currentTab == .tag else {
-                assertionFailure("Could not save document in tab #\(viewModel.currentTab)")
+                assertionFailure("Could not save document in tab #\(String(describing: viewModel.currentTab))")
                 return
             }
             viewModel.tagViewModel.saveDocument()
         case delete:
             guard viewModel.currentTab == .tag else {
-                assertionFailure("Could not save document in tab #\(viewModel.currentTab)")
+                assertionFailure("Could not save document in tab #\(String(describing: viewModel.currentTab))")
                 return
             }
             viewModel.tagViewModel.deleteDocument()

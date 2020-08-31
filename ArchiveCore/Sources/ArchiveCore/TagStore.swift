@@ -29,7 +29,7 @@ public final class TagStore {
     public func getAvailableTags(with searchterms: [String]) -> Set<String> {
 
         // search in filename of the documents
-        let filteredDocuments = ArchiveStore.shared.documents.filter(by: searchterms)
+        let filteredDocuments = ArchiveStore.shared.documents.fuzzyMatchSorted(by: searchterms)
 
         // get a set of all document tags
         let allDocumentTags = filteredDocuments.reduce(into: Set<String>()) { result, document in

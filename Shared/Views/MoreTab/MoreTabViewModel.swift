@@ -12,7 +12,7 @@ import MessageUI
 import LoggingKit
 import SwiftUI
 
-class MoreTabViewModel: ObservableObject, Log {
+final class MoreTabViewModel: ObservableObject, Log {
 
     static let mailRecipients = ["support@pdf-archiver.io"]
     static let mailSubject = "PDF Archiver: iOS Support"

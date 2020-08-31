@@ -8,7 +8,7 @@
 import DeepDiff
 import Foundation
 
-class LocalFolderProvider: FolderProvider {
+final class LocalFolderProvider: FolderProvider {
 
 //    var type: FolderType = .local
     let baseUrl: URL

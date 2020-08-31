@@ -18,7 +18,7 @@ public enum PDFProcessingError: Error {
     case pdfNotFound
 }
 
-public class PDFProcessing: Operation, Log {
+public final class PDFProcessing: Operation, Log {
 
     public typealias ProgressHandler = ((Float) -> Void)
 

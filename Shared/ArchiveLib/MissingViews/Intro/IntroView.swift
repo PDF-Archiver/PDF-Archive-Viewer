@@ -11,7 +11,7 @@ import SwiftUI
 
 struct IntroView: UIViewControllerRepresentable {
 
-    class Coordinator: NSObject {
+    final class Coordinator: NSObject {
     }
 
     func makeUIViewController(context: UIViewControllerRepresentableContext<IntroView>) -> IntroViewController {

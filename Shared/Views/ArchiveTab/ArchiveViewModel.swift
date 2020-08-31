@@ -13,7 +13,7 @@ import Foundation
 import LoggingKit
 import UIKit
 
-class ArchiveViewModel: ObservableObject, Log {
+final class ArchiveViewModel: ObservableObject, Log {
 
     static func createDetail(with document: Document) -> DocumentDetailView {
         let viewModel = DocumentDetailViewModel(document)
@@ -86,13 +86,15 @@ class ArchiveViewModel: ObservableObject, Log {
                         .components(separatedBy: .whitespacesAndNewlines)
                 }
 
+                var currentDocuments = documents
+
                 let searchscope = self.years[searchscopeSelection]
                 if CharacterSet.decimalDigits.isSuperset(of: CharacterSet(charactersIn: searchscope)) {
                     // found a year - it should be used as a searchterm
-                    searchterms.append(searchscope)
+                    currentDocuments = currentDocuments.filter { $0.folder == searchscope }
                 }
 
-                return documents
+                return currentDocuments
                     .filter { $0.taggingStatus == .tagged }
                     .fuzzyMatchSorted(by: searchterms)
 //                    .filter(by: searchterms)

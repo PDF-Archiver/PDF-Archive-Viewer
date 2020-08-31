@@ -10,7 +10,7 @@ import SwiftUI
 
 struct CustomTextField: UIViewRepresentable {
 
-    class Coordinator: NSObject, UITextFieldDelegate {
+    final class Coordinator: NSObject, UITextFieldDelegate {
 
         var didBecomeFirstResponder = false
         let customTextField: CustomTextField

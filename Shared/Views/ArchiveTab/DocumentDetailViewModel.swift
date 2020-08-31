@@ -9,7 +9,7 @@
 import Foundation
 import PDFKit
 
-class DocumentDetailViewModel: ObservableObject {
+final class DocumentDetailViewModel: ObservableObject {
     let document: Document
     @Published var pdfDocument: PDFDocument?
     @Published var showActivityView: Bool = false

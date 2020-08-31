@@ -12,7 +12,7 @@ import LoggingKit
 import PDFKit
 import SwiftUI
 
-class TagTabViewModel: ObservableObject, Log {
+final class TagTabViewModel: ObservableObject, Log {
 
     // set this property manually
     @Published var documents = [Document]()
@@ -45,11 +45,8 @@ class TagTabViewModel: ObservableObject, Log {
         self.tagStore = tagStore
 
         // MARK: - Combine Stuff
-//        NotificationCenter.default.publisher(for: .documentChanges)
         archiveStore.$state
             .map { state in
-
-                print(self.archiveStore.documents.count)
                 return state == .uninitialized
             }
             .receive(on: DispatchQueue.main)
@@ -90,9 +87,9 @@ class TagTabViewModel: ObservableObject, Log {
             .assign(to: \.inputAccessoryViewSuggestions, on: self)
             .store(in: &disposables)
 
-        ArchiveStore.shared.$documents
-            .map { documents in
-                documents.filter { $0.taggingStatus == .untagged }
+        archiveStore.$documents
+            .map { newDocuments -> [Document] in
+                newDocuments.filter { $0.taggingStatus == .untagged }
             }
             .removeDuplicates()
             .compactMap { newUntaggedDocuments in

@@ -24,7 +24,7 @@ extension URL {
 }
 
 //swiftlint:disable:next type_name
-class Tests_iOS: XCTestCase {
+final class Tests_iOS: XCTestCase {
 
     var tempDir: URL?
 

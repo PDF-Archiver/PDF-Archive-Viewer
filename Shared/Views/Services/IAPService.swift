@@ -23,7 +23,7 @@ public extension IAPServiceDelegate {
     func found(requestsRunning: Int) {}
 }
 
-public class IAPService: NSObject, Log {
+public final class IAPService: NSObject, Log {
 
     private static let productIdentifiers = Set(["SUBSCRIPTION_MONTHLY_IOS", "SUBSCRIPTION_YEARLY_IOS_NEW"])
 

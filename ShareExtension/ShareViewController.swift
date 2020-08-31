@@ -9,7 +9,7 @@
 import PDFKit
 import UIKit
 
-class ShareViewController: UIViewController {
+final class ShareViewController: UIViewController {
 
     fileprivate enum ShareError: Error {
         case timeout

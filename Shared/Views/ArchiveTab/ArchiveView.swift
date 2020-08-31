@@ -12,31 +12,6 @@ import SwiftUIX
 struct ArchiveView: View {
     @ObservedObject var viewModel: ArchiveViewModel
 
-//    var body: some View {
-//        NavigationView {
-//            if viewModel.showLoadingView {
-//                LoadingView()
-//            } else {
-//                HStack {
-//                    VStack {
-//                        searchView
-//                        documentsView
-//                            .resignKeyboardOnDragGesture()
-//                    }
-//                    .navigationBarTitle(Text("Documents"))
-////                    emptyView
-//                }
-//            }
-//            if let document = viewModel.selectedDocument {
-//                ArchiveViewModel.createDetail(with: document)
-//            } else {
-//                emptyView
-//            }
-//        }
-//        // On iPad: force double column view
-//        .navigationViewStyle(DoubleColumnNavigationViewStyle())
-//    }
-
     var body: some View {
 
         if viewModel.showLoadingView {
@@ -48,7 +23,7 @@ struct ArchiveView: View {
                     documentsView
                         .resignKeyboardOnDragGesture()
                 }
-                .navigationBarTitle(Text("Documents"))
+                .navigationBarTitle(Text("Archive"))
 //                    emptyView
             }
         }
@@ -65,24 +40,17 @@ struct ArchiveView: View {
     var documentsView: some View {
         List {
             ForEach(viewModel.documents) { document in
-                DocumentView(viewModel: document, showTagStatus: false)
-                    .contentShape(Rectangle())
-                    .onTapGesture {
-                        self.viewModel.tapped(document)
+                if document.downloadStatus == .local {
+                    NavigationLink(destination: ArchiveViewModel.createDetail(with: document)) {
+                        DocumentView(viewModel: document, showTagStatus: false)
                     }
-                //                if document.downloadStatus == .local {
-                //                    NavigationLink(destination: ArchiveViewModel.createDetail(with: document)) {
-                //                        DocumentView(viewModel: document, showTagStatus: false)
-                //                    }
-                //                } else {
+                } else {
 
-                //                NavigationLink(destination: ArchiveViewModel.createDetail(with: viewModel.selectedDocument ?? viewModel.documents.first!)) {
-                //                    DocumentView(viewModel: document, showTagStatus: false)
-                //                        .onTapGesture {
-                //                            self.viewModel.tapped(document)
-                //                        }
-                //                }
-                //                }
+                    DocumentView(viewModel: document, showTagStatus: false)
+                        .onTapGesture {
+                            self.viewModel.tapped(document)
+                        }
+                }
             }
             // TODO: fix delete
             .onDelete(perform: viewModel.delete(at:))

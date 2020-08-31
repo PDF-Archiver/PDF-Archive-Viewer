@@ -9,7 +9,7 @@
 import Foundation
 import XCTest
 
-class ArrayURLTests: XCTestCase {
+final class ArrayURLTests: XCTestCase {
 
     override func setUp() {
         super.setUp()

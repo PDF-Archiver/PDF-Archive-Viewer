@@ -21,7 +21,7 @@ struct InputAccessoryView: View {
                 }
                 if index != (items.count - 1) {
                     Divider()
-                        .backgroundColor(.systemGray6)
+                        .backgroundFill(.systemGray6)
                         .padding()
                 }
             }

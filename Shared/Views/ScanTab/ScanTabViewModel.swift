@@ -13,7 +13,7 @@ import LoggingKit
 import SwiftUI
 import VisionKit
 
-class ScanTabViewModel: ObservableObject, Log {
+final class ScanTabViewModel: ObservableObject, Log {
     @Published var showDocumentScan: Bool = false
     @Published var progressValue: CGFloat = 0.0
     @Published var progressLabel: String = ""

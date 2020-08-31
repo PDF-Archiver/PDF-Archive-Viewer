@@ -9,7 +9,7 @@
 import Foundation
 import LoggingKit
 
-class DirectoryDeepWatcher: NSObject, Log {
+final class DirectoryDeepWatcher: NSObject, Log {
     private var watchedUrl: URL
 
     typealias SourceObject = (source: DispatchSourceFileSystemObject, descriptor: Int32, url: URL)

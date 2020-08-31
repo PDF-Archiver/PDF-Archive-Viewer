@@ -41,19 +41,19 @@ struct Stack_Previews: PreviewProvider {
             Stack {
                 Text("Text 1")
                     .padding(.all, 20)
-                    .backgroundColor(.green)
+                    .backgroundFill(.green)
                 Text("Text 2")
                     .padding(.all, 20)
-                    .backgroundColor(.blue)
+                    .backgroundFill(.blue)
             }
             .previewLayout(.fixed(width: 800.0, height: 200.0))
             Stack {
                 Text("Text 1")
                     .padding(.all, 20)
-                    .backgroundColor(.green)
+                    .backgroundFill(.green)
                 Text("Text 2")
                     .padding(.all, 20)
-                    .backgroundColor(.blue)
+                    .backgroundFill(.blue)
             }
             .previewLayout(.fixed(width: 200.0, height: 800.0))
         }

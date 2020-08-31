@@ -11,7 +11,7 @@ import LoggingKit
 import StoreKit
 import SwiftUI
 
-class IAPViewModel: ObservableObject, Log {
+final class IAPViewModel: ObservableObject, Log {
     @Published var level1Name = "Level 1"
     @Published var level2Name = "Level 2"
 
