@@ -1,5 +1,5 @@
 //
-//  MainTabView.swift
+//  MainNavigationView.swift
 //  PDFArchiver
 //
 //  Created by Julian Kahnert on 30.10.19.
@@ -47,7 +47,7 @@ struct MainNavigationView: View {
                 ForEach(viewModel.tabs) { tab in
                     NavigationLink(destination: viewModel.view(for: tab.type), tag: tab.type, selection: $viewModel.currentTab) {
                         Label {
-                            Text(tab.name)
+                            Text(LocalizedStringKey(tab.name))
                         } icon: {
                             Image(systemName: tab.iconName)
                                 .accentColor(Color(.paDarkRed))
@@ -119,9 +119,9 @@ struct MainNavigationView: View {
     }
 }
 
-//struct MainTabView_Previews: PreviewProvider {
+//struct MainNavigationView_Previews: PreviewProvider {
 //    @State static var viewModel = MainNavigationViewModel()
 //    static var previews: some View {
-//        MainTabView(viewModel: viewModel)
+//        MainNavigationView(viewModel: viewModel)
 //    }
 //}

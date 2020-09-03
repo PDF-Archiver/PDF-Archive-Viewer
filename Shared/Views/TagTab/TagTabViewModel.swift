@@ -88,7 +88,6 @@ final class TagTabViewModel: ObservableObject, Log {
             .store(in: &disposables)
 
         archiveStore.$documents
-            .print("TagTabViewModel")
             .map { newDocuments -> [Document] in
                 newDocuments.filter { $0.taggingStatus == .untagged }
             }
@@ -183,20 +182,22 @@ final class TagTabViewModel: ObservableObject, Log {
             }
             .store(in: &disposables)
 
-        // TODO: fix this
-//        $documentTags
-//            .removeDuplicates()
-//            .map { tags -> [String] in
-//                let tmpTags = tags.map { $0.lowercased().slugified(withSeparator: "") }
-//                    .filter { !$0.isEmpty }
-//
-//                self.selectionFeedback.prepare()
-//                self.selectionFeedback.selectionChanged()
-//
-//                return Set(tmpTags).sorted()
-//            }
-//            .receive(on: DispatchQueue.main)
-//            .assign(to: $documentTags)
+        $documentTags
+            .removeDuplicates()
+            .map { tags -> [String] in
+                let tmpTags = tags.map { $0.lowercased().slugified(withSeparator: "") }
+                    .filter { !$0.isEmpty }
+
+                self.selectionFeedback.prepare()
+                self.selectionFeedback.selectionChanged()
+
+                return Set(tmpTags).sorted()
+            }
+            .receive(on: DispatchQueue.main)
+            .assign(to: &$documentTags)
+//            .assign(to: \.documentTags, on: self)
+//            .store(in: &disposables)
+
     }
 
     func saveTag(_ tagName: String) {

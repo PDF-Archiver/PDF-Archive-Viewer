@@ -23,7 +23,7 @@ struct PDFArchiverApp: App {
 
     var body: some Scene {
         WindowGroup {
-            MainTabView()
+            MainNavigationView()
                 .accentColor(Color(.paDarkGray))
                 .environmentObject(OrientationInfo())
         }

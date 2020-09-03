@@ -21,7 +21,7 @@ struct DocumentInformationForm: View {
     var body: some View {
         Form {
             DatePicker("Date", selection: $date, displayedComponents: .date)
-//                .labelsHidden()
+                .labelsHidden()
             TextField("Description", text: $specification)
                 .modifier(ClearButton(text: $specification))
             documentTagsView

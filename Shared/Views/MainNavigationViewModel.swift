@@ -37,7 +37,7 @@ final class MainNavigationViewModel: ObservableObject, Log {
     @Published var archiveCategories = ["2020", "2019", "2018"]
     @Published var tagCategories = ["bill", "clothes", "finance"]
 
-    @Published var currentTab: Tab.TabType? = UserDefaults.standard.lastSelectedTabIndex
+    @Published var currentTab: Tab.TabType? = UserDefaults.standard.lastSelectedTabIndex ?? .scan
     @Published var showTutorial = !UserDefaults.standard.tutorialShown
 
     var scanViewModel = ScanTabViewModel()

@@ -119,32 +119,32 @@ struct TagTabView: View {
                                 inputAccessoryViewSuggestions: $viewModel.inputAccessoryViewSuggestions)
     }
 
-    // MARK: - Layout Helpers
-
-    private func shouldShowDocumentList(width: CGFloat) -> Bool {
-        guard width > 900.0 else { return false }
-        let screenSize = UIScreen.main.bounds.size
-        return UIDevice.current.userInterfaceIdiom != .phone && screenSize.height < screenSize.width
-    }
-
-    private enum Element {
-        case documentList, pdf, documentInformation
-    }
-
-    private func size(of element: Element, width: CGFloat) -> CGFloat {
-        switch element {
-        case .documentList:
-            return width / 6 * 1
-        case .pdf:
-            return .infinity
-        case .documentInformation:
-            if UIDevice.current.userInterfaceIdiom != .phone {
-                return max(width / 6 * 2, 320)
-            } else {
-                return .infinity
-            }
-        }
-    }
+//    // MARK: - Layout Helpers
+//
+//    private func shouldShowDocumentList(width: CGFloat) -> Bool {
+//        guard width > 900.0 else { return false }
+//        let screenSize = UIScreen.main.bounds.size
+//        return UIDevice.current.userInterfaceIdiom != .phone && screenSize.height < screenSize.width
+//    }
+//
+//    private enum Element {
+//        case documentList, pdf, documentInformation
+//    }
+//
+//    private func size(of element: Element, width: CGFloat) -> CGFloat {
+//        switch element {
+//        case .documentList:
+//            return width / 6 * 1
+//        case .pdf:
+//            return .infinity
+//        case .documentInformation:
+//            if UIDevice.current.userInterfaceIdiom != .phone {
+//                return max(width / 6 * 2, 320)
+//            } else {
+//                return .infinity
+//            }
+//        }
+//    }
 }
 
 #if DEBUG

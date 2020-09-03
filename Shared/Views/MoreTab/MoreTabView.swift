@@ -17,29 +17,28 @@ struct MoreTabView: View {
 
     var body: some View {
         HStack {
-            if UIDevice.current.userInterfaceIdiom != .phone {
-                Spacer()
+            #if !os(iOS)
+            Spacer()
+            #endif
+
+            Form {
+                preferences
+                subscription
+                moreInformation
             }
-            NavigationView {
-                Form {
-                    preferences
-                    subscription
-                    moreInformation
-                }
-                .listStyle(GroupedListStyle())
-                .foregroundColor(.primary)
-                .sheet(isPresented: $viewModel.isShowingMailView) {
-                    SupportMailView(subject: MoreTabViewModel.mailSubject,
-                                    recipients: MoreTabViewModel.mailRecipients,
-                                    result: self.$viewModel.result)
-                }
-                .navigationBarTitleView(title)
+            .listStyle(GroupedListStyle())
+            .foregroundColor(.primary)
+            .sheet(isPresented: $viewModel.isShowingMailView) {
+                SupportMailView(subject: MoreTabViewModel.mailSubject,
+                                recipients: MoreTabViewModel.mailRecipients,
+                                result: self.$viewModel.result)
             }
-            .navigationViewStyle(StackNavigationViewStyle())
+            .navigationBarTitleView(title)
             .frame(maxWidth: 500)
-            if UIDevice.current.userInterfaceIdiom != .phone {
-                Spacer()
-            }
+
+            #if !os(iOS)
+            Spacer()
+            #endif
         }
         .backgroundFill(.systemGroupedBackground)
         .navigationViewStyle(StackNavigationViewStyle())
