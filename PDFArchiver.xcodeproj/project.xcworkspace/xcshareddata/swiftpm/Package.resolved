@@ -68,8 +68,8 @@
         "package": "SwiftUIX",
         "repositoryURL": "https://github.com/SwiftUIX/SwiftUIX",
         "state": {
-          "branch": "master",
-          "revision": "e21824b20b0cdec87e87ea14e1a0d0a0061ab61b",
+          "branch": "asauthorization-xcode12b6-patch",
+          "revision": "939b85a2c06f463722dcbd1a125343f29d85551b",
           "version": null
         }
       },

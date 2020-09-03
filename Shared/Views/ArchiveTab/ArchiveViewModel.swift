@@ -47,7 +47,7 @@ final class ArchiveViewModel: ObservableObject, Log {
 
         archiveStore.$years
             .map { years -> [String] in
-                ["All"] + Array(years.sorted().reversed().prefix(3))
+                ["All"] + Array(years.sorted().reversed().prefix(4))
             }
             .removeDuplicates()
             .receive(on: DispatchQueue.main)

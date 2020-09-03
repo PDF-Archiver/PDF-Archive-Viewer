@@ -162,7 +162,7 @@ public final class Document: ObservableObject, Identifiable, Codable, Log {
 
             // set the specification
             let specification = parsedFilename.specification ?? ""
-            if specification.contains(Constants.documentDescriptionPlaceholder) {
+            if specification.lowercased().contains(Constants.documentDescriptionPlaceholder.lowercased()) {
                 self.specification = ""
             } else {
                 self.specification = specification

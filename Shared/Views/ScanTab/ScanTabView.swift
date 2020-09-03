@@ -12,6 +12,7 @@ import UIKit
 
 struct ScanTabView: View {
     @ObservedObject var viewModel: ScanTabViewModel
+    @State private var opacity = 0.0
 
     var body: some View {
         VStack {
@@ -57,6 +58,12 @@ struct ScanTabView: View {
         }
         .padding(16.0)
         .foregroundColor(Color(.paDarkGray))
+        .opacity(opacity)
+        .onAppear {
+            withAnimation {
+                opacity = 1.0
+            }
+        }
     }
 
     var scanButton: some View {

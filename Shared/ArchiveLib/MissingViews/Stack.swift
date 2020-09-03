@@ -10,6 +10,10 @@ import SwiftUI
 
 struct Stack<Content: View>: View {
 
+    #if os(iOS)
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
+    #endif
+
     var spacing: CGFloat
     var content: Content
 
@@ -19,19 +23,42 @@ struct Stack<Content: View>: View {
     }
 
     var body: some View {
-        GeometryReader { geometry in
-            if geometry.size.width * 1.3 < geometry.size.height {
-                VStack(alignment: .center, spacing: spacing) {
-                    content
-                }
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-            } else {
-                HStack(alignment: .center, spacing: spacing) {
-                    content
-                }
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-            }
+        #if os(iOS)
+        if horizontalSizeClass == .compact {
+            vertical
+        } else {
+            horizontal
         }
+        #else
+        horizontal
+        #endif
+//        GeometryReader { geometry in
+//            if geometry.size.width * 1.3 < geometry.size.height {
+//                VStack(alignment: .center, spacing: spacing) {
+//                    content
+//                }
+//                .frame(maxWidth: .infinity, maxHeight: .infinity)
+//            } else {
+//                HStack(alignment: .center, spacing: spacing) {
+//                    content
+//                }
+//                .frame(maxWidth: .infinity, maxHeight: .infinity)
+//            }
+//        }
+    }
+
+    var vertical: some View {
+        VStack(alignment: .center, spacing: spacing) {
+            content
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+    }
+
+    var horizontal: some View {
+        HStack(alignment: .center, spacing: spacing) {
+            content
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 }
 

@@ -47,7 +47,7 @@ final class TagTabViewModel: ObservableObject, Log {
         // MARK: - Combine Stuff
         archiveStore.$state
             .map { state in
-                return state == .uninitialized
+                state == .uninitialized
             }
             .receive(on: DispatchQueue.main)
             .assign(to: \.showLoadingView, on: self)
@@ -88,6 +88,7 @@ final class TagTabViewModel: ObservableObject, Log {
             .store(in: &disposables)
 
         archiveStore.$documents
+            .print("TagTabViewModel")
             .map { newDocuments -> [Document] in
                 newDocuments.filter { $0.taggingStatus == .untagged }
             }
@@ -104,20 +105,15 @@ final class TagTabViewModel: ObservableObject, Log {
                 }
 
                 // download new documents
-                let untaggedDocuments = newUntaggedDocuments
+                newUntaggedDocuments
                     .filter { $0.downloadStatus == .remote }
-                    .map { document -> Document in
+                    .forEach { document in
                         do {
                             try archiveStore.download(document)
                         } catch {
                             AlertViewModel.createAndPost(message: error, primaryButtonTitle: "ok")
                         }
-                        return document
                     }
-                let taggedDocuments = archiveStore.documents.filter { $0.taggingStatus == .tagged }
-
-                // save documents
-                archiveStore.documents = [untaggedDocuments, taggedDocuments].flatMap { $0 }
 
                 guard self.currentDocument == nil || !newUntaggedDocuments.contains(self.currentDocument!)  else { return nil }
 
@@ -149,6 +145,8 @@ final class TagTabViewModel: ObservableObject, Log {
 
                     // try to parse suggestions from document content
                     DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+//                        doc
+
                         // get tags and save them in the background, they will be passed to the TagTabView
                         guard let text = pdfDocument.string else { return }
                         let tags = TagParser.parse(text).sorted()

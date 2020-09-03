@@ -41,7 +41,7 @@ struct MoreTabView: View {
                 Spacer()
             }
         }
-        .backgroundColor(Color(.systemGroupedBackground))
+        .backgroundFill(.systemGroupedBackground)
         .navigationViewStyle(StackNavigationViewStyle())
         .onAppear(perform: viewModel.updateSubscription)
     }

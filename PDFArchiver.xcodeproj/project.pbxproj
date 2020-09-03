@@ -1461,7 +1461,7 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SwiftUIX/SwiftUIX";
 			requirement = {
-				branch = master;
+				branch = "asauthorization-xcode12b6-patch";
 				kind = branch;
 			};
 		};

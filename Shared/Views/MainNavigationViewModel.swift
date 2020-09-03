@@ -34,6 +34,8 @@ final class MainNavigationViewModel: ObservableObject, Log {
             CategoryItem(type: .tags, name: "clothes")
         ])
     ]
+    @Published var archiveCategories = ["2020", "2019", "2018"]
+    @Published var tagCategories = ["bill", "clothes", "finance"]
 
     @Published var currentTab: Tab.TabType? = UserDefaults.standard.lastSelectedTabIndex
     @Published var showTutorial = !UserDefaults.standard.tutorialShown
@@ -131,6 +133,18 @@ final class MainNavigationViewModel: ObservableObject, Log {
             }
             .store(in: &disposables)
 
+        ArchiveStore.shared.$years
+            .map { years -> [String] in
+                let tmp = years.sorted()
+                    .reversed()
+                    .prefix(10)
+
+                return Array(tmp)
+            }
+            .removeDuplicates()
+            .receive(on: DispatchQueue.main)
+            .assign(to: \.archiveCategories, on: self)
+
         // TODO: change container!?
         DispatchQueue.global(qos: .userInteractive).async {
 
@@ -183,6 +197,20 @@ final class MainNavigationViewModel: ObservableObject, Log {
             case .more:
                 return AnyView(MoreTabView(viewModel: moreViewModel))
         }
+    }
+
+    func selectedArchive(_ category: String) {
+        // TODO: add advanced query: only search in date/folder
+        log.info("Tapped on archive category.")
+        currentTab = .archive
+        archiveViewModel.searchText = category
+    }
+
+    func selectedTag(_ category: String) {
+        // TODO: add advanced query: only search in tags
+        log.info("Tapped on tag category.")
+        currentTab = .archive
+        archiveViewModel.searchText = category
     }
 
     // MARK: - Helper Functions

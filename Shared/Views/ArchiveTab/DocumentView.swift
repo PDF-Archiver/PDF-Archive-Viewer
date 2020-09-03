@@ -38,8 +38,14 @@ struct DocumentView: View {
 
     var titleSubtitle: some View {
         VStack(alignment: .leading) {
-            Text(viewModel.specification.capitalized)
-                .font(.body)
+            if viewModel.specification.isEmpty {
+                Text("N/A")
+                    .font(.body)
+                    .foregroundColor(.gray)
+            } else {
+                Text(viewModel.specification.capitalized)
+                    .font(.body)
+            }
             Text(viewModel.date ?? Date(), style: .date)
                 .font(.caption)
                 .foregroundColor(.gray)

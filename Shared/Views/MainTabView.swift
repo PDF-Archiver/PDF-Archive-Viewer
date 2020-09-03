@@ -46,27 +46,52 @@ struct MainTabView: View {
             List {
                 ForEach(viewModel.tabs) { tab in
                     NavigationLink(destination: viewModel.view(for: tab.type), tag: tab.type, selection: $viewModel.currentTab) {
-                        Label(tab.name, systemImage: tab.iconName)
-                    }
-                }
-
-                ForEach(viewModel.categories) { canvas in
-                    Section(header: Text(canvas.name)) {
-                        ForEach(canvas.items) { item in
-                            Button(action: {
-                                // TODO: handle action
-                                print("Pressed item \(item)")
-                            }) {
-                                switch item.type {
-                                    case .archive:
-                                        Label(item.name, systemImage: "folder.fill")
-                                    case .tags:
-                                        Label(item.name, systemImage: "tag.fill")
-                                }
-                            }
+                        Label {
+                            Text(tab.name)
+                        } icon: {
+                            Image(systemName: tab.iconName)
+                                .accentColor(Color(.paDarkRed))
                         }
                     }
                 }
+
+                Section(header: Text("Archive")) {
+                    ForEach(viewModel.archiveCategories) { category in
+                        Button {
+                            viewModel.selectedArchive(category)
+                        } label: {
+                            Label(category, systemImage: "folder")
+                        }
+                    }
+                }
+
+                Section(header: Text("Tags")) {
+                    ForEach(viewModel.tagCategories) { category in
+                        Button {
+                            viewModel.selectedTag(category)
+                        } label: {
+                            Label(category, systemImage: "tag")
+                        }
+                    }
+                }
+
+//                ForEach(viewModel.categories) { canvas in
+//                    Section(header: Text(canvas.name)) {
+//                        ForEach(canvas.items) { item in
+//                            Button(action: {
+//                                viewModel.currentTab = .archive
+//                                viewModel.archiveViewModel.searchText = item.name
+//                            }) {
+//                                switch item.type {
+//                                    case .archive:
+//                                        Label(item.name, systemImage: "folder.fill")
+//                                    case .tags:
+//                                        Label(item.name, systemImage: "tag.fill")
+//                                }
+//                            }
+//                        }
+//                    }
+//                }
             }
             .listStyle(SidebarListStyle())
             .navigationTitle("Documents")

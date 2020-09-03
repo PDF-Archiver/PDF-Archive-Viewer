@@ -34,20 +34,12 @@ public final class ArchiveStore: ObservableObject, Log {
     private var archiveFolder: URL!
     private var untaggedFolders: [URL] = []
 
+    private let fileManager = FileManager.default
     private let queue = DispatchQueue(label: "ArchiveStoreQueue", qos: .utility)
     private var providers: [FolderProvider] = []
     private var contents: [URL: [Document]] = [:]
 
-    private var disposables = Set<AnyCancellable>()
-
     private init() {
-
-        $documents
-            .print("ArchiveStore")
-            .sink { _ in
-
-            }
-            .store(in: &disposables)
         DispatchQueue.global(qos: .userInitiated).async {
             self.loadDocuments()
         }
@@ -56,6 +48,8 @@ public final class ArchiveStore: ObservableObject, Log {
     // MARK: Public API
 
     public func update(archiveFolder: URL, untaggedFolders: [URL]) {
+        assert(!Thread.isMainThread, "This should not be called from the main thread.")
+
         self.untaggedFolders = untaggedFolders
         let observedFolders = [[archiveFolder], untaggedFolders]
             .flatMap { $0 }
@@ -64,7 +58,8 @@ public final class ArchiveStore: ObservableObject, Log {
         queue.sync {
             contents = [:]
         }
-        try? FileManager.default.removeItem(at: Self.savePath)
+        // TODO: only remove this if the archiveFolder has changed
+//        try? fileManager.removeItem(at: Self.savePath)
 
         providers = observedFolders.map { folder in
             guard let provider = Self.availableProvider.first(where: { $0.canHandle(folder) }) else {
@@ -75,6 +70,8 @@ public final class ArchiveStore: ObservableObject, Log {
     }
 
     public func archive(_ document: Document, slugify: Bool) throws {
+        assert(!Thread.isMainThread, "This should not be called from the main thread.")
+
         guard let documentProvider = providers.first(where: { document.path.path.hasPrefix($0.baseUrl.path) }),
               let archiveFolder = self.archiveFolder,
               let archiveProvider = providers.first(where: { archiveFolder.path.hasPrefix($0.baseUrl.path) }) else {
@@ -128,6 +125,8 @@ public final class ArchiveStore: ObservableObject, Log {
     }
 
     public func delete(_ document: Document) throws {
+        assert(!Thread.isMainThread, "This should not be called from the main thread.")
+
         guard let provider = providers.first(where: { document.path.path.hasPrefix($0.baseUrl.path) }) else {
             throw ArchiveStore.Error.providerNotFound
         }
@@ -179,7 +178,7 @@ public final class ArchiveStore: ObservableObject, Log {
 
                     // trigger update of the document properties
                     if let contentParsingOptions = contentParsingOptions {
-                        DispatchQueue.global(qos: .userInitiated).async {
+                        DispatchQueue.global(qos: .background).async {
                             // TODO: add this as an WorkItem to an queue and save documents after the last has been written
                             document.updateProperties(with: document.downloadStatus, contentParsingOptions: contentParsingOptions)
                         }
@@ -220,7 +219,7 @@ public final class ArchiveStore: ObservableObject, Log {
         self.years = years
     }
 
-    func getTaggingStatus(of url: URL) -> Document.TaggingStatus {
+    private func getTaggingStatus(of url: URL) -> Document.TaggingStatus {
 
         // Could document be found in the untagged folder?
         guard untaggedFolders.contains(where: { url.path.hasPrefix($0.path) }) else { return .tagged }
@@ -253,11 +252,16 @@ public final class ArchiveStore: ObservableObject, Log {
         } catch {
             log.error("JSON decoding error", metadata: ["error": "\(error.localizedDescription)"])
 
-            try? FileManager.default.removeItem(at: Self.savePath)
+            try? fileManager.removeItem(at: Self.savePath)
         }
     }
 
     private func saveDocuments() {
+
+        if fileManager.fileExists(atPath: Self.savePath.path) {
+            try? fileManager.removeItem(at: Self.savePath)
+        }
+
         do {
             let data = try JSONEncoder().encode(documents)
             try data.write(to: Self.savePath)

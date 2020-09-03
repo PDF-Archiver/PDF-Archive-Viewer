@@ -10,7 +10,10 @@ import SwiftUI
 
 struct TagTabView: View {
 
-    @Namespace var namespace
+//    @Namespace var namespace
+    #if os(iOS)
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
+    #endif
 
     @ObservedObject var viewModel: TagTabViewModel
 
@@ -18,33 +21,38 @@ struct TagTabView: View {
     @EnvironmentObject var orientationInfo: OrientationInfo
 
     var body: some View {
-        NavigationView {
+//        NavigationView {
             if viewModel.showLoadingView {
                 LoadingView()
             } else if viewModel.currentDocument != nil {
-                GeometryReader { geometry in
+//                GeometryReader { geometry in
                     Stack(spacing: 8) {
-                        if shouldShowDocumentList(width: geometry.size.width) {
+                        #if os(iOS)
+                        if horizontalSizeClass != .compact {
                             documentsList
-                                .frame(maxWidth: size(of: .documentList, width: geometry.size.width))
+//                                .frame(maxWidth: size(of: .documentList, width: geometry.size.width))
                         }
+                        #else
+                        documentsList
+//                            .frame(maxWidth: size(of: .documentList, width: geometry.size.width))
+                        #endif
                         pdfView
-                            .frame(maxWidth: size(of: .pdf, width: geometry.size.width), minHeight: 175.0, maxHeight: .infinity, alignment: .center)
+//                            .frame(maxWidth: size(of: .pdf, width: geometry.size.width), minHeight: 175.0, maxHeight: .infinity, alignment: .center)
                         documentInformation
-                            .frame(maxWidth: size(of: .documentInformation, width: geometry.size.width))
+//                            .frame(maxWidth: size(of: .documentInformation, width: geometry.size.width))
 //                            .keyboardPadding()
                     }
-                }
+//                }
                 .navigationBarTitle(Text("Document"), displayMode: .inline)
                 .navigationBarItems(leading: deleteNavBarView, trailing: saveNavBarView)
             } else {
                 PlaceholderView(name: "No iCloud Drive documents found. Please scan and tag documents first.")
             }
-        }
-        .navigationViewStyle(StackNavigationViewStyle())
-        .onTapGesture {
-            self.endEditing(true)
-        }
+//        }
+//        .navigationViewStyle(StackNavigationViewStyle())
+//        .onTapGesture {
+//            self.endEditing(true)
+//        }
     }
 
     private var deleteNavBarView: some View {
@@ -56,6 +64,7 @@ struct TagTabView: View {
                 Text("Delete")
                     .font(.system(size: 11.0))
             }
+            .padding(.horizontal, 24)
         })
     }
 
@@ -68,6 +77,7 @@ struct TagTabView: View {
                 Text("Add")
                     .font(.system(size: 11.0))
             }
+            .padding(.horizontal, 24)
         })
     }
 
