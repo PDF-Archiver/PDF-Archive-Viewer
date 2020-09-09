@@ -20,21 +20,47 @@ struct ArchiveView: View {
             HStack {
                 VStack {
                     searchView
+                    if !viewModel.availableFilters.isEmpty {
+                        filterQueryItemView
+                    }
                     documentsView
                         .resignKeyboardOnDragGesture()
                 }
                 .navigationBarTitle(Text("Archive"))
-//                    emptyView
             }
         }
     }
 
     var searchView: some View {
         SearchField(searchText: $viewModel.searchText,
+                    filterItems: $viewModel.selectedFilters,
+                    filterSelectionHandler: viewModel.selected(filterItem:),
                     scopes: $viewModel.years,
                     selectionIndex: $viewModel.scopeSelecton,
                     placeholder: "Search")
             .padding(EdgeInsets(top: 0.0, leading: 8.0, bottom: 0.0, trailing: 8.0))
+    }
+
+    var filterQueryItemView: some View {
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack {
+                ForEach(viewModel.availableFilters) { filter in
+                    Button {
+                        viewModel.selected(filterItem: filter)
+                    } label: {
+                        Label {
+                            Text(filter.text)
+                        } icon: {
+                            Image(systemName: filter.imageSystemName)
+                        }
+                    }
+                    .padding()
+                    .background(.secondarySystemBackground)
+                    .cornerRadius(8)
+                }
+            }
+            .padding()
+        }
     }
 
     var documentsView: some View {
@@ -47,9 +73,6 @@ struct ArchiveView: View {
                 } else {
 
                     DocumentView(viewModel: document, showTagStatus: false)
-                        .onTapGesture {
-                            self.viewModel.tapped(document)
-                        }
                 }
             }
             // TODO: fix delete

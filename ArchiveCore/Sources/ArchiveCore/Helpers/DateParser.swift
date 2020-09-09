@@ -89,10 +89,25 @@ public enum DateParser {
                 }
             }
         }
-        return nil
+
+        // use the NSDataDetector as a fallback, e.g. for "yesterday"/"last monday"
+        return dateDetector(for: raw)
     }
 
     // MARK: - helper functions
+
+    private static func dateDetector(for text: String) -> (date: Date, rawDate: String)? {
+        guard let detector = try? NSDataDetector(types: NSTextCheckingResult.CheckingType.date.rawValue) else { return nil }
+        let searchRange = NSRange(text.startIndex..<text.endIndex, in: text)
+        let result = detector.firstMatch(in: text, options: [], range: searchRange)
+
+        if let date = result?.date,
+           let rawRange = result?.range,
+           let range = Range(rawRange, in: text) {
+            return (date, String(text[range]))
+        }
+        return nil
+    }
 
     private static func createMappings(for locales: [Locale]) -> [FormatMapping] {
 

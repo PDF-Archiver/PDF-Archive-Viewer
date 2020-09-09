@@ -10,6 +10,8 @@ import SwiftUI
 
 struct SearchField: View {
     @Binding var searchText: String
+    @Binding var filterItems: [FilterItem]
+    var filterSelectionHandler: (FilterItem) -> Void
     @Binding var scopes: [String]
     @Binding var selectionIndex: Int
     var placeholder: LocalizedStringKey
@@ -24,14 +26,31 @@ struct SearchField: View {
         HStack {
             Image(systemName: "magnifyingglass")
                 .foregroundColor(Color.secondary)
+            if !filterItems.isEmpty {
+                ForEach(filterItems) { filter in
+                    Button {
+                        filterSelectionHandler(filter)
+                    } label: {
+                        Label {
+                            Text(filter.text)
+                        } icon: {
+                            Image(systemName: filter.imageSystemName)
+                        }
+                    }
+                    .padding(2)
+                    .background(.secondarySystemBackground)
+                    .cornerRadius(8)
+                }
+            }
             TextField(placeholder, text: $searchText)
             Button(action: {
                 self.searchText = ""
+                self.filterItems = []
                 self.selectionIndex = 0
             }, label: {
                 Image(systemName: "xmark.circle.fill")
-                    .foregroundColor(Color.secondary)
-                    .opacity(self.searchText.isEmpty ? 0.0 : 1.0)
+                    .foregroundColor(.secondary)
+                    .opacity(self.searchText.isEmpty && self.filterItems.isEmpty ? 0.0 : 1.0)
             })
         }
         .padding(EdgeInsets(top: 8.0, leading: 8.0, bottom: 8.0, trailing: 8.0))
@@ -61,7 +80,7 @@ struct SearchField_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
             VStack {
-                SearchField(searchText: $searchText, scopes: $years, selectionIndex: $selection, placeholder: "Search")
+                SearchField(searchText: $searchText, filterItems: .constant([.tag("bill"), .tag("clothes")]), filterSelectionHandler: { print($0.text) }, scopes: $years, selectionIndex: $selection, placeholder: "Search")
                     .padding(EdgeInsets(top: 0.0, leading: 16.0, bottom: 0.0, trailing: 16.0))
                 List {
                     ForEach(array.filter { $0.hasPrefix(searchText) || searchText.isEmpty }, id: \.self) { searchText in

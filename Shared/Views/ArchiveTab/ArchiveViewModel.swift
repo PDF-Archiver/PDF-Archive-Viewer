@@ -11,7 +11,7 @@ import ArchiveCore
 import Combine
 import Foundation
 import LoggingKit
-import UIKit
+import SwiftUI
 
 final class ArchiveViewModel: ObservableObject, Log {
 
@@ -26,6 +26,9 @@ final class ArchiveViewModel: ObservableObject, Log {
     @Published var scopeSelecton: Int = 0
     @Published var searchText = ""
     @Published var showLoadingView = true
+
+    @Published var availableFilters: [FilterItem] = []
+    @Published var selectedFilters: [FilterItem] = []
 
     private var disposables = Set<AnyCancellable>()
     private let archiveStore: ArchiveStore
@@ -70,12 +73,30 @@ final class ArchiveViewModel: ObservableObject, Log {
             }
             .store(in: &disposables)
 
+        $searchText
+            .receive(on: DispatchQueue.global(qos: .userInitiated))
+            .map { searchterm -> [FilterItem] in
+                var filters = Self.getDateFilters(from: searchterm)
+                let tagFilters = TagStore.shared.getAvailableTags(with: [searchterm])
+                    .sorted()
+                    .prefix(3)
+                    .map { tag in
+                        FilterItem.tag(tag)
+                    }
+                filters.append(contentsOf: tagFilters)
+
+                return filters
+            }
+            .receive(on: DispatchQueue.main)
+            .assign(to: \.availableFilters, on: self)
+            .store(in: &disposables)
+
         // filter documents, get input from Notification, searchText or searchScope
         $searchText
             .debounce(for: .milliseconds(100), scheduler: DispatchQueue.global(qos: .userInitiated))
             .removeDuplicates()
-            .combineLatest($scopeSelecton, archiveStore.$documents)
-            .map { (searchterm, searchscopeSelection, documents) -> [Document] in
+            .combineLatest($scopeSelecton, archiveStore.$documents, $selectedFilters)
+            .map { (searchterm, searchscopeSelection, documents, selectedFilters) -> [Document] in
 
                 var searchterms: [String] = []
                 if searchterm.isEmpty {
@@ -96,6 +117,7 @@ final class ArchiveViewModel: ObservableObject, Log {
 
                 return currentDocuments
                     .filter { $0.taggingStatus == .tagged }
+                    .filter(by: selectedFilters)
                     .fuzzyMatchSorted(by: searchterms)
 //                    .filter(by: searchterms)
 //                    .sorted()
@@ -152,5 +174,25 @@ final class ArchiveViewModel: ObservableObject, Log {
             }
         }
         notificationFeedback.notificationOccurred(.success)
+    }
+
+    func selected(filterItem: FilterItem) {
+        withAnimation {
+            if let index = availableFilters.firstIndex(of: filterItem) {
+                availableFilters.remove(at: index)
+
+                selectedFilters.append(filterItem)
+                selectedFilters.sort()
+            } else if let index = selectedFilters.firstIndex(of: filterItem) {
+                selectedFilters.remove(at: index)
+            }
+
+            searchText = ""
+        }
+    }
+
+    private static func getDateFilters(from searchterm: String) -> [FilterItem] {
+        guard let date = DateParser.parse(searchterm)?.date else { return [] }
+        return [.year(date), .yearMonth(date), .yearMonthDay(date)]
     }
 }
