@@ -13,31 +13,11 @@ import SwiftUI
 
 final class MainNavigationViewModel: ObservableObject, Log {
 
-    let tabs = [
-        Tab(name: "Scan", iconName: "doc.text.viewfinder", type: .scan),
-        Tab(name: "Tag", iconName: "tag", type: .tag),
-        Tab(name: "Archive", iconName: "archivebox", type: .archive),
-        Tab(name: "More", iconName: "ellipsis", type: .more)
-    ]
+    @Published var archiveCategories: [String] = []
+    @Published var tagCategories: [String] = []
 
-    // TODO: remove example category items
-    @Published var categories = [
-        Category(name: "Archive", items: [
-            CategoryItem(type: .archive, name: "2020"),
-            CategoryItem(type: .archive, name: "2019"),
-            CategoryItem(type: .archive, name: "2018"),
-            CategoryItem(type: .archive, name: "2017")
-        ]),
-        Category(name: "Tags", items: [
-            CategoryItem(type: .tags, name: "bill"),
-            CategoryItem(type: .tags, name: "clothes"),
-            CategoryItem(type: .tags, name: "clothes")
-        ])
-    ]
-    @Published var archiveCategories = ["2020", "2019", "2018"]
-    @Published var tagCategories = ["bill", "clothes", "finance"]
-
-    @Published var currentTab: Tab.TabType? = UserDefaults.standard.lastSelectedTabIndex ?? .scan
+    @Published var currentTab: Tab = UserDefaults.standard.lastSelectedTab
+    @Published var currentOptionalTab: Tab?
     @Published var showTutorial = !UserDefaults.standard.tutorialShown
 
     var scanViewModel = ScanTabViewModel()
@@ -56,6 +36,16 @@ final class MainNavigationViewModel: ObservableObject, Log {
 
     init() {
 
+        $currentTab
+            .map { Optional($0) }
+            .removeDuplicates()
+            .assign(to: &$currentOptionalTab)
+
+        $currentOptionalTab
+            .compactMap { $0 }
+            .removeDuplicates()
+            .assign(to: &$currentTab)
+
         scanViewModel.objectWillChange
             .sink { _ in
                 // bubble up the change from the nested view model
@@ -72,11 +62,9 @@ final class MainNavigationViewModel: ObservableObject, Log {
             .dropFirst()
             .removeDuplicates()
             .sink { selectedTab in
-                let tab = selectedTab ?? .scan
-
                 // save the selected index for the next app start
-                UserDefaults.standard.lastSelectedTabIndex = tab
-                Self.log.info("Changed tab.", metadata: ["selectedTab": "\(tab)"])
+                UserDefaults.standard.lastSelectedTab = selectedTab
+                Self.log.info("Changed tab.", metadata: ["selectedTab": "\(selectedTab)"])
 
                 self.selectionFeedback.prepare()
                 self.selectionFeedback.selectionChanged()
@@ -99,7 +87,7 @@ final class MainNavigationViewModel: ObservableObject, Log {
         // MARK: Subscription
         $currentTab
             .sink { selectedTab in
-                self.validateSubscriptionState(of: selectedTab ?? .scan)
+                self.validateSubscriptionState(of: selectedTab)
             }
             .store(in: &disposables)
 
@@ -107,7 +95,7 @@ final class MainNavigationViewModel: ObservableObject, Log {
             .receive(on: DispatchQueue.main)
             .sink { _ in
                 self.showSubscriptionDismissed()
-                self.validateSubscriptionState(of: self.currentTab  ?? .scan)
+                self.validateSubscriptionState(of: self.currentTab)
             }
             .store(in: &disposables)
 
@@ -137,13 +125,21 @@ final class MainNavigationViewModel: ObservableObject, Log {
             .map { years -> [String] in
                 let tmp = years.sorted()
                     .reversed()
-                    .prefix(10)
+                    .prefix(5)
 
                 return Array(tmp)
             }
             .removeDuplicates()
             .receive(on: DispatchQueue.main)
-            .assign(to: \.archiveCategories, on: self)
+            .assign(to: &self.$archiveCategories)
+
+        ArchiveStore.shared.$documents
+            .map { _ in
+                Array(TagStore.shared.getSortedTags().prefix(10).map(\.localizedCapitalized))
+            }
+            .removeDuplicates()
+            .receive(on: DispatchQueue.main)
+            .assign(to: &self.$tagCategories)
 
         // TODO: change container!?
         DispatchQueue.global(qos: .userInteractive).async {
@@ -186,7 +182,7 @@ final class MainNavigationViewModel: ObservableObject, Log {
         currentTab = .archive
     }
 
-    func view(for type: Tab.TabType) -> AnyView {
+    func view(for type: Tab) -> AnyView {
         switch type {
             case .scan:
                 return AnyView(ScanTabView(viewModel: scanViewModel))
@@ -200,17 +196,20 @@ final class MainNavigationViewModel: ObservableObject, Log {
     }
 
     func selectedArchive(_ category: String) {
-        // TODO: add advanced query: only search in date/folder
+        guard let date = DateComponents(calendar: .current, timeZone: .current, year: Int(category)).date else {
+            log.assertOrError("Could not create matching date.", metadata: ["input": "\(category)"])
+            return
+        }
+
         log.info("Tapped on archive category.")
         currentTab = .archive
-        archiveViewModel.searchText = category
+        archiveViewModel.selectedFilters = [.year(date)]
     }
 
     func selectedTag(_ category: String) {
-        // TODO: add advanced query: only search in tags
-        log.info("Tapped on tag category.")
+        log.info("Tapped on tag.")
         currentTab = .archive
-        archiveViewModel.searchText = category
+        archiveViewModel.selectedFilters = [.tag(category)]
     }
 
     // MARK: - Helper Functions
@@ -231,7 +230,7 @@ final class MainNavigationViewModel: ObservableObject, Log {
         }
     }
 
-    private func validateSubscriptionState(of selectedTab: Tab.TabType) {
+    private func validateSubscriptionState(of selectedTab: Tab) {
         self.showSubscriptionView = !IAP.service.appUsagePermitted() && selectedTab == .tag
     }
 }

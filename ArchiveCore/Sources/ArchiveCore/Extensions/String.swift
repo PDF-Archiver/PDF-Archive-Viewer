@@ -70,11 +70,11 @@ extension String {
         return NSLocalizedString(self, comment: "")
     }
 
-    /// Returns a capitalized version, e.g. "Blue Pullover".
-    public var capitalized: String {
-        self
-            .split { [" ", "-"].contains($0) }
-            .map { $0.prefix(1).uppercased() + $0.dropFirst() }
-            .joined(separator: " ")
-    }
+//    /// Returns a capitalized version, e.g. "Blue Pullover".
+//    public var capitalized: String {
+//        self
+//            .split { [" ", "-"].contains($0) }
+//            .map { $0.prefix(1).uppercased() + $0.dropFirst() }
+//            .joined(separator: " ")
+//    }
 }

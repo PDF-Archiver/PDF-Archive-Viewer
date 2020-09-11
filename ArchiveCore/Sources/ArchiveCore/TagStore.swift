@@ -12,6 +12,7 @@ public final class TagStore {
     public static let shared = TagStore()
 
     public private(set) var tagIndex = TagIndex<String>()
+    private var tagCounts: [String: Int] = [:]
     private var disposables = Set<AnyCancellable>()
 
     private init() {
@@ -47,6 +48,18 @@ public final class TagStore {
         }
 
         return filteredTags
+    }
+
+    public func getSortedTags() -> [String] {
+        let documents = ArchiveStore.shared.documents
+        let tagCounts = documents.reduce(into: [:]) { ( counts: inout [String: Int], document: Document) in
+            for tag in document.tags {
+                counts[tag, default: 0] += 1
+            }
+        }
+
+        return tagCounts.sorted { $0.value > $1.value }
+            .map(\.key)
     }
 
     // MARK: Tag Index

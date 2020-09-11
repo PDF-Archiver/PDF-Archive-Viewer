@@ -11,10 +11,10 @@ public enum FilterItem: Identifiable, Equatable, Comparable {
 
     public static let cache = FilterCache()
 
-    case tag(String)
     case year(Date)
     case yearMonth(Date)
     case yearMonthDay(Date)
+    case tag(String)
 
     public var id: String {
         text
@@ -56,7 +56,8 @@ extension Array where Element == Document {
 
     public func filter(with filterItem: FilterItem) -> [Element] {
         switch filterItem {
-            case .tag(let tagname):
+            case .tag(let name):
+                let tagname = name.lowercased()
                 return self.filter { $0.tags.contains(tagname) }
             case .year(let date):
                 let dateString = FilterItem.cache.getTriple(for: date).year

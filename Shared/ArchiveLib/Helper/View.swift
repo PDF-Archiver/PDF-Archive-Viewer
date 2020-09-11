@@ -21,4 +21,15 @@ extension View {
     func resignKeyboardOnDragGesture() -> some View {
         return modifier(ResignKeyboardOnDragGesture())
     }
+
+    @ViewBuilder
+    func wrapNavigationView(when value: Bool) -> some View {
+        if value {
+            NavigationView {
+                self
+            }
+        } else {
+            self
+        }
+    }
 }

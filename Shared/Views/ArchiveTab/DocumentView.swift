@@ -43,7 +43,7 @@ struct DocumentView: View {
                     .font(.body)
                     .foregroundColor(.gray)
             } else {
-                Text(viewModel.specification.capitalized)
+                Text(viewModel.specification.localizedCapitalized)
                     .font(.body)
             }
             Text(viewModel.date ?? Date(), style: .date)

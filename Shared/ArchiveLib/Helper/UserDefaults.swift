@@ -13,7 +13,7 @@ extension UserDefaults: Log {
 
     private enum Names: String {
         case tutorialShown = "tutorial-v1"
-        case lastSelectedTabIndex
+        case lastSelectedTabName
         case pdfQuality
         case subscriptionExpiryDate = "SubscriptionExpiryDate"
     }
@@ -41,13 +41,14 @@ extension UserDefaults: Log {
         }
     }
 
-    var lastSelectedTabIndex: Tab.TabType {
+    var lastSelectedTab: Tab {
         get {
-            let index = UserDefaults.standard.integer(forKey: Names.lastSelectedTabIndex.rawValue)
-            return Tab.TabType(rawValue: index) ?? .scan
+            guard let name = UserDefaults.standard.string(forKey: Names.lastSelectedTabName.rawValue),
+                let tab = Tab(rawValue: name) else { return .scan }
+            return tab
         }
         set {
-            UserDefaults.standard.set(newValue.rawValue, forKey: Names.lastSelectedTabIndex.rawValue)
+            UserDefaults.standard.set(newValue.rawValue, forKey: Names.lastSelectedTabName.rawValue)
         }
     }
 

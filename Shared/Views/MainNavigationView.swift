@@ -44,8 +44,8 @@ struct MainNavigationView: View {
     private var sidebar: some View {
         NavigationView {
             List {
-                ForEach(viewModel.tabs) { tab in
-                    NavigationLink(destination: viewModel.view(for: tab.type), tag: tab.type, selection: $viewModel.currentTab) {
+                ForEach(Tab.allCases) { tab in
+                    NavigationLink(destination: viewModel.view(for: tab), tag: tab, selection: $viewModel.currentOptionalTab) {
                         Label {
                             Text(LocalizedStringKey(tab.name))
                         } icon: {
@@ -94,8 +94,9 @@ struct MainNavigationView: View {
 
     private var tabbar: some View {
         TabView(selection: $viewModel.currentTab) {
-            ForEach(viewModel.tabs) { tab in
-                viewModel.view(for: tab.type)
+            ForEach(Tab.allCases) { tab in
+                viewModel.view(for: tab)
+                    .wrapNavigationView(when: tab != .scan)
                     .tabItem {
                         Label(tab.name, systemImage: tab.iconName)
                     }

@@ -294,7 +294,7 @@ final class DocumentTests: XCTestCase {
         // assert
         XCTAssertEqual(document.date, dateFormatter.date(from: "2010-05-12"))
         XCTAssertEqual(document.specification, "example filename")
-        XCTAssertEqual(document.specification.capitalized, "Example Filename")
+        XCTAssertEqual(document.specification.localizedCapitalized, "Example Filename")
         XCTAssertEqual(document.tags, Set())
     }
 
@@ -309,7 +309,7 @@ final class DocumentTests: XCTestCase {
         // assert
         XCTAssertEqual(document.date, dateFormatter.date(from: "2010-05-12"))
         XCTAssertEqual(document.specification, "example filename")
-        XCTAssertEqual(document.specification.capitalized, "Example Filename")
+        XCTAssertEqual(document.specification.localizedCapitalized, "Example Filename")
         XCTAssertEqual(document.tags, Set())
     }
 
@@ -324,7 +324,7 @@ final class DocumentTests: XCTestCase {
         // assert
         XCTAssertEqual(document.date, dateFormatter.date(from: "2010-05-12"))
         XCTAssertEqual(document.specification, "example filename")
-        XCTAssertEqual(document.specification.capitalized, "Example Filename")
+        XCTAssertEqual(document.specification.localizedCapitalized, "Example Filename")
         XCTAssertEqual(document.tags, Set())
     }
 
@@ -354,7 +354,7 @@ final class DocumentTests: XCTestCase {
         // assert
         XCTAssertEqual(document.date, dateFormatter.date(from: "2010-05-12"))
         XCTAssertEqual(document.specification, "15-17")
-        XCTAssertEqual(document.specification.capitalized, "15 17")
+        XCTAssertEqual(document.specification.localizedCapitalized, "15 17")
         XCTAssertEqual(document.tags, Set())
     }
 

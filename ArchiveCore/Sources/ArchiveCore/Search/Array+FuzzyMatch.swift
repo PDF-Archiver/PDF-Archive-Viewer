@@ -24,9 +24,9 @@ extension String: Searchitem {
     }
 }
 
-extension Array where Element: Searchitem {
+extension Array where Element: Searchitem, Element: Comparable {
     public func fuzzyMatchSorted(by searchTerms: [String]) -> Self {
-        guard !searchTerms.isEmpty else { return self }
+        guard !searchTerms.isEmpty else { return self.sorted() }
 
         // all searchTerms must be machted, sorted by count to decrease the number of search elements
         let sortedSearchTerms = searchTerms
