@@ -10,7 +10,6 @@ import SwiftUI
 
 struct TagTabView: View {
 
-//    @Namespace var namespace
     #if os(iOS)
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     #endif
@@ -21,38 +20,31 @@ struct TagTabView: View {
     @EnvironmentObject var orientationInfo: OrientationInfo
 
     var body: some View {
-//        NavigationView {
-            if viewModel.showLoadingView {
-                LoadingView()
-            } else if viewModel.currentDocument != nil {
-//                GeometryReader { geometry in
-                    Stack(spacing: 8) {
-                        #if os(iOS)
-                        if horizontalSizeClass != .compact {
-                            documentsList
-//                                .frame(maxWidth: size(of: .documentList, width: geometry.size.width))
-                        }
-                        #else
-                        documentsList
-//                            .frame(maxWidth: size(of: .documentList, width: geometry.size.width))
-                        #endif
+        if viewModel.showLoadingView {
+            LoadingView()
+        } else if viewModel.currentDocument != nil {
+            Stack(spacing: 8) {
+                #if os(iOS)
+                if horizontalSizeClass != .compact {
+                    documentsList
+                }
+                #else
+                documentsList
+                #endif
+                GeometryReader { geometry in
+                    VStack(spacing: 0) {
                         pdfView
-//                            .frame(maxWidth: size(of: .pdf, width: geometry.size.width), minHeight: 175.0, maxHeight: .infinity, alignment: .center)
+                            .frame(height: geometry.size.height * 2 / 3)
                         documentInformation
-//                            .frame(maxWidth: size(of: .documentInformation, width: geometry.size.width))
-//                            .keyboardPadding()
+                            .frame(height: geometry.size.height / 3)
                     }
-//                }
-                .navigationBarTitle(Text("Document"), displayMode: .inline)
-                .navigationBarItems(leading: deleteNavBarView, trailing: saveNavBarView)
-            } else {
-                PlaceholderView(name: "No iCloud Drive documents found. Please scan and tag documents first.")
+                }
             }
-//        }
-//        .navigationViewStyle(StackNavigationViewStyle())
-//        .onTapGesture {
-//            self.endEditing(true)
-//        }
+            .navigationBarTitle(Text("Document"), displayMode: .inline)
+            .navigationBarItems(leading: deleteNavBarView, trailing: saveNavBarView)
+        } else {
+            PlaceholderView(name: "No iCloud Drive documents found. Please scan and tag documents first.")
+        }
     }
 
     private var deleteNavBarView: some View {
@@ -104,6 +96,7 @@ struct TagTabView: View {
                 }
             }
         }
+        .frame(maxWidth: 300)
     }
 
     private var pdfView: some View {
@@ -118,33 +111,6 @@ struct TagTabView: View {
                                 suggestedTags: $viewModel.suggestedTags,
                                 inputAccessoryViewSuggestions: $viewModel.inputAccessoryViewSuggestions)
     }
-
-//    // MARK: - Layout Helpers
-//
-//    private func shouldShowDocumentList(width: CGFloat) -> Bool {
-//        guard width > 900.0 else { return false }
-//        let screenSize = UIScreen.main.bounds.size
-//        return UIDevice.current.userInterfaceIdiom != .phone && screenSize.height < screenSize.width
-//    }
-//
-//    private enum Element {
-//        case documentList, pdf, documentInformation
-//    }
-//
-//    private func size(of element: Element, width: CGFloat) -> CGFloat {
-//        switch element {
-//        case .documentList:
-//            return width / 6 * 1
-//        case .pdf:
-//            return .infinity
-//        case .documentInformation:
-//            if UIDevice.current.userInterfaceIdiom != .phone {
-//                return max(width / 6 * 2, 320)
-//            } else {
-//                return .infinity
-//            }
-//        }
-//    }
 }
 
 #if DEBUG

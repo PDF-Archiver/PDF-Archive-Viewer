@@ -96,7 +96,7 @@ struct MainNavigationView: View {
         TabView(selection: $viewModel.currentTab) {
             ForEach(Tab.allCases) { tab in
                 viewModel.view(for: tab)
-                    .wrapNavigationView(when: tab != .scan)
+                    .wrapNavigationView(when: tab == .tag || tab == .archive)
                     .tabItem {
                         Label(tab.name, systemImage: tab.iconName)
                     }

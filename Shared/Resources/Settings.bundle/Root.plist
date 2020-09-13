@@ -8,7 +8,7 @@
 	<array>
 		<dict>
 			<key>DefaultValue</key>
-			<string>DummyVersion</string>
+			<string>AppVersion</string>
 			<key>Key</key>
 			<string>version_preference</string>
 			<key>Title</key>

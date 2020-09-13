@@ -22,7 +22,7 @@ struct DocumentView: View {
                 }
                 titleSubtitle
                 Spacer()
-                if !showTagStatus && !viewModel.downloadStatus.isLocal {
+                if !showTagStatus && viewModel.downloadStatus.isRemote {
                     status
                 }
             }
@@ -43,7 +43,7 @@ struct DocumentView: View {
                     .font(.body)
                     .foregroundColor(.gray)
             } else {
-                Text(viewModel.specification.localizedCapitalized)
+                Text(viewModel.specification.localizedCapitalized.replacingOccurrences(of: "-", with: " "))
                     .font(.body)
             }
             Text(viewModel.date ?? Date(), style: .date)
@@ -77,8 +77,16 @@ fileprivate extension FileChange.DownloadStatus {
         }
     }
 
-    var isLocal: Bool {
-        if case FileChange.DownloadStatus.local = self {
+//    var isLocal: Bool {
+//        if case FileChange.DownloadStatus.local = self {
+//            return true
+//        } else {
+//            return false
+//        }
+//    }
+
+    var isRemote: Bool {
+        if case FileChange.DownloadStatus.remote = self {
             return true
         } else {
             return false
@@ -86,8 +94,8 @@ fileprivate extension FileChange.DownloadStatus {
     }
 
     var percentageDownloading: CGFloat {
-        if case FileChange.DownloadStatus.downloading = self {
-            return CGFloat(0.0)
+        if case FileChange.DownloadStatus.downloading(let percent) = self {
+            return CGFloat(percent)
         } else {
             return 0.0
         }

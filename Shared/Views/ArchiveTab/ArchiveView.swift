@@ -71,8 +71,10 @@ struct ArchiveView: View {
                         DocumentView(viewModel: document, showTagStatus: false)
                     }
                 } else {
-
                     DocumentView(viewModel: document, showTagStatus: false)
+                        .onTapGesture {
+                            viewModel.tapped(document)
+                        }
                 }
             }
             // TODO: fix delete

@@ -221,27 +221,29 @@ final class TagTabViewModel: ObservableObject, Log {
         document.specification = specification.slugified(withSeparator: "-")
         document.tags = Set(documentTags.map { $0.slugified(withSeparator: "") })
 
-        notificationFeedback.prepare()
-        do {
-            try archiveStore.archive(document, slugify: true)
-            var filteredDocuments = archiveStore.documents.filter { $0.id != document.id }
-            filteredDocuments.append(document)
-            archiveStore.documents = filteredDocuments
+        DispatchQueue.global(qos: .userInitiated).async {
+            self.notificationFeedback.prepare()
+            do {
+                try self.archiveStore.archive(document, slugify: true)
+                var filteredDocuments = self.archiveStore.documents.filter { $0.id != document.id }
+                filteredDocuments.append(document)
+                self.archiveStore.documents = filteredDocuments
 
-            currentDocument = getNewDocument()
+                self.currentDocument = self.getNewDocument()
 
-            notificationFeedback.notificationOccurred(.success)
+                self.notificationFeedback.notificationOccurred(.success)
 
-            // increment the AppStoreReview counter
-            AppStoreReviewRequest.shared.incrementCount()
+                // increment the AppStoreReview counter
+                AppStoreReviewRequest.shared.incrementCount()
 
-        } catch {
-            log.error("Error in PDFProcessing!", metadata: ["error": "\(error.localizedDescription)"])
-            AlertViewModel.createAndPost(title: "Save failed!",
-                                         message: error,
-                                         primaryButtonTitle: "OK")
+            } catch {
+                Self.log.error("Error in PDFProcessing!", metadata: ["error": "\(error.localizedDescription)"])
+                AlertViewModel.createAndPost(title: "Save failed!",
+                                             message: error,
+                                             primaryButtonTitle: "OK")
 
-            notificationFeedback.notificationOccurred(.error)
+                self.notificationFeedback.notificationOccurred(.error)
+            }
         }
     }
 
@@ -252,14 +254,24 @@ final class TagTabViewModel: ObservableObject, Log {
 
         // delete document in archive
         guard let currentDocument = currentDocument else { return }
-//        currentDocument?.delete(in: DocumentService.archive)
-        archiveStore.documents.removeAll { $0 == currentDocument }
+        DispatchQueue.global(qos: .userInitiated).async {
+            do {
+                try self.archiveStore.delete(currentDocument)
 
-        // delete document from document list
-        documents.removeAll { $0.filename == currentDocument.filename }
+                DispatchQueue.main.async {
+                    // delete document from document list
+                    self.documents.removeAll { $0.filename == currentDocument.filename }
 
-        // remove the current document and clear the vie
-        self.currentDocument = getNewDocument()
+                    // remove the current document and clear the vie
+                    self.currentDocument = self.getNewDocument()
+                }
+            } catch {
+                Self.log.error("Error while deleting document!", metadata: ["error": "\(error.localizedDescription)"])
+                AlertViewModel.createAndPost(title: "Delete failed!",
+                                             message: error,
+                                             primaryButtonTitle: "OK")
+            }
+        }
     }
 
     private func getNewDocument() -> Document? {

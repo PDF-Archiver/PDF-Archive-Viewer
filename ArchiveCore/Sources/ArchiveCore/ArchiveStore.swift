@@ -50,6 +50,7 @@ public final class ArchiveStore: ObservableObject, Log {
     public func update(archiveFolder: URL, untaggedFolders: [URL]) {
         assert(!Thread.isMainThread, "This should not be called from the main thread.")
 
+        self.archiveFolder = archiveFolder
         self.untaggedFolders = untaggedFolders
         let observedFolders = [[archiveFolder], untaggedFolders]
             .flatMap { $0 }
@@ -79,7 +80,9 @@ public final class ArchiveStore: ObservableObject, Log {
         }
 
         if slugify {
-            document.specification = document.specification.slugified(withSeparator: "-")
+            DispatchQueue.main.async {
+                document.specification = document.specification.slugified(withSeparator: "-")
+            }
         }
 
         let foldername: String
@@ -131,6 +134,7 @@ public final class ArchiveStore: ObservableObject, Log {
             throw ArchiveStore.Error.providerNotFound
         }
         try provider.delete(url: document.path)
+        documents.removeAll { $0 == document }
     }
 
     // MARK: Helper Function

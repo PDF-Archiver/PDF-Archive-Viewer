@@ -16,31 +16,19 @@ struct MoreTabView: View {
     private static let appVersion = AppEnvironment.getFullVersion()
 
     var body: some View {
-        HStack {
-            #if !os(iOS)
-            Spacer()
-            #endif
-
-            Form {
-                preferences
-                subscription
-                moreInformation
-            }
-            .listStyle(GroupedListStyle())
-            .foregroundColor(.primary)
-            .sheet(isPresented: $viewModel.isShowingMailView) {
-                SupportMailView(subject: MoreTabViewModel.mailSubject,
-                                recipients: MoreTabViewModel.mailRecipients,
-                                result: self.$viewModel.result)
-            }
-            .navigationBarTitleView(title)
-            .frame(maxWidth: 500)
-
-            #if !os(iOS)
-            Spacer()
-            #endif
+        Form {
+            preferences
+            subscription
+            moreInformation
         }
-        .backgroundFill(.systemGroupedBackground)
+        .listStyle(GroupedListStyle())
+        .foregroundColor(.primary)
+        .sheet(isPresented: $viewModel.isShowingMailView) {
+            SupportMailView(subject: MoreTabViewModel.mailSubject,
+                            recipients: MoreTabViewModel.mailRecipients,
+                            result: self.$viewModel.result)
+        }
+        .navigationBarTitleView(title)
         .navigationViewStyle(StackNavigationViewStyle())
         .onAppear(perform: viewModel.updateSubscription)
     }

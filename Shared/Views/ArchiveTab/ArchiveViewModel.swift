@@ -102,9 +102,10 @@ final class ArchiveViewModel: ObservableObject, Log {
                 if searchterm.isEmpty {
                     searchterms = []
                 } else {
-                    searchterms = searchterm
+                    searchterms = searchterm.slugified(withSeparator: " ")
                         .trimmingCharacters(in: .whitespacesAndNewlines)
                         .components(separatedBy: .whitespacesAndNewlines)
+
                 }
 
                 var currentDocuments = documents
@@ -118,9 +119,9 @@ final class ArchiveViewModel: ObservableObject, Log {
                 return currentDocuments
                     .filter { $0.taggingStatus == .tagged }
                     .filter(by: selectedFilters)
+                    // filter by fuzzy search + sort
                     .fuzzyMatchSorted(by: searchterms)
-//                    .filter(by: searchterms)
-//                    .sorted()
+                    // sort: new > old
                     .reversed()
             }
             .receive(on: DispatchQueue.main)

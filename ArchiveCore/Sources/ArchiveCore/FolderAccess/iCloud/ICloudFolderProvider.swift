@@ -43,8 +43,8 @@ class ICloudFolderProvider: NSObject, FolderProvider {
 
         metadataQuery.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [predicate, notContainsTempPath] )
 
-        // update the file status 5 times per second, while downloading
-        metadataQuery.notificationBatchingInterval = 0.2
+        // update the file status 10 times per second, while downloading
+        metadataQuery.notificationBatchingInterval = 0.1
 
         /*
          Ask for both in-container documents and external documents so that
