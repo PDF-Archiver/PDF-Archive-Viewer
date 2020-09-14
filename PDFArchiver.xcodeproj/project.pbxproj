@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		34031DC6250FCED500C46C88 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 3416B1AD24A9282700D5F4E0 /* Settings.bundle */; };
 		340EA92724B641E20066B4BE /* TagView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 340EA92424B641E20066B4BE /* TagView.swift */; };
 		340EA92824B641E20066B4BE /* TagView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 340EA92424B641E20066B4BE /* TagView.swift */; };
 		340EA92924B641E20066B4BE /* DocumentInformationForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 340EA92524B641E20066B4BE /* DocumentInformationForm.swift */; };
@@ -55,7 +56,6 @@
 		3416B23524A9282800D5F4E0 /* ArchiveViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3416B1A924A9282700D5F4E0 /* ArchiveViewModel.swift */; };
 		3416B23624A9282800D5F4E0 /* DocumentDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3416B1AA24A9282700D5F4E0 /* DocumentDetailView.swift */; };
 		3416B23724A9282800D5F4E0 /* DocumentDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3416B1AA24A9282700D5F4E0 /* DocumentDetailView.swift */; };
-		3416B23B24A9282800D5F4E0 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 3416B1AD24A9282700D5F4E0 /* Settings.bundle */; };
 		3416B23C24A9282800D5F4E0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3416B1AE24A9282800D5F4E0 /* Assets.xcassets */; };
 		3416B23D24A9282800D5F4E0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3416B1AE24A9282800D5F4E0 /* Assets.xcassets */; };
 		3416B23E24A9282800D5F4E0 /* Config.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 3416B1B024A9282800D5F4E0 /* Config.xcconfig */; };
@@ -577,10 +577,10 @@
 			buildConfigurationList = 3489D74524A3C53E0035E64F /* Build configuration list for PBXNativeTarget "iOS" */;
 			buildPhases = (
 				34A53F7C24AA6381008A3377 /* SwiftLint */,
+				3489D71924A3C53E0035E64F /* Resources */,
 				34A53F7E24AA63DC008A3377 /* Settings Bundle Update */,
 				3489D71724A3C53E0035E64F /* Sources */,
 				3489D71824A3C53E0035E64F /* Frameworks */,
-				3489D71924A3C53E0035E64F /* Resources */,
 				34A53F8E24AA653E008A3377 /* Embed App Extensions */,
 			);
 			buildRules = (
@@ -615,6 +615,8 @@
 			dependencies = (
 			);
 			name = macOS;
+			packageProductDependencies = (
+			);
 			productName = macOS;
 			productReference = 3489D72324A3C53E0035E64F /* PDFArchiver.app */;
 			productType = "com.apple.product-type.application";
@@ -750,10 +752,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				3416B23F24A9282800D5F4E0 /* Config.xcconfig in Resources */,
-				3416B23B24A9282800D5F4E0 /* Settings.bundle in Resources */,
 				3416B24124A9282800D5F4E0 /* LaunchScreen.storyboard in Resources */,
 				3416B23D24A9282800D5F4E0 /* Assets.xcassets in Resources */,
 				34E7DB10250189D400E94352 /* Localizable.strings in Resources */,
+				34031DC6250FCED500C46C88 /* Settings.bundle in Resources */,
 				3416B24324A9282800D5F4E0 /* Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -809,6 +811,7 @@
 			inputFileListPaths = (
 			);
 			inputPaths = (
+				"$(SRCROOT)/Shared/Resources/Seettings.bundle",
 			);
 			name = "Settings Bundle Update";
 			outputFileListPaths = (
@@ -816,9 +819,9 @@
 			outputPaths = (
 				"$(BUILT_PRODUCTS_DIR)/Shared/Resources/Settings.bundle",
 			);
-			runOnlyForDeploymentPostprocessing = 1;
+			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Update settings.bundle with new license plist files\n# https://github.com/mono0926/LicensePlist\nif which license-plist >/dev/null; then\n    license-plist --suppress-opening-directory --add-version-numbers --force --output-path Shared/Resources/Settings.bundle\nelse\n    echo \"warning: license-plist not installed, download from https://github.com/mono0926/LicensePlist\"\nfi\n\n# Source: https://stackoverflow.com/a/39030153\n#cd \"${BUILT_PRODUCTS_DIR}\"\necho \"$CODESIGNING_FOLDER_PATH\"\nversion=$(/usr/libexec/PlistBuddy -c \"Print CFBundleShortVersionString\" \"$PROJECT_DIR/iOS/Info.plist\")\nbuild=$(/usr/libexec/PlistBuddy -c \"Print CFBundleVersion\" \"$PROJECT_DIR/iOS/Info.plist\")\n/usr/libexec/PlistBuddy -c \"Set PreferenceSpecifiers:0:DefaultValue $version ($build)\" \"$CODESIGNING_FOLDER_PATH/Settings.bundle/Root.plist\"\n";
+			shellScript = "# Update settings.bundle with new license plist files\n# https://github.com/mono0926/LicensePlist\nif which license-plist >/dev/null; then\n    license-plist --suppress-opening-directory --add-version-numbers --force --output-path Shared/Resources/Settings.bundle\nelse\n    echo \"warning: license-plist not installed, download from https://github.com/mono0926/LicensePlist\"\nfi\n\n# Source: https://stackoverflow.com/a/39030153\n#cd \"${BUILT_PRODUCTS_DIR}\"\n\nls -lah \"$BUILT_PRODUCTS_DIR/Shared/Resources\"\nversion=$(/usr/libexec/PlistBuddy -c \"Print CFBundleShortVersionString\" \"$PROJECT_DIR/$INFOPLIST_FILE\")\nbuild=$(/usr/libexec/PlistBuddy -c \"Print CFBundleVersion\" \"$PROJECT_DIR/$INFOPLIST_FILE\")\n/usr/libexec/PlistBuddy -c \"Set PreferenceSpecifiers:0:DefaultValue $version ($build)\" \"$CODESIGNING_FOLDER_PATH/Settings.bundle/Root.plist\"\n\ncat \"$CODESIGNING_FOLDER_PATH/Settings.bundle/Root.plist\"\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -1190,8 +1193,8 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.16;
-				MARKETING_VERSION = 2.3.5;
-				PRODUCT_BUNDLE_IDENTIFIER = de.juliankahnert.PDFArchiver;
+				MARKETING_VERSION = 3.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = de.JulianKahnert.PDFArchiveViewer;
 				PRODUCT_NAME = PDFArchiver;
 				SDKROOT = macosx;
 				SWIFT_VERSION = 5.0;
@@ -1215,8 +1218,8 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.16;
-				MARKETING_VERSION = 2.3.5;
-				PRODUCT_BUNDLE_IDENTIFIER = de.juliankahnert.PDFArchiver;
+				MARKETING_VERSION = 3.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = de.JulianKahnert.PDFArchiveViewer;
 				PRODUCT_NAME = PDFArchiver;
 				SDKROOT = macosx;
 				SWIFT_VERSION = 5.0;
