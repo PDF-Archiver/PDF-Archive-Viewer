@@ -6,6 +6,7 @@
 //  Copyright © 2018 Julian Kahnert. All rights reserved.
 //
 
+import ArchiveCore
 import Diagnostics
 import Foundation
 import LogModel
@@ -51,8 +52,12 @@ final class AppDelegate: UIResponder, UIApplicationDelegate, Log {
 
             // start document service
             _ = ArchiveStore.shared
-//            _ = DocumentService.archive
-//            _ = DocumentService.documentsQuery
+
+            // schedule a new background task
+            if ImageConverter.shared.totalDocumentCount.value > 0 {
+                BackgroundTaskScheduler.shared.scheduleTask(with: .pdfProcessing)
+            }
+
         }
 
         do {

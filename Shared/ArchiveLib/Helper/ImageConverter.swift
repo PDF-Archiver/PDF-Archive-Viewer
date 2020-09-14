@@ -6,6 +6,7 @@
 //  Copyright © 2019 Julian Kahnert. All rights reserved.
 //
 
+import ArchiveCore
 import Foundation
 import PDFKit
 import LoggingKit
@@ -34,7 +35,9 @@ public final class ImageConverter: Log {
         return queue
     }()
 
-    private init() {}
+    private init() {
+        BackgroundTaskScheduler.shared.delegate = self
+    }
 
     public func saveProcessAndSaveTempImages(at path: URL) {
         log.debug("Start processing images")
@@ -98,6 +101,22 @@ public final class ImageConverter: Log {
                     self.totalDocumentCount.mutate { $0 = 0 }
                 }
             }
+        }
+    }
+}
+
+extension ImageConverter: BackgroundTaskExecutionDelegate {
+    public func executeBackgroundTask(completion: @escaping ((Bool) -> Void)) {
+        startProcessing()
+
+        #if DEBUG
+        UserNotification.schedule(title: "Start PDF processing", message: "Operations left in queue: \(queue.operationCount)")
+        #endif
+
+        // this execution block will only run on a background task, so no UI affects should happen
+        queue.addOperation { [weak self] in
+            guard let self = self else { return }
+            completion(self.queue.operationCount < 2)
         }
     }
 }

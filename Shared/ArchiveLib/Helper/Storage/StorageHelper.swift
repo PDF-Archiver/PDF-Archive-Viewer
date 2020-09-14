@@ -23,8 +23,8 @@ enum StorageHelper {
 
         if let image = UIImage(contentsOfFile: url.path) {
 
-            try StorageHelper.save([image])
-            try StorageHelper.triggerProcessing()
+            try Self.save([image])
+            try Self.triggerProcessing()
             try FileManager.default.removeItem(at: url)
 
         } else {
