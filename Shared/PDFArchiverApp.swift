@@ -24,7 +24,6 @@ struct PDFArchiverApp: App {
     var body: some Scene {
         WindowGroup {
             MainNavigationView()
-                .accentColor(Color(.paDarkGray))
                 .environmentObject(OrientationInfo())
         }
 //        #if os(macOS)

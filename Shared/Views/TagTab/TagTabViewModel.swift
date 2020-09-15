@@ -94,7 +94,18 @@ final class TagTabViewModel: ObservableObject, Log {
             .removeDuplicates()
             .compactMap { newUntaggedDocuments in
 
-                let sortedDocuments = newUntaggedDocuments.sorted { $0.filename < $1.filename }
+                let sortedDocuments = newUntaggedDocuments
+                    .sorted { doc1, doc2 in
+
+                        // sort by file creation date to get most recent scans at first
+                        if let date1 = try? archiveStore.getCreationDate(of: doc1.path),
+                           let date2 = try? archiveStore.getCreationDate(of: doc2.path) {
+
+                            return date1 > date2
+                        } else {
+                            return doc1 > doc2
+                        }
+                    }
 
                 // tagged documents should be first in the list
                 var currentDocuments = self.documents.filter { $0.taggingStatus == .tagged }

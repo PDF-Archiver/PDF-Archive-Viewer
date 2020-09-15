@@ -44,7 +44,7 @@
 "document_recovery_suggestion__tags_missing" = "Please add tags.";
 
 /* Intro: Find Description */
-"intro.find.description" = "You can find your documents quickly and easily at any time via the archive or the iCloud Drive app\n\nso you always have your most important information in your pocket!";
+"intro.find.description" = "You can find your documents quickly and easily at any time via the archive or the iCloud Drive app so you always have your most important information in your pocket!";
 
 /* Intro: Find Title */
 "intro.find.title" = "Find it.";

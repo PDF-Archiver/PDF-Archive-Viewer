@@ -18,8 +18,6 @@
 		3416B1B924A9282800D5F4E0 /* AboutMeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3416B16124A9282700D5F4E0 /* AboutMeView.swift */; };
 		3416B1BA24A9282800D5F4E0 /* MoreTabViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3416B16224A9282700D5F4E0 /* MoreTabViewModel.swift */; };
 		3416B1BB24A9282800D5F4E0 /* MoreTabViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3416B16224A9282700D5F4E0 /* MoreTabViewModel.swift */; };
-		3416B1BC24A9282800D5F4E0 /* TagTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3416B16424A9282700D5F4E0 /* TagTabView.swift */; };
-		3416B1BD24A9282800D5F4E0 /* TagTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3416B16424A9282700D5F4E0 /* TagTabView.swift */; };
 		3416B1BE24A9282800D5F4E0 /* TagTabViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3416B16524A9282700D5F4E0 /* TagTabViewModel.swift */; };
 		3416B1BF24A9282800D5F4E0 /* TagTabViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3416B16524A9282700D5F4E0 /* TagTabViewModel.swift */; };
 		3416B1C224A9282800D5F4E0 /* IAPViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3416B16724A9282700D5F4E0 /* IAPViewModel.swift */; };
@@ -97,6 +95,8 @@
 		343A0A6124C2384000824F75 /* SubscriptionButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 343A0A2524C228DE00824F75 /* SubscriptionButtonStyle.swift */; };
 		343DCDD024C38AC100965627 /* LoggingKit in Frameworks */ = {isa = PBXBuildFile; productRef = 343DCDCF24C38AC100965627 /* LoggingKit */; };
 		345A497E24AFB0CE00EC4DC2 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 3416B1AD24A9282700D5F4E0 /* Settings.bundle */; };
+		34683F63251172D30025A478 /* TagTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3416B16424A9282700D5F4E0 /* TagTabView.swift */; };
+		34683F64251172D40025A478 /* TagTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3416B16424A9282700D5F4E0 /* TagTabView.swift */; };
 		347BD2E224C2275600C38DB9 /* Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 347BD2D324C2275500C38DB9 /* Alert.swift */; };
 		347BD2E324C2275600C38DB9 /* Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 347BD2D324C2275500C38DB9 /* Alert.swift */; };
 		347BD2E424C2275600C38DB9 /* InputAccessoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 347BD2D424C2275500C38DB9 /* InputAccessoryView.swift */; };
@@ -830,7 +830,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3416B1BC24A9282800D5F4E0 /* TagTabView.swift in Sources */,
 				3498723A24BE2DE600ADE587 /* AppDelegate.swift in Sources */,
 				343A0A3E24C2319D00824F75 /* StorageHelper+Errors.swift in Sources */,
 				3416B22A24A9282800D5F4E0 /* ArchiveView.swift in Sources */,
@@ -876,6 +875,7 @@
 				3416B23424A9282800D5F4E0 /* ArchiveViewModel.swift in Sources */,
 				3416B21224A9282800D5F4E0 /* DocumentCameraView.swift in Sources */,
 				3416B1B624A9282800D5F4E0 /* MoreTabView.swift in Sources */,
+				34683F64251172D40025A478 /* TagTabView.swift in Sources */,
 				347BD2F824C2275600C38DB9 /* ClearButton.swift in Sources */,
 				340EA92924B641E20066B4BE /* DocumentInformationForm.swift in Sources */,
 				343A0A4024C2319D00824F75 /* StorageHelper.swift in Sources */,
@@ -892,7 +892,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3416B1BD24A9282800D5F4E0 /* TagTabView.swift in Sources */,
 				343A0A4B24C2319F00824F75 /* StorageHelper+Errors.swift in Sources */,
 				3416B22B24A9282800D5F4E0 /* ArchiveView.swift in Sources */,
 				3416B23724A9282800D5F4E0 /* DocumentDetailView.swift in Sources */,
@@ -938,6 +937,7 @@
 				343A0A4E24C2319F00824F75 /* AlertViewModel.swift in Sources */,
 				3416B21724A9282800D5F4E0 /* ScanTabViewModel.swift in Sources */,
 				347BD2ED24C2275600C38DB9 /* PlaceholderView.swift in Sources */,
+				34683F63251172D30025A478 /* TagTabView.swift in Sources */,
 				347BD2E924C2275600C38DB9 /* IntroViewController.swift in Sources */,
 				343A0A6024C2384000824F75 /* WidthSyncedRow.swift in Sources */,
 				343A0A4D24C2319F00824F75 /* StorageHelper.swift in Sources */,

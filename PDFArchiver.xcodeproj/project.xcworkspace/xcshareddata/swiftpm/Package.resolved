@@ -20,6 +20,15 @@
         }
       },
       {
+        "package": "Down",
+        "repositoryURL": "https://github.com/iwasrobbed/Down",
+        "state": {
+          "branch": null,
+          "revision": "427aec0a0ab342246ec02369dea398597b61174a",
+          "version": "0.9.3"
+        }
+      },
+      {
         "package": "LoggingKit",
         "repositoryURL": "https://github.com/PDF-Archiver/LoggingKit",
         "state": {
@@ -44,6 +53,15 @@
           "branch": null,
           "revision": "c36df080b1001c385cc14c85f3b1c5ea36531fd0",
           "version": "6.1.5"
+        }
+      },
+      {
+        "package": "Parma",
+        "repositoryURL": "https://github.com/dasautoooo/Parma",
+        "state": {
+          "branch": null,
+          "revision": "82f825cead4b408fa3e0059affa3e5d296d3b745",
+          "version": "0.1.1"
         }
       },
       {

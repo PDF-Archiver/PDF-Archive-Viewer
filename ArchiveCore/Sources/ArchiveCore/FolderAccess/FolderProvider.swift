@@ -26,6 +26,7 @@ public protocol FolderProvider: class, Log {
     func fetch(url: URL) throws -> Data
     func delete(url: URL) throws
     func rename(from: URL, to: URL) throws
+    func getCreationDate(of: URL) throws -> Date?
 }
 
 public enum FolderType: Equatable {

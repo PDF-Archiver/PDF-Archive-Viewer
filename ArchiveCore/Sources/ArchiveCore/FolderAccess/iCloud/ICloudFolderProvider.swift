@@ -43,8 +43,8 @@ class ICloudFolderProvider: NSObject, FolderProvider {
 
         metadataQuery.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [predicate, notContainsTempPath] )
 
-        // update the file status 10 times per second, while downloading
-        metadataQuery.notificationBatchingInterval = 0.1
+        // update the file status 3 times per second, while downloading
+        metadataQuery.notificationBatchingInterval = 0.3
 
         /*
          Ask for both in-container documents and external documents so that
@@ -119,6 +119,11 @@ class ICloudFolderProvider: NSObject, FolderProvider {
         }
 
         try fileManager.moveItem(at: source, to: destination)
+    }
+
+    func getCreationDate(of url: URL) throws -> Date? {
+        let attributes = try fileManager.attributesOfItem(atPath: url.path)
+        return attributes[.creationDate] as? Date
     }
 
     // MARK: - Helper Functions

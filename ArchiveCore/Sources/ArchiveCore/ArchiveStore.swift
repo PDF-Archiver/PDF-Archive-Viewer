@@ -137,6 +137,19 @@ public final class ArchiveStore: ObservableObject, Log {
         documents.removeAll { $0 == document }
     }
 
+    public func getCreationDate(of url: URL) throws -> Date? {
+        guard let provider = providers.first(where: { url.path.hasPrefix($0.baseUrl.path) }) else {
+            throw ArchiveStore.Error.providerNotFound
+        }
+
+        do {
+            return try provider.getCreationDate(of: url)
+        } catch {
+            log.assertOrError("Document download error.", metadata: ["error": "\(error.localizedDescription)"])
+            throw error
+        }
+    }
+
     // MARK: Helper Function
 
     private func folderDidChange(_ provider: FolderProvider, _ changes: [FileChange]) {

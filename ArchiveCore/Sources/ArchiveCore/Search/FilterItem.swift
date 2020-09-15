@@ -43,6 +43,15 @@ public enum FilterItem: Identifiable, Equatable, Comparable {
                 return "calendar"
         }
     }
+
+    public var isTag: Bool {
+        switch self {
+            case .tag:
+                return true
+            case .year, .yearMonth, .yearMonthDay:
+                return false
+        }
+    }
 }
 
 extension Array where Element == Document {

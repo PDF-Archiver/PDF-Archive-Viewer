@@ -23,7 +23,7 @@ final class ArchiveViewModel: ObservableObject, Log {
     @Published private(set) var selectedDocument: Document?
     @Published private(set) var documents: [Document] = []
     @Published var years: [String] = ["All", "2019", "2018", "2017"]
-    @Published var scopeSelecton: Int = 0
+    @Published var scopeSelection: Int = 0
     @Published var searchText = ""
     @Published var showLoadingView = true
 
@@ -65,21 +65,29 @@ final class ArchiveViewModel: ObservableObject, Log {
             self.showLoadingView = false
         }
 
-        $scopeSelecton
+        $scopeSelection
             .dropFirst()
             .sink { _ in
+                self.selectedFilters = self.selectedFilters.filter(\.isTag)
                 self.selectionFeedback.prepare()
                 self.selectionFeedback.selectionChanged()
             }
             .store(in: &disposables)
 
         $searchText
+            .combineLatest($scopeSelection)
+            // only change scope when there is a non-empty searchterm
+            .filter { !$0.0.isEmpty }
             .receive(on: DispatchQueue.global(qos: .userInitiated))
-            .map { searchterm -> [FilterItem] in
+            .map { (searchterm, _) -> [FilterItem] in
+                let allDocumentTags = self.documents.reduce(into: Set<String>()) { result, document in
+                    result.formUnion(document.tags)
+                }
+
                 var filters = Self.getDateFilters(from: searchterm)
-                let tagFilters = TagStore.shared.getAvailableTags(with: [searchterm])
+                let tagFilters = allDocumentTags
                     .sorted()
-                    .prefix(3)
+                    .prefix(10)
                     .map { tag in
                         FilterItem.tag(tag)
                     }
@@ -95,7 +103,7 @@ final class ArchiveViewModel: ObservableObject, Log {
         $searchText
             .debounce(for: .milliseconds(100), scheduler: DispatchQueue.global(qos: .userInitiated))
             .removeDuplicates()
-            .combineLatest($scopeSelecton, archiveStore.$documents, $selectedFilters)
+            .combineLatest($scopeSelection, archiveStore.$documents, $selectedFilters)
             .map { (searchterm, searchscopeSelection, documents, selectedFilters) -> [Document] in
 
                 var searchterms: [String] = []
