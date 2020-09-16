@@ -73,7 +73,7 @@ struct MoreTabView: View {
                 Text("About  👤")
             }
             Link("PDF Archiver (macOS)  🖥", destination: viewModel.macOSAppUrl)
-            NavigationLink(destination: markdownView(for: "Privacy")) {
+            NavigationLink(destination: markdownView(for: "Terms of Use & Privacy Policy")) {
                 Text("Terms of Use & Privacy Policy")
             }
             NavigationLink(destination: markdownView(for: "Imprint")) {
