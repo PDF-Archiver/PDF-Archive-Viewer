@@ -581,8 +581,8 @@
 			buildConfigurationList = 3489D74524A3C53E0035E64F /* Build configuration list for PBXNativeTarget "iOS" */;
 			buildPhases = (
 				34A53F7C24AA6381008A3377 /* SwiftLint */,
-				3489D71924A3C53E0035E64F /* Resources */,
 				34A53F7E24AA63DC008A3377 /* Settings Bundle Update */,
+				3489D71924A3C53E0035E64F /* Resources */,
 				3489D71724A3C53E0035E64F /* Sources */,
 				3489D71824A3C53E0035E64F /* Frameworks */,
 				34A53F8E24AA653E008A3377 /* Embed App Extensions */,
@@ -820,17 +820,16 @@
 			inputFileListPaths = (
 			);
 			inputPaths = (
-				"$(SRCROOT)/Shared/Resources/Seettings.bundle",
 			);
 			name = "Settings Bundle Update";
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(BUILT_PRODUCTS_DIR)/Shared/Resources/Settings.bundle",
+				"$(PROJECT_DIR)/Shared/Resources/Seettings.bundle/Root.plist",
 			);
-			runOnlyForDeploymentPostprocessing = 0;
+			runOnlyForDeploymentPostprocessing = 1;
 			shellPath = /bin/sh;
-			shellScript = "# Update settings.bundle with new license plist files\n# https://github.com/mono0926/LicensePlist\nif which license-plist >/dev/null; then\n    license-plist --suppress-opening-directory --add-version-numbers --force --output-path Shared/Resources/Settings.bundle\nelse\n    echo \"warning: license-plist not installed, download from https://github.com/mono0926/LicensePlist\"\nfi\n\n# Source: https://stackoverflow.com/a/39030153\n#cd \"${BUILT_PRODUCTS_DIR}\"\n\nls -lah \"$BUILT_PRODUCTS_DIR/Shared/Resources\"\nversion=$(/usr/libexec/PlistBuddy -c \"Print CFBundleShortVersionString\" \"$PROJECT_DIR/$INFOPLIST_FILE\")\nbuild=$(/usr/libexec/PlistBuddy -c \"Print CFBundleVersion\" \"$PROJECT_DIR/$INFOPLIST_FILE\")\n/usr/libexec/PlistBuddy -c \"Set PreferenceSpecifiers:0:DefaultValue $version ($build)\" \"$CODESIGNING_FOLDER_PATH/Settings.bundle/Root.plist\"\n\ncat \"$CODESIGNING_FOLDER_PATH/Settings.bundle/Root.plist\"\n";
+			shellScript = "# Update settings.bundle with new license plist files\n# https://github.com/mono0926/LicensePlist\nif which license-plist >/dev/null; then\n    license-plist --suppress-opening-directory --add-version-numbers --force --output-path Shared/Resources/Settings.bundle\nelse\n    echo \"warning: license-plist not installed, download from https://github.com/mono0926/LicensePlist\"\nfi\n\n# Source: https://stackoverflow.com/a/39030153\n/usr/libexec/PlistBuddy -c \"Set PreferenceSpecifiers:0:DefaultValue $MARKETING_VERSION ($CURRENT_PROJECT_VERSION)\" \"$PROJECT_DIR/Shared/Resources/Settings.bundle/Root.plist\"\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -1154,7 +1153,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = iOS/PDFArchiver.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_TEAM = 87KNVHZ8C7;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = iOS/Info.plist;
@@ -1180,7 +1179,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = iOS/PDFArchiver.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_TEAM = 87KNVHZ8C7;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = iOS/Info.plist;
@@ -1344,7 +1343,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = ShareExtension/ShareExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_TEAM = 87KNVHZ8C7;
 				INFOPLIST_FILE = ShareExtension/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
@@ -1370,7 +1369,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = ShareExtension/ShareExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_TEAM = 87KNVHZ8C7;
 				INFOPLIST_FILE = ShareExtension/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
