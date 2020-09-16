@@ -8,8 +8,6 @@ name: LoggingKit, nameSpecified: LoggingKit, owner: PDF-Archiver, version: 1.1.7
 
 name: LogModel, nameSpecified: LogModel, owner: PDF-Archiver, version: 0.0.4
 
-name: paper-onboarding, nameSpecified: PaperOnboarding, owner: Ramotion, version: 6.1.5
-
 name: Parma, nameSpecified: Parma, owner: dasautoooo, version: 0.1.1
 
 name: sentry-cocoa, nameSpecified: Sentry, owner: getsentry, version: 5.2.0

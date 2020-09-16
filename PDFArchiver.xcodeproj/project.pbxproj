@@ -64,7 +64,6 @@
 		3416B24624A9282800D5F4E0 /* MainNavigationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3416B1B524A9282800D5F4E0 /* MainNavigationViewModel.swift */; };
 		3416B24724A9282800D5F4E0 /* MainNavigationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3416B1B524A9282800D5F4E0 /* MainNavigationViewModel.swift */; };
 		3416B27E24A92CEC00D5F4E0 /* SwiftyStoreKit in Frameworks */ = {isa = PBXBuildFile; productRef = 3416B27D24A92CEC00D5F4E0 /* SwiftyStoreKit */; };
-		3416B28124A92D0500D5F4E0 /* PaperOnboarding in Frameworks */ = {isa = PBXBuildFile; productRef = 3416B28024A92D0500D5F4E0 /* PaperOnboarding */; };
 		3416B28424A92D1E00D5F4E0 /* SwiftUIX in Frameworks */ = {isa = PBXBuildFile; productRef = 3416B28324A92D1E00D5F4E0 /* SwiftUIX */; };
 		3416B28724A92D4200D5F4E0 /* Sentry in Frameworks */ = {isa = PBXBuildFile; productRef = 3416B28624A92D4200D5F4E0 /* Sentry */; };
 		3416B28A24A92D5A00D5F4E0 /* Diagnostics in Frameworks */ = {isa = PBXBuildFile; productRef = 3416B28924A92D5A00D5F4E0 /* Diagnostics */; };
@@ -103,10 +102,6 @@
 		347BD2E524C2275600C38DB9 /* InputAccessoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 347BD2D424C2275500C38DB9 /* InputAccessoryView.swift */; };
 		347BD2E624C2275600C38DB9 /* Stack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 347BD2D524C2275500C38DB9 /* Stack.swift */; };
 		347BD2E724C2275600C38DB9 /* Stack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 347BD2D524C2275500C38DB9 /* Stack.swift */; };
-		347BD2E824C2275600C38DB9 /* IntroViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 347BD2D724C2275600C38DB9 /* IntroViewController.swift */; };
-		347BD2E924C2275600C38DB9 /* IntroViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 347BD2D724C2275600C38DB9 /* IntroViewController.swift */; };
-		347BD2EA24C2275600C38DB9 /* IntroView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 347BD2D824C2275600C38DB9 /* IntroView.swift */; };
-		347BD2EB24C2275600C38DB9 /* IntroView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 347BD2D824C2275600C38DB9 /* IntroView.swift */; };
 		347BD2EC24C2275600C38DB9 /* PlaceholderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 347BD2D924C2275600C38DB9 /* PlaceholderView.swift */; };
 		347BD2ED24C2275600C38DB9 /* PlaceholderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 347BD2D924C2275600C38DB9 /* PlaceholderView.swift */; };
 		347BD2EE24C2275600C38DB9 /* DetailRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 347BD2DA24C2275600C38DB9 /* DetailRowView.swift */; };
@@ -230,8 +225,6 @@
 		347BD2D324C2275500C38DB9 /* Alert.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Alert.swift; sourceTree = "<group>"; };
 		347BD2D424C2275500C38DB9 /* InputAccessoryView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InputAccessoryView.swift; sourceTree = "<group>"; };
 		347BD2D524C2275500C38DB9 /* Stack.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Stack.swift; sourceTree = "<group>"; };
-		347BD2D724C2275600C38DB9 /* IntroViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IntroViewController.swift; sourceTree = "<group>"; };
-		347BD2D824C2275600C38DB9 /* IntroView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IntroView.swift; sourceTree = "<group>"; };
 		347BD2D924C2275600C38DB9 /* PlaceholderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaceholderView.swift; sourceTree = "<group>"; };
 		347BD2DA24C2275600C38DB9 /* DetailRowView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailRowView.swift; sourceTree = "<group>"; };
 		347BD2DB24C2275600C38DB9 /* CustomTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomTextField.swift; sourceTree = "<group>"; };
@@ -279,7 +272,6 @@
 				3416B27E24A92CEC00D5F4E0 /* SwiftyStoreKit in Frameworks */,
 				34A5CF8224A93A3C002409EF /* StoreKit.framework in Frameworks */,
 				3416B28A24A92D5A00D5F4E0 /* Diagnostics in Frameworks */,
-				3416B28124A92D0500D5F4E0 /* PaperOnboarding in Frameworks */,
 				34B2541F251275EA00EC5DD9 /* Parma in Frameworks */,
 				343A0A5524C2339900824F75 /* ArchiveCore in Frameworks */,
 				3416B28424A92D1E00D5F4E0 /* SwiftUIX in Frameworks */,
@@ -463,7 +455,6 @@
 				347BD2D324C2275500C38DB9 /* Alert.swift */,
 				347BD2D424C2275500C38DB9 /* InputAccessoryView.swift */,
 				347BD2D524C2275500C38DB9 /* Stack.swift */,
-				347BD2D624C2275500C38DB9 /* Intro */,
 				347BD2D924C2275600C38DB9 /* PlaceholderView.swift */,
 				347BD2DA24C2275600C38DB9 /* DetailRowView.swift */,
 				347BD2DB24C2275600C38DB9 /* CustomTextField.swift */,
@@ -475,15 +466,6 @@
 				347BD2E124C2275600C38DB9 /* LoadingView.swift */,
 			);
 			path = MissingViews;
-			sourceTree = "<group>";
-		};
-		347BD2D624C2275500C38DB9 /* Intro */ = {
-			isa = PBXGroup;
-			children = (
-				347BD2D724C2275600C38DB9 /* IntroViewController.swift */,
-				347BD2D824C2275600C38DB9 /* IntroView.swift */,
-			);
-			path = Intro;
 			sourceTree = "<group>";
 		};
 		3489D70E24A3C53D0035E64F = {
@@ -611,7 +593,6 @@
 			name = iOS;
 			packageProductDependencies = (
 				3416B27D24A92CEC00D5F4E0 /* SwiftyStoreKit */,
-				3416B28024A92D0500D5F4E0 /* PaperOnboarding */,
 				3416B28324A92D1E00D5F4E0 /* SwiftUIX */,
 				3416B28624A92D4200D5F4E0 /* Sentry */,
 				3416B28924A92D5A00D5F4E0 /* Diagnostics */,
@@ -736,7 +717,6 @@
 			mainGroup = 3489D70E24A3C53D0035E64F;
 			packageReferences = (
 				3416B27C24A92CEC00D5F4E0 /* XCRemoteSwiftPackageReference "SwiftyStoreKit" */,
-				3416B27F24A92D0500D5F4E0 /* XCRemoteSwiftPackageReference "paper-onboarding" */,
 				3416B28224A92D1E00D5F4E0 /* XCRemoteSwiftPackageReference "SwiftUIX" */,
 				3416B28524A92D4200D5F4E0 /* XCRemoteSwiftPackageReference "sentry-cocoa" */,
 				3416B28824A92D5A00D5F4E0 /* XCRemoteSwiftPackageReference "Diagnostics" */,
@@ -879,7 +859,6 @@
 				343A0A5324C2325300824F75 /* ImageConverter.swift in Sources */,
 				347BD2F024C2275600C38DB9 /* CustomTextField.swift in Sources */,
 				3416B22C24A9282800D5F4E0 /* DocumentDetailViewModel.swift in Sources */,
-				347BD2EA24C2275600C38DB9 /* IntroView.swift in Sources */,
 				340EA92724B641E20066B4BE /* TagView.swift in Sources */,
 				347BD2E224C2275600C38DB9 /* Alert.swift in Sources */,
 				343A0A3924C2300F00824F75 /* UIFont.swift in Sources */,
@@ -895,7 +874,6 @@
 				347BD2E424C2275600C38DB9 /* InputAccessoryView.swift in Sources */,
 				343A0A4124C2319D00824F75 /* AlertViewModel.swift in Sources */,
 				343A0A4224C2319D00824F75 /* AppStoreReviewRequest.swift in Sources */,
-				347BD2E824C2275600C38DB9 /* IntroViewController.swift in Sources */,
 				3416B21424A9282800D5F4E0 /* ScanTabView.swift in Sources */,
 				3416B1B824A9282800D5F4E0 /* AboutMeView.swift in Sources */,
 				3416B23424A9282800D5F4E0 /* ArchiveViewModel.swift in Sources */,
@@ -937,7 +915,6 @@
 				347BD2E324C2275600C38DB9 /* Alert.swift in Sources */,
 				3416B22F24A9282800D5F4E0 /* DocumentView.swift in Sources */,
 				3416B1C324A9282800D5F4E0 /* IAPViewModel.swift in Sources */,
-				347BD2EB24C2275600C38DB9 /* IntroView.swift in Sources */,
 				3416B22D24A9282800D5F4E0 /* DocumentDetailViewModel.swift in Sources */,
 				340EA92824B641E20066B4BE /* TagView.swift in Sources */,
 				3416B21F24A9282800D5F4E0 /* IAP.swift in Sources */,
@@ -964,7 +941,6 @@
 				3416B21724A9282800D5F4E0 /* ScanTabViewModel.swift in Sources */,
 				347BD2ED24C2275600C38DB9 /* PlaceholderView.swift in Sources */,
 				34683F63251172D30025A478 /* TagTabView.swift in Sources */,
-				347BD2E924C2275600C38DB9 /* IntroViewController.swift in Sources */,
 				343A0A6024C2384000824F75 /* WidthSyncedRow.swift in Sources */,
 				343A0A4D24C2319F00824F75 /* StorageHelper.swift in Sources */,
 				343A0A4F24C2319F00824F75 /* AppStoreReviewRequest.swift in Sources */,
@@ -1479,19 +1455,11 @@
 				minimumVersion = 0.16.0;
 			};
 		};
-		3416B27F24A92D0500D5F4E0 /* XCRemoteSwiftPackageReference "paper-onboarding" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/Ramotion/paper-onboarding";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 6.1.5;
-			};
-		};
 		3416B28224A92D1E00D5F4E0 /* XCRemoteSwiftPackageReference "SwiftUIX" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SwiftUIX/SwiftUIX";
 			requirement = {
-				branch = master;
+				branch = "asauthorization-xcode12b6-patch";
 				kind = branch;
 			};
 		};
@@ -1534,11 +1502,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 3416B27C24A92CEC00D5F4E0 /* XCRemoteSwiftPackageReference "SwiftyStoreKit" */;
 			productName = SwiftyStoreKit;
-		};
-		3416B28024A92D0500D5F4E0 /* PaperOnboarding */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 3416B27F24A92D0500D5F4E0 /* XCRemoteSwiftPackageReference "paper-onboarding" */;
-			productName = PaperOnboarding;
 		};
 		3416B28324A92D1E00D5F4E0 /* SwiftUIX */ = {
 			isa = XCSwiftPackageProductDependency;

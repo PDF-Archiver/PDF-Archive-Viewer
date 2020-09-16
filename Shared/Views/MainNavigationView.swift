@@ -32,10 +32,8 @@ struct MainNavigationView: View {
             if viewModel.showSubscriptionView {
                 IAPView(viewModel: self.viewModel.iapViewModel)
             }
-            if viewModel.showTutorial {
-                introView
-            }
         }
+        .intro(when: $viewModel.showTutorial)
         .alert(isPresented: $viewModel.showAlert) {
             Alert(viewModel: viewModel.alertViewModel)
         }
@@ -112,12 +110,6 @@ struct MainNavigationView: View {
             .edgesIgnoringSafeArea(.all)
             .statusBar(hidden: true)
     }
-
-    private var introView: some View {
-        IntroView()
-            .edgesIgnoringSafeArea(.all)
-            .statusBar(hidden: true)
-    }
 }
 
 //struct MainNavigationView_Previews: PreviewProvider {
@@ -126,3 +118,21 @@ struct MainNavigationView: View {
 //        MainNavigationView(viewModel: viewModel)
 //    }
 //}
+
+fileprivate extension View {
+
+    @ViewBuilder
+    func intro(when value: Binding<Bool>) -> some View {
+        if value.wrappedValue {
+            ZStack {
+                self
+                    .redacted(reason: .placeholder)
+                    .blur(radius: 15)
+
+                OnboardingView(isPresenting: value)
+            }
+        } else {
+            self
+        }
+    }
+}

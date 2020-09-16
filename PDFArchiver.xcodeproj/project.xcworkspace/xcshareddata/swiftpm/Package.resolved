@@ -47,15 +47,6 @@
         }
       },
       {
-        "package": "PaperOnboarding",
-        "repositoryURL": "https://github.com/Ramotion/paper-onboarding",
-        "state": {
-          "branch": null,
-          "revision": "c36df080b1001c385cc14c85f3b1c5ea36531fd0",
-          "version": "6.1.5"
-        }
-      },
-      {
         "package": "Parma",
         "repositoryURL": "https://github.com/dasautoooo/Parma",
         "state": {
@@ -86,8 +77,8 @@
         "package": "SwiftUIX",
         "repositoryURL": "https://github.com/SwiftUIX/SwiftUIX",
         "state": {
-          "branch": "master",
-          "revision": "2891cc35852804c2549f4040cdd0bd554a6aae75",
+          "branch": "asauthorization-xcode12b6-patch",
+          "revision": "939b85a2c06f463722dcbd1a125343f29d85551b",
           "version": null
         }
       },
