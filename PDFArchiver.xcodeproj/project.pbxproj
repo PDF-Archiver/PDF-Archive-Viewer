@@ -134,6 +134,11 @@
 		34A53FA724AA65CB008A3377 /* ShareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34A53FA524AA65CA008A3377 /* ShareViewController.swift */; };
 		34A53FA824AA65CB008A3377 /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 34A53FA624AA65CB008A3377 /* MainInterface.storyboard */; };
 		34A5CF8224A93A3C002409EF /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34A5CF8124A93A3C002409EF /* StoreKit.framework */; };
+		34B2541F251275EA00EC5DD9 /* Parma in Frameworks */ = {isa = PBXBuildFile; productRef = 34B2541E251275EA00EC5DD9 /* Parma */; };
+		34B2545D2512774400EC5DD9 /* Imprint.md in Resources */ = {isa = PBXBuildFile; fileRef = 34B254602512774400EC5DD9 /* Imprint.md */; };
+		34B2545E2512774400EC5DD9 /* Imprint.md in Resources */ = {isa = PBXBuildFile; fileRef = 34B254602512774400EC5DD9 /* Imprint.md */; };
+		34B25468251277A700EC5DD9 /* Privacy.md in Resources */ = {isa = PBXBuildFile; fileRef = 34B2546B251277A700EC5DD9 /* Privacy.md */; };
+		34B25469251277A700EC5DD9 /* Privacy.md in Resources */ = {isa = PBXBuildFile; fileRef = 34B2546B251277A700EC5DD9 /* Privacy.md */; };
 		34E7DB0F250189D400E94352 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 34E7DB12250189D400E94352 /* Localizable.strings */; };
 		34E7DB10250189D400E94352 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 34E7DB12250189D400E94352 /* Localizable.strings */; };
 /* End PBXBuildFile section */
@@ -256,6 +261,10 @@
 		34A53FA924AA65E8008A3377 /* ShareExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ShareExtension.entitlements; sourceTree = "<group>"; };
 		34A5CF7F24A93A28002409EF /* PDFArchiver.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = PDFArchiver.entitlements; sourceTree = "<group>"; };
 		34A5CF8124A93A3C002409EF /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS14.0.sdk/System/Library/Frameworks/StoreKit.framework; sourceTree = DEVELOPER_DIR; };
+		34B2545F2512774400EC5DD9 /* de */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = de; path = de.lproj/Imprint.md; sourceTree = "<group>"; };
+		34B254672512774D00EC5DD9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = Base; path = Base.lproj/Imprint.md; sourceTree = "<group>"; };
+		34B2546A251277A700EC5DD9 /* de */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = de; path = de.lproj/Privacy.md; sourceTree = "<group>"; };
+		34B25472251277AC00EC5DD9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = Base; path = Base.lproj/Privacy.md; sourceTree = "<group>"; };
 		34E7DB11250189D400E94352 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		34E7DB1325018A0000E94352 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -271,6 +280,7 @@
 				34A5CF8224A93A3C002409EF /* StoreKit.framework in Frameworks */,
 				3416B28A24A92D5A00D5F4E0 /* Diagnostics in Frameworks */,
 				3416B28124A92D0500D5F4E0 /* PaperOnboarding in Frameworks */,
+				34B2541F251275EA00EC5DD9 /* Parma in Frameworks */,
 				343A0A5524C2339900824F75 /* ArchiveCore in Frameworks */,
 				3416B28424A92D1E00D5F4E0 /* SwiftUIX in Frameworks */,
 			);
@@ -383,6 +393,7 @@
 		3416B1AC24A9282700D5F4E0 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				34B254252512765700EC5DD9 /* markdown */,
 				3416B1AD24A9282700D5F4E0 /* Settings.bundle */,
 				3416B1AF24A9282800D5F4E0 /* PDFArchiver.entitlements */,
 				3416B1AE24A9282800D5F4E0 /* Assets.xcassets */,
@@ -569,6 +580,15 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		34B254252512765700EC5DD9 /* markdown */ = {
+			isa = PBXGroup;
+			children = (
+				34B254602512774400EC5DD9 /* Imprint.md */,
+				34B2546B251277A700EC5DD9 /* Privacy.md */,
+			);
+			path = markdown;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -597,6 +617,7 @@
 				3416B28924A92D5A00D5F4E0 /* Diagnostics */,
 				343A0A5424C2339900824F75 /* ArchiveCore */,
 				343DCDCF24C38AC100965627 /* LoggingKit */,
+				34B2541E251275EA00EC5DD9 /* Parma */,
 			);
 			productName = iOS;
 			productReference = 3489D71B24A3C53E0035E64F /* PDFArchiver.app */;
@@ -720,6 +741,7 @@
 				3416B28524A92D4200D5F4E0 /* XCRemoteSwiftPackageReference "sentry-cocoa" */,
 				3416B28824A92D5A00D5F4E0 /* XCRemoteSwiftPackageReference "Diagnostics" */,
 				343DCDCE24C38AC100965627 /* XCRemoteSwiftPackageReference "LoggingKit" */,
+				34B2541D251275EA00EC5DD9 /* XCRemoteSwiftPackageReference "Parma" */,
 			);
 			productRefGroup = 3489D71C24A3C53E0035E64F /* Products */;
 			projectDirPath = "";
@@ -742,7 +764,9 @@
 				3416B23E24A9282800D5F4E0 /* Config.xcconfig in Resources */,
 				3416B24024A9282800D5F4E0 /* LaunchScreen.storyboard in Resources */,
 				345A497E24AFB0CE00EC4DC2 /* Settings.bundle in Resources */,
+				34B2545D2512774400EC5DD9 /* Imprint.md in Resources */,
 				3416B23C24A9282800D5F4E0 /* Assets.xcassets in Resources */,
+				34B25468251277A700EC5DD9 /* Privacy.md in Resources */,
 				34E7DB0F250189D400E94352 /* Localizable.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -751,6 +775,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				34B25469251277A700EC5DD9 /* Privacy.md in Resources */,
+				34B2545E2512774400EC5DD9 /* Imprint.md in Resources */,
 				3416B23F24A9282800D5F4E0 /* Config.xcconfig in Resources */,
 				3416B24124A9282800D5F4E0 /* LaunchScreen.storyboard in Resources */,
 				3416B23D24A9282800D5F4E0 /* Assets.xcassets in Resources */,
@@ -998,6 +1024,24 @@
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
 		};
+		34B254602512774400EC5DD9 /* Imprint.md */ = {
+			isa = PBXVariantGroup;
+			children = (
+				34B2545F2512774400EC5DD9 /* de */,
+				34B254672512774D00EC5DD9 /* Base */,
+			);
+			name = Imprint.md;
+			sourceTree = "<group>";
+		};
+		34B2546B251277A700EC5DD9 /* Privacy.md */ = {
+			isa = PBXVariantGroup;
+			children = (
+				34B2546A251277A700EC5DD9 /* de */,
+				34B25472251277AC00EC5DD9 /* Base */,
+			);
+			name = Privacy.md;
+			sourceTree = "<group>";
+		};
 		34E7DB12250189D400E94352 /* Localizable.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -1131,7 +1175,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = iOS/PDFArchiver.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = 87KNVHZ8C7;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = iOS/Info.plist;
@@ -1157,7 +1201,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = iOS/PDFArchiver.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = 87KNVHZ8C7;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = iOS/Info.plist;
@@ -1321,7 +1365,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = ShareExtension/ShareExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = 87KNVHZ8C7;
 				INFOPLIST_FILE = ShareExtension/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
@@ -1347,7 +1391,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = ShareExtension/ShareExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = 87KNVHZ8C7;
 				INFOPLIST_FILE = ShareExtension/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
@@ -1475,6 +1519,14 @@
 				minimumVersion = 1.1.7;
 			};
 		};
+		34B2541D251275EA00EC5DD9 /* XCRemoteSwiftPackageReference "Parma" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/dasautoooo/Parma";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.1.1;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -1511,6 +1563,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 343DCDCE24C38AC100965627 /* XCRemoteSwiftPackageReference "LoggingKit" */;
 			productName = LoggingKit;
+		};
+		34B2541E251275EA00EC5DD9 /* Parma */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 34B2541D251275EA00EC5DD9 /* XCRemoteSwiftPackageReference "Parma" */;
+			productName = Parma;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

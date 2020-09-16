@@ -9,6 +9,7 @@
 import LogModel
 import MessageUI
 import SwiftUI
+import Parma
 
 struct MoreTabView: View {
 
@@ -28,17 +29,9 @@ struct MoreTabView: View {
                             recipients: MoreTabViewModel.mailRecipients,
                             result: self.$viewModel.result)
         }
-        .navigationBarTitleView(title)
+        .navigationTitle("Preferences & More")
         .navigationViewStyle(StackNavigationViewStyle())
         .onAppear(perform: viewModel.updateSubscription)
-    }
-
-    private var title: some View {
-        Text("Preferences & More")
-            .font(.largeTitle)
-            .fontWeight(.bold)
-            .background(Color(.systemGroupedBackground))
-            .maxWidth(.infinity)
     }
 
     private var preferences: some View {
@@ -80,12 +73,25 @@ struct MoreTabView: View {
                 Text("About  👤")
             }
             Link("PDF Archiver (macOS)  🖥", destination: viewModel.macOSAppUrl)
-            Link("Terms of Use & Privacy Policy", destination: viewModel.privacyPolicyUrl)
-            Link("Imprint", destination: viewModel.imprintUrl)
+            NavigationLink(destination: markdownView(for: "Privacy")) {
+                Text("Terms of Use & Privacy Policy")
+            }
+            NavigationLink(destination: markdownView(for: "Imprint")) {
+                Text("Imprint")
+            }
             DetailRowView(name: "Support  🚑") {
                 self.viewModel.showSupport()
             }
         }
+    }
+
+    private func markdownView(for key: String) -> some View {
+        guard let url = Bundle.main.url(forResource: key, withExtension: "md"),
+              let markdown = try? String(contentsOf: url) else { preconditionFailure("Could not fetch file \(key)") }
+        return ScrollView {
+            Parma(markdown)
+        }
+        .navigationTitle(LocalizedStringKey(key))
     }
 }
 

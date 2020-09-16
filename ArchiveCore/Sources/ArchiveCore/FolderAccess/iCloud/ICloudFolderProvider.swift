@@ -14,8 +14,6 @@ class ICloudFolderProvider: NSObject, FolderProvider {
     let baseUrl: URL
     private let folderDidChange: FolderChangeHandler
 
-//    var type: FolderType = .iCloudDrive
-
     private let notContainsTempPath = NSPredicate(format: "(NOT (%K CONTAINS[c] %@)) AND (NOT (%K CONTAINS[c] %@))", NSMetadataItemPathKey, "/\(ICloudFolderProvider.tempFolderName)/", NSMetadataItemPathKey, "/.Trash/")
     private var metadataQuery: NSMetadataQuery
     private var firstRun = true
@@ -122,7 +120,14 @@ class ICloudFolderProvider: NSObject, FolderProvider {
     }
 
     func getCreationDate(of url: URL) throws -> Date? {
-        let attributes = try fileManager.attributesOfItem(atPath: url.path)
+        var attributes = [FileAttributeKey: Any]()
+        do {
+            attributes = try fileManager.attributesOfItem(atPath: url.path)
+        } catch {
+            let newFilename = ".\(url.lastPathComponent).icloud"
+            let newUrl = url.deletingLastPathComponent().appendingPathComponent(newFilename)
+            attributes = try fileManager.attributesOfItem(atPath: newUrl.path)
+        }
         return attributes[.creationDate] as? Date
     }
 

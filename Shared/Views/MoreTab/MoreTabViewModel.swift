@@ -83,14 +83,6 @@ final class MoreTabViewModel: ObservableObject, Log {
         URL(string: "https://macos.pdf-archiver.io")!
     }
 
-    var privacyPolicyUrl: URL {
-        URL(string: NSLocalizedString("MoreTableViewController.privacyPolicyCell.url", comment: ""))!
-    }
-
-    var imprintUrl: URL {
-        URL(string: NSLocalizedString("MoreTableViewController.imprintCell.url", comment: ""))!
-    }
-
     func showSupport() {
         log.info("More table view show: support")
         if MFMailComposeViewController.canSendMail() {
