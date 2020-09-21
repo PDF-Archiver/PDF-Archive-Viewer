@@ -126,14 +126,14 @@
 		3489D73E24A3C53E0035E64F /* PDFArchiverApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3489D71424A3C53D0035E64F /* PDFArchiverApp.swift */; };
 		348FC3D62512A7D900D901A0 /* SwiftUIX in Frameworks */ = {isa = PBXBuildFile; productRef = 348FC3D52512A7D900D901A0 /* SwiftUIX */; };
 		3498723A24BE2DE600ADE587 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3498723924BE2DE600ADE587 /* AppDelegate.swift */; };
+		34A23FCF2519386200EBE1D5 /* Imprint.md in Resources */ = {isa = PBXBuildFile; fileRef = 34B254602512774400EC5DD9 /* Imprint.md */; };
+		34A23FD02519386200EBE1D5 /* Privacy.md in Resources */ = {isa = PBXBuildFile; fileRef = 34B2546B251277A700EC5DD9 /* Privacy.md */; };
 		34A53FA124AA656B008A3377 /* ShareExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 34A53F9724AA656B008A3377 /* ShareExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		34A53FA724AA65CB008A3377 /* ShareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34A53FA524AA65CA008A3377 /* ShareViewController.swift */; };
 		34A53FA824AA65CB008A3377 /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 34A53FA624AA65CB008A3377 /* MainInterface.storyboard */; };
 		34A5CF8224A93A3C002409EF /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34A5CF8124A93A3C002409EF /* StoreKit.framework */; };
 		34B2541F251275EA00EC5DD9 /* Parma in Frameworks */ = {isa = PBXBuildFile; productRef = 34B2541E251275EA00EC5DD9 /* Parma */; };
-		34B2545D2512774400EC5DD9 /* Imprint.md in Resources */ = {isa = PBXBuildFile; fileRef = 34B254602512774400EC5DD9 /* Imprint.md */; };
 		34B2545E2512774400EC5DD9 /* Imprint.md in Resources */ = {isa = PBXBuildFile; fileRef = 34B254602512774400EC5DD9 /* Imprint.md */; };
-		34B25468251277A700EC5DD9 /* Privacy.md in Resources */ = {isa = PBXBuildFile; fileRef = 34B2546B251277A700EC5DD9 /* Privacy.md */; };
 		34B25469251277A700EC5DD9 /* Privacy.md in Resources */ = {isa = PBXBuildFile; fileRef = 34B2546B251277A700EC5DD9 /* Privacy.md */; };
 		34E7DB0F250189D400E94352 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 34E7DB12250189D400E94352 /* Localizable.strings */; };
 		34E7DB10250189D400E94352 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 34E7DB12250189D400E94352 /* Localizable.strings */; };
@@ -744,12 +744,12 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				34A23FCF2519386200EBE1D5 /* Imprint.md in Resources */,
 				3416B23E24A9282800D5F4E0 /* Config.xcconfig in Resources */,
 				3416B24024A9282800D5F4E0 /* LaunchScreen.storyboard in Resources */,
+				34A23FD02519386200EBE1D5 /* Privacy.md in Resources */,
 				345A497E24AFB0CE00EC4DC2 /* Settings.bundle in Resources */,
-				34B2545D2512774400EC5DD9 /* Imprint.md in Resources */,
 				3416B23C24A9282800D5F4E0 /* Assets.xcassets in Resources */,
-				34B25468251277A700EC5DD9 /* Privacy.md in Resources */,
 				34E7DB0F250189D400E94352 /* Localizable.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1153,7 +1153,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = iOS/PDFArchiver.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 5;
 				DEVELOPMENT_TEAM = 87KNVHZ8C7;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = iOS/Info.plist;
@@ -1179,7 +1179,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = iOS/PDFArchiver.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 5;
 				DEVELOPMENT_TEAM = 87KNVHZ8C7;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = iOS/Info.plist;
@@ -1343,7 +1343,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = ShareExtension/ShareExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 5;
 				DEVELOPMENT_TEAM = 87KNVHZ8C7;
 				INFOPLIST_FILE = ShareExtension/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
@@ -1369,7 +1369,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = ShareExtension/ShareExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 5;
 				DEVELOPMENT_TEAM = 87KNVHZ8C7;
 				INFOPLIST_FILE = ShareExtension/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;

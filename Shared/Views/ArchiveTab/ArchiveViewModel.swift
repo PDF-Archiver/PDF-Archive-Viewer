@@ -59,12 +59,6 @@ final class ArchiveViewModel: ObservableObject, Log {
             }
             .store(in: &disposables)
 
-        // we assume that all documents should be loaded after 10 seconds
-        // force the disappear of the loading view
-        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(10)) {
-            self.showLoadingView = false
-        }
-
         $scopeSelection
             .dropFirst()
             .sink { _ in

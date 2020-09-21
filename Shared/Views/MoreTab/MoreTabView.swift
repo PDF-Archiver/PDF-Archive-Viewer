@@ -9,6 +9,7 @@
 import LogModel
 import MessageUI
 import SwiftUI
+import SwiftUIX
 import Parma
 
 struct MoreTabView: View {
@@ -73,25 +74,28 @@ struct MoreTabView: View {
                 Text("About  👤")
             }
             Link("PDF Archiver (macOS)  🖥", destination: viewModel.macOSAppUrl)
-            NavigationLink(destination: markdownView(for: "Terms of Use & Privacy Policy")) {
-                Text("Terms of Use & Privacy Policy")
-            }
-            NavigationLink(destination: markdownView(for: "Imprint")) {
-                Text("Imprint")
-            }
+            markdownView(for: "Terms of Use & Privacy Policy", withKey: "Privacy")
+            markdownView(for: "Imprint", withKey: "Imprint")
             DetailRowView(name: "Support  🚑") {
                 self.viewModel.showSupport()
             }
         }
     }
 
-    private func markdownView(for key: String) -> some View {
+    private func markdownView(for title: LocalizedStringKey, withKey key: String) -> some View {
         guard let url = Bundle.main.url(forResource: key, withExtension: "md"),
               let markdown = try? String(contentsOf: url) else { preconditionFailure("Could not fetch file \(key)") }
-        return ScrollView {
-            Parma(markdown)
+
+        return NavigationLink {
+            LazyView {
+                ScrollView {
+                    Parma(markdown)
+                }
+            }
+            .navigationTitle(title)
+        } label: {
+            Text(title)
         }
-        .navigationTitle(LocalizedStringKey(key))
     }
 }
 

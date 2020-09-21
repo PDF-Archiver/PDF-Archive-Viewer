@@ -61,6 +61,7 @@ struct MainNavigationView: View {
                             Label(category, systemImage: "folder")
                         }
                     }
+                    .accentColor(.systemGray)
                 }
 
                 Section(header: Text("Tags")) {
@@ -71,6 +72,7 @@ struct MainNavigationView: View {
                             Label(category, systemImage: "tag")
                         }
                     }
+                    .accentColor(.blue)
                 }
             }
             .listStyle(SidebarListStyle())
@@ -95,6 +97,7 @@ struct MainNavigationView: View {
             ForEach(Tab.allCases) { tab in
                 viewModel.view(for: tab)
                     .wrapNavigationView(when: tab != .scan)
+                    .navigationViewStyle(StackNavigationViewStyle())
                     .tabItem {
                         Label(tab.name, systemImage: tab.iconName)
                     }

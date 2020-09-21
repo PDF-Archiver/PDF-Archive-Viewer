@@ -11,23 +11,23 @@ import SwiftUIX
 
 struct ArchiveView: View {
     @ObservedObject var viewModel: ArchiveViewModel
+    @Environment(\.editMode) private var editMode
 
     var body: some View {
 
         if viewModel.showLoadingView {
             LoadingView()
         } else {
-            HStack {
-                VStack {
-                    searchView
-                    if !viewModel.availableFilters.isEmpty {
-                        filterQueryItemView
-                    }
-                    documentsView
-                        .resignKeyboardOnDragGesture()
+            VStack {
+                searchView
+                if !viewModel.availableFilters.isEmpty {
+                    filterQueryItemView
                 }
-                .navigationBarTitle(Text("Archive"))
+                documentsView
+                    .resignKeyboardOnDragGesture()
             }
+            .navigationBarTitle(Text("Archive"))
+            .navigationBarItems(trailing: EditButton())
         }
     }
 
@@ -73,11 +73,11 @@ struct ArchiveView: View {
                 } else {
                     DocumentView(viewModel: document, showTagStatus: false)
                         .onTapGesture {
+                            guard editMode?.wrappedValue == .inactive else { return }
                             viewModel.tapped(document)
                         }
                 }
             }
-            // TODO: fix delete
             .onDelete(perform: viewModel.delete(at:))
         }
     }
