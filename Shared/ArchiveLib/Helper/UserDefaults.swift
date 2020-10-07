@@ -16,6 +16,7 @@ extension UserDefaults: Log {
         case lastSelectedTabName
         case pdfQuality
         case subscriptionExpiryDate = "SubscriptionExpiryDate"
+        case firstDocumentScanAlertPresented
     }
 
     enum PDFQuality: Float, CaseIterable {
@@ -38,6 +39,15 @@ extension UserDefaults: Log {
         }
         set {
             UserDefaults.standard.set(newValue, forKey: Names.tutorialShown.rawValue)
+        }
+    }
+
+    var firstDocumentScanAlertPresented: Bool {
+        get {
+            return UserDefaults.standard.bool(forKey: Names.firstDocumentScanAlertPresented.rawValue)
+        }
+        set {
+            UserDefaults.standard.set(newValue, forKey: Names.firstDocumentScanAlertPresented.rawValue)
         }
     }
 

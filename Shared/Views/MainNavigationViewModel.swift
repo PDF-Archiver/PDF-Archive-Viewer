@@ -209,7 +209,10 @@ final class MainNavigationViewModel: ObservableObject, Log {
     func selectedTag(_ category: String) {
         log.info("Tapped on tag.")
         currentTab = .archive
-        archiveViewModel.selectedFilters = [.tag(category)]
+        let newTagFilter: FilterItem = .tag(category)
+        if !archiveViewModel.selectedFilters.contains(newTagFilter) {
+            archiveViewModel.selectedFilters.append(newTagFilter)
+        }
     }
 
     // MARK: - Helper Functions

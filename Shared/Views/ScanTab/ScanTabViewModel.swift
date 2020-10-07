@@ -18,6 +18,7 @@ final class ScanTabViewModel: ObservableObject, Log {
     @Published var progressValue: CGFloat = 0.0
     @Published var progressLabel: String = ""
 
+    private var lastProgressValue: CGFloat?
     private var disposables = Set<AnyCancellable>()
     private let notificationFeedback = UINotificationFeedbackGenerator()
 
@@ -32,10 +33,16 @@ final class ScanTabViewModel: ObservableObject, Log {
 
         NotificationCenter.default.publisher(for: .imageProcessingQueue)
             .sink { notification in
-                if let documentProgress = notification.object as? Float {
-                    self.updateProcessingIndicator(with: documentProgress)
-                } else {
-                    self.updateProcessingIndicator(with: nil)
+                let documentProgress = notification.object as? Float
+                self.updateProcessingIndicator(with: documentProgress)
+
+                if documentProgress == nil,
+                   !UserDefaults.standard.firstDocumentScanAlertPresented {
+                    UserDefaults.standard.firstDocumentScanAlertPresented = true
+                    
+                    AlertViewModel.createAndPost(title: "First Scan processed! 🙂",
+                                                 message: "The first document was processed successfully and is now waiting for you in the 'Tag' tab.\n\n📄   ➡️   🗄",
+                                                 primaryButtonTitle: "OK")
                 }
             }
             .store(in: &disposables)

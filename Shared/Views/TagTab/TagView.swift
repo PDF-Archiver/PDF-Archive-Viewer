@@ -29,7 +29,7 @@ struct TagView: View, Identifiable {
     private var tag: some View {
         HStack {
             Image(systemName: "tag")
-            Text(self.tagName)
+            Text(self.tagName.capitalized)
                 .lineLimit(1)
             if self.isEditable {
                 Image(systemName: "xmark.circle.fill")

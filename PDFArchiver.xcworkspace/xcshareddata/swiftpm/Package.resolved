@@ -2,6 +2,15 @@
   "object": {
     "pins": [
       {
+        "package": "DeepDiff",
+        "repositoryURL": "https://github.com/onmyway133/DeepDiff.git",
+        "state": {
+          "branch": null,
+          "revision": "010ebbe1ce5ebeaee37a3d2f4a8c03f0e75b8045",
+          "version": "2.3.1"
+        }
+      },
+      {
         "package": "Diagnostics",
         "repositoryURL": "https://github.com/WeTransfer/Diagnostics",
         "state": {
@@ -11,12 +20,21 @@
         }
       },
       {
+        "package": "Down",
+        "repositoryURL": "https://github.com/iwasrobbed/Down",
+        "state": {
+          "branch": null,
+          "revision": "427aec0a0ab342246ec02369dea398597b61174a",
+          "version": "0.9.3"
+        }
+      },
+      {
         "package": "LoggingKit",
         "repositoryURL": "https://github.com/PDF-Archiver/LoggingKit",
         "state": {
           "branch": null,
-          "revision": "69e313a70f6dc330a050663aa1ac8719b5bbfab5",
-          "version": "1.1.4"
+          "revision": "1ad81013e4a24cfe1c7541adef09c581aa61c763",
+          "version": "1.1.7"
         }
       },
       {
@@ -29,12 +47,12 @@
         }
       },
       {
-        "package": "PaperOnboarding",
-        "repositoryURL": "https://github.com/Ramotion/paper-onboarding",
+        "package": "Parma",
+        "repositoryURL": "https://github.com/dasautoooo/Parma",
         "state": {
           "branch": null,
-          "revision": "c36df080b1001c385cc14c85f3b1c5ea36531fd0",
-          "version": "6.1.5"
+          "revision": "82f825cead4b408fa3e0059affa3e5d296d3b745",
+          "version": "0.1.1"
         }
       },
       {
@@ -59,8 +77,8 @@
         "package": "SwiftUIX",
         "repositoryURL": "https://github.com/SwiftUIX/SwiftUIX",
         "state": {
-          "branch": "master",
-          "revision": "a8a786f4813ba28786fbd11ef3021c119622325a",
+          "branch": "asauthorization-xcode12b6-patch",
+          "revision": "939b85a2c06f463722dcbd1a125343f29d85551b",
           "version": null
         }
       },
