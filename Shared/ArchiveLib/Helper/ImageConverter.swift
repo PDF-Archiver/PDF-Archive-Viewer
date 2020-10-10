@@ -13,12 +13,6 @@ import LoggingKit
 import UIKit
 import Vision
 
-extension Notification.Name {
-    static var imageProcessingQueue: Notification.Name {
-        return .init(rawValue: "ImageConverter.queueLength")
-    }
-}
-
 public final class ImageConverter: Log {
 
     static let shared = ImageConverter()

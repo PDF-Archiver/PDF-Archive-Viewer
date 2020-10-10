@@ -77,9 +77,9 @@
         "package": "SwiftUIX",
         "repositoryURL": "https://github.com/SwiftUIX/SwiftUIX",
         "state": {
-          "branch": "asauthorization-xcode12b6-patch",
-          "revision": "939b85a2c06f463722dcbd1a125343f29d85551b",
-          "version": null
+          "branch": null,
+          "revision": "7f6484328875a56187b1737e2f8fa3ce7c3c9030",
+          "version": "0.0.3"
         }
       },
       {
@@ -87,8 +87,8 @@
         "repositoryURL": "https://github.com/bizz84/SwiftyStoreKit",
         "state": {
           "branch": null,
-          "revision": "a45217b2cf7c9bfea3139dc45afa06ca9cf6c4e6",
-          "version": "0.16.0"
+          "revision": "9974acf07b31b6f5bf363d5118dc1bd4fcac6122",
+          "version": "0.16.1"
         }
       }
     ]

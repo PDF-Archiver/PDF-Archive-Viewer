@@ -47,9 +47,6 @@ final class AppDelegate: UIResponder, UIApplicationDelegate, Log {
 
         DispatchQueue.global().async {
 
-            // start IAP service
-            _ = IAP.service
-
             // start document service
             _ = ArchiveStore.shared
 
