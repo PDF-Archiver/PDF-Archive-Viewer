@@ -50,6 +50,8 @@ public final class ArchiveStore: ObservableObject, Log {
     public func update(archiveFolder: URL, untaggedFolders: [URL]) {
         assert(!Thread.isMainThread, "This should not be called from the main thread.")
 
+        let oldArchiveFolder = self.archiveFolder
+
         self.archiveFolder = archiveFolder
         self.untaggedFolders = untaggedFolders
         let observedFolders = [[archiveFolder], untaggedFolders]
@@ -59,8 +61,12 @@ public final class ArchiveStore: ObservableObject, Log {
         queue.sync {
             contents = [:]
         }
-        // TODO: only remove this if the archiveFolder has changed
-//        try? fileManager.removeItem(at: Self.savePath)
+
+        if let oldArchiveFolder = oldArchiveFolder,
+           oldArchiveFolder != archiveFolder {
+            // only remove this if the archiveFolder has changed
+            try? fileManager.removeItem(at: Self.savePath)
+        }
 
         providers = observedFolders.map { folder in
             guard let provider = Self.availableProvider.first(where: { $0.canHandle(folder) }) else {
@@ -153,6 +159,9 @@ public final class ArchiveStore: ObservableObject, Log {
     // MARK: Helper Function
 
     private func folderDidChange(_ provider: FolderProvider, _ changes: [FileChange]) {
+
+        let documentProcessingGroup = DispatchGroup()
+
         queue.sync {
             for change in changes {
 
@@ -196,15 +205,25 @@ public final class ArchiveStore: ObservableObject, Log {
                     // trigger update of the document properties
                     if let contentParsingOptions = contentParsingOptions {
                         DispatchQueue.global(qos: .background).async {
-                            // TODO: add this as an WorkItem to an queue and save documents after the last has been written
+                            // save documents after the last has been written
+                            documentProcessingGroup.enter()
+//                            let startingPoint = Date()
                             document.updateProperties(with: document.downloadStatus, contentParsingOptions: contentParsingOptions)
+//                            print("\(startingPoint.timeIntervalSinceNow * -1) seconds elapsed")
+                            documentProcessingGroup.leave()
                         }
                     }
                 }
             }
         }
 
-        updateDocuments()
+        DispatchQueue.global(qos: .background).async {
+            let timeout = documentProcessingGroup.wait(wallTimeout: .now() + .seconds(15))
+            if timeout == .timedOut {
+                Self.log.assertOrError("Timeout while waiting for documents to be processed.")
+            }
+            self.updateDocuments()
+        }
     }
 
     private func updateDocuments() {

@@ -39,7 +39,7 @@ final class ScanTabViewModel: ObservableObject, Log {
                 if documentProgress == nil,
                    !UserDefaults.standard.firstDocumentScanAlertPresented {
                     UserDefaults.standard.firstDocumentScanAlertPresented = true
-                    
+
                     AlertViewModel.createAndPost(title: "First Scan processed! 🙂",
                                                  message: "The first document was processed successfully and is now waiting for you in the 'Tag' tab.\n\n📄   ➡️   🗄",
                                                  primaryButtonTitle: "OK")

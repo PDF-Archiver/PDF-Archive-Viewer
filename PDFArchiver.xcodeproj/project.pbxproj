@@ -36,12 +36,8 @@
 		3416B21D24A9282800D5F4E0 /* IAPView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3416B19A24A9282700D5F4E0 /* IAPView.swift */; };
 		3416B21E24A9282800D5F4E0 /* IAP.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3416B19C24A9282700D5F4E0 /* IAP.swift */; };
 		3416B21F24A9282800D5F4E0 /* IAP.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3416B19C24A9282700D5F4E0 /* IAP.swift */; };
-		3416B22224A9282800D5F4E0 /* DocumentService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3416B19F24A9282700D5F4E0 /* DocumentService.swift */; };
-		3416B22324A9282800D5F4E0 /* DocumentService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3416B19F24A9282700D5F4E0 /* DocumentService.swift */; };
 		3416B22424A9282800D5F4E0 /* IAPService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3416B1A024A9282700D5F4E0 /* IAPService.swift */; };
 		3416B22524A9282800D5F4E0 /* IAPService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3416B1A024A9282700D5F4E0 /* IAPService.swift */; };
-		3416B22624A9282800D5F4E0 /* ArchiveExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3416B1A124A9282700D5F4E0 /* ArchiveExtension.swift */; };
-		3416B22724A9282800D5F4E0 /* ArchiveExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3416B1A124A9282700D5F4E0 /* ArchiveExtension.swift */; };
 		3416B22A24A9282800D5F4E0 /* ArchiveView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3416B1A424A9282700D5F4E0 /* ArchiveView.swift */; };
 		3416B22B24A9282800D5F4E0 /* ArchiveView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3416B1A424A9282700D5F4E0 /* ArchiveView.swift */; };
 		3416B22C24A9282800D5F4E0 /* DocumentDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3416B1A524A9282700D5F4E0 /* DocumentDetailViewModel.swift */; };
@@ -193,9 +189,7 @@
 		3416B19924A9282700D5F4E0 /* MainNavigationView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainNavigationView.swift; sourceTree = "<group>"; };
 		3416B19A24A9282700D5F4E0 /* IAPView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IAPView.swift; sourceTree = "<group>"; };
 		3416B19C24A9282700D5F4E0 /* IAP.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IAP.swift; sourceTree = "<group>"; };
-		3416B19F24A9282700D5F4E0 /* DocumentService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DocumentService.swift; sourceTree = "<group>"; };
 		3416B1A024A9282700D5F4E0 /* IAPService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IAPService.swift; sourceTree = "<group>"; };
-		3416B1A124A9282700D5F4E0 /* ArchiveExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArchiveExtension.swift; sourceTree = "<group>"; };
 		3416B1A424A9282700D5F4E0 /* ArchiveView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArchiveView.swift; sourceTree = "<group>"; };
 		3416B1A524A9282700D5F4E0 /* DocumentDetailViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DocumentDetailViewModel.swift; sourceTree = "<group>"; };
 		3416B1A624A9282700D5F4E0 /* DocumentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DocumentView.swift; sourceTree = "<group>"; };
@@ -314,16 +308,15 @@
 		3416B15E24A9280E00D5F4E0 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				3416B1A324A9282700D5F4E0 /* ArchiveTab */,
 				3416B19A24A9282700D5F4E0 /* IAPView.swift */,
 				3416B16724A9282700D5F4E0 /* IAPViewModel.swift */,
 				3416B19324A9282700D5F4E0 /* KeyCommandHostingController.swift */,
-				34E7DB12250189D400E94352 /* Localizable.strings */,
 				3416B19924A9282700D5F4E0 /* MainNavigationView.swift */,
 				3416B1B524A9282800D5F4E0 /* MainNavigationViewModel.swift */,
+				3416B1A324A9282700D5F4E0 /* ArchiveTab */,
+				34E7DB12250189D400E94352 /* Localizable.strings */,
 				3416B15F24A9282700D5F4E0 /* MoreTab */,
 				3416B19424A9282700D5F4E0 /* ScanTab */,
-				3416B19B24A9282700D5F4E0 /* Services */,
 				3416B16324A9282700D5F4E0 /* TagTab */,
 			);
 			path = Views;
@@ -360,15 +353,13 @@
 			path = ScanTab;
 			sourceTree = "<group>";
 		};
-		3416B19B24A9282700D5F4E0 /* Services */ = {
+		3416B19B24A9282700D5F4E0 /* IAP */ = {
 			isa = PBXGroup;
 			children = (
 				3416B19C24A9282700D5F4E0 /* IAP.swift */,
-				3416B19F24A9282700D5F4E0 /* DocumentService.swift */,
 				3416B1A024A9282700D5F4E0 /* IAPService.swift */,
-				3416B1A124A9282700D5F4E0 /* ArchiveExtension.swift */,
 			);
-			path = Services;
+			path = IAP;
 			sourceTree = "<group>";
 		};
 		3416B1A324A9282700D5F4E0 /* ArchiveTab */ = {
@@ -401,6 +392,7 @@
 			isa = PBXGroup;
 			children = (
 				343A0A2624C228F900824F75 /* Helper */,
+				3416B19B24A9282700D5F4E0 /* IAP */,
 				347BD2D224C2275500C38DB9 /* MissingViews */,
 				3416B24924A9284E00D5F4E0 /* Models */,
 			);
@@ -844,13 +836,11 @@
 				3416B23624A9282800D5F4E0 /* DocumentDetailView.swift in Sources */,
 				347BD2FA24C2275600C38DB9 /* ActivityView.swift in Sources */,
 				343A0A2124C228AB00824F75 /* UserDefaults.swift in Sources */,
-				3416B22624A9282800D5F4E0 /* ArchiveExtension.swift in Sources */,
 				347BD2F224C2275600C38DB9 /* TagListView.swift in Sources */,
 				343A0A5A24C2383D00824F75 /* FilledButtonStyle.swift in Sources */,
 				343A0A5B24C2383D00824F75 /* WidthSyncedRow.swift in Sources */,
 				347BD2F624C2275600C38DB9 /* SearchField.swift in Sources */,
 				347BD2FC24C2275600C38DB9 /* LoadingView.swift in Sources */,
-				3416B22224A9282800D5F4E0 /* DocumentService.swift in Sources */,
 				3416B24624A9282800D5F4E0 /* MainNavigationViewModel.swift in Sources */,
 				343A0A4324C2319D00824F75 /* ResignKeyboardOnDragGesture.swift in Sources */,
 				3416B21024A9282800D5F4E0 /* KeyCommandHostingController.swift in Sources */,
@@ -901,10 +891,8 @@
 				343A0A4B24C2319F00824F75 /* StorageHelper+Errors.swift in Sources */,
 				3416B22B24A9282800D5F4E0 /* ArchiveView.swift in Sources */,
 				3416B23724A9282800D5F4E0 /* DocumentDetailView.swift in Sources */,
-				3416B22724A9282800D5F4E0 /* ArchiveExtension.swift in Sources */,
 				347BD2FD24C2275600C38DB9 /* LoadingView.swift in Sources */,
 				347BD2FB24C2275600C38DB9 /* ActivityView.swift in Sources */,
-				3416B22324A9282800D5F4E0 /* DocumentService.swift in Sources */,
 				343A0A6124C2384000824F75 /* SubscriptionButtonStyle.swift in Sources */,
 				347BD2E724C2275600C38DB9 /* Stack.swift in Sources */,
 				3416B24724A9282800D5F4E0 /* MainNavigationViewModel.swift in Sources */,
@@ -1153,7 +1141,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = iOS/PDFArchiver.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 7;
 				DEVELOPMENT_TEAM = 87KNVHZ8C7;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = iOS/Info.plist;
@@ -1179,7 +1167,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = iOS/PDFArchiver.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 7;
 				DEVELOPMENT_TEAM = 87KNVHZ8C7;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = iOS/Info.plist;
@@ -1343,7 +1331,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = ShareExtension/ShareExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 7;
 				DEVELOPMENT_TEAM = 87KNVHZ8C7;
 				INFOPLIST_FILE = ShareExtension/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
@@ -1369,7 +1357,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = ShareExtension/ShareExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 7;
 				DEVELOPMENT_TEAM = 87KNVHZ8C7;
 				INFOPLIST_FILE = ShareExtension/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;

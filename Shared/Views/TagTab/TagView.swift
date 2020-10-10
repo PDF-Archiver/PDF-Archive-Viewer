@@ -37,9 +37,7 @@ struct TagView: View, Identifiable {
         }
         .padding(EdgeInsets(top: 2.0, leading: 5.0, bottom: 2.0, trailing: 5.0))
         .foregroundColor(.white)
-        // TODO: fix this
-//        .background(Color(.paLightRed))
-        .background(Color.red)
+        .background(Color(.paDarkRed))
         .cornerRadius(8.0)
         .transition(.opacity)
         .animation(.spring())

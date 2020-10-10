@@ -74,6 +74,7 @@ struct ScanTabView: View {
             }, label: {
                 Text("Scan")
             }).buttonStyle(FilledButtonStyle())
+            .keyboardShortcut("s")
             Spacer()
         }
         .padding()

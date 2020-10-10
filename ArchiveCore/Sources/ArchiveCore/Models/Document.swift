@@ -147,6 +147,9 @@ public final class Document: ObservableObject, Identifiable, Codable, Log {
     }
 
     func updateProperties(with downloadStatus: FileChange.DownloadStatus, contentParsingOptions: ParsingOptions) {
+        if Thread.isMainThread {
+            log.assertOrError("updateProperties() must not be called from the main thread.")
+        }
         filename = (try? path.resourceValues(forKeys: [.localizedNameKey]).localizedName) ?? self.path.lastPathComponent
 
         // parse the current filename and add finder file tags
@@ -154,7 +157,7 @@ public final class Document: ObservableObject, Identifiable, Codable, Log {
         let tags = Set(parsedFilename.tagNames ?? []).union(path.fileTags)
             .filter { !$0.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty && $0 != Constants.documentTagPlaceholder }
 
-        DispatchQueue.main.async {
+        DispatchQueue.main.sync {
             self.downloadStatus = downloadStatus
 
             // set the date
@@ -169,13 +172,11 @@ public final class Document: ObservableObject, Identifiable, Codable, Log {
             }
 
             self.tags = tags
-
-            guard !contentParsingOptions.isEmpty else { return }
-            DispatchQueue.global(qos: .utility).async {
-                // TODO: add this only when needed
-//                self.parseContent(contentParsingOptions)
-            }
         }
+
+        guard downloadStatus == .local,
+              !contentParsingOptions.isEmpty else { return }
+        self.parseContent(contentParsingOptions)
     }
 
     /// Get the new foldername and filename after applying the PDF Archiver naming scheme.
@@ -210,14 +211,17 @@ public final class Document: ObservableObject, Identifiable, Codable, Log {
     ///
     /// - Parameter tagManager: TagManager that will be used when adding new tags.
     private func parseContent(_ options: ParsingOptions) {
-//
-//        // skip the calculations if the OptionSet is empty
-//        guard !options.isEmpty else { return }
+        if Thread.isMainThread {
+            log.assertOrError("parseContent() must not be called from the main thread.")
+        }
 
-        // get the pdf content of every page
+        // skip the calculations if the OptionSet is empty
+        guard !options.isEmpty else { return }
+
+        // get the pdf content of first 3 pages
         guard let pdfDocument = PDFDocument(url: path) else { return }
         var text = ""
-        for index in 0 ..< pdfDocument.pageCount {
+        for index in 0 ..< min(pdfDocument.pageCount, 3) {
             guard let page = pdfDocument.page(at: index),
                 let pageContent = page.string else { return }
 
@@ -230,7 +234,7 @@ public final class Document: ObservableObject, Identifiable, Codable, Log {
         // parse the date
         if options.contains(.date),
             let parsed = DateParser.parse(text) {
-            DispatchQueue.main.async {
+            DispatchQueue.main.sync {
                 self.date = parsed.date
             }
         }
@@ -240,7 +244,7 @@ public final class Document: ObservableObject, Identifiable, Codable, Log {
 
             // get new tags
             let newTags = TagParser.parse(text)
-            DispatchQueue.main.async {
+            DispatchQueue.main.sync {
                 self.tags.formUnion(newTags)
             }
         }

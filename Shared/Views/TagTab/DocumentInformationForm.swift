@@ -68,18 +68,6 @@ struct DocumentInformationForm: View {
                             suggestions: self.inputAccessoryViewSuggestions)
                 .frame(maxHeight: 22)
                 .padding(EdgeInsets(top: 4.0, leading: 0.0, bottom: 4.0, trailing: 0.0))
-            // TODO: switch to this
-//            CocoaTextField("Enter Tag",
-//                      text: $tagInput,
-//                      onEditingChanged: { value in
-//                        print("Got value: \(value)")
-//                      },
-//                      onCommit: saveCurrentTag)
-//                .inputAccessoryView {
-//                    InputAccessoryView(items: inputAccessoryViewSuggestions) { tag in
-//                        insertAndSort($tags, tag: tag)
-//                    }
-//                }
         }
     }
 
