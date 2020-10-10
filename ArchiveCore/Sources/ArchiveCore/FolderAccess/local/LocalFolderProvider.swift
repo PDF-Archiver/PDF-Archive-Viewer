@@ -10,7 +10,6 @@ import Foundation
 
 final class LocalFolderProvider: FolderProvider {
 
-//    var type: FolderType = .local
     let baseUrl: URL
     private let folderDidChange: FolderChangeHandler
 
