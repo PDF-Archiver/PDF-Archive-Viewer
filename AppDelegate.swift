@@ -6,7 +6,6 @@
 //  Copyright © 2018 Julian Kahnert. All rights reserved.
 //
 
-import ArchiveCore
 import Diagnostics
 import Foundation
 import LogModel

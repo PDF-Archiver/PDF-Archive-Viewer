@@ -6,7 +6,7 @@
 //
 // swiftlint:disable force_try force_unwrapping type_body_length
 
-@testable import ArchiveCore
+@testable import ArchiveBackend
 import XCTest
 
 final class DocumentTests: XCTestCase {

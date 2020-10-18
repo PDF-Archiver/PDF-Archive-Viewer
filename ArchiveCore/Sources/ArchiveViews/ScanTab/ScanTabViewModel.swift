@@ -19,12 +19,14 @@ final class ScanTabViewModel: ObservableObject, Log {
     @Published var progressLabel: String = ""
 
     private let imageConverter: ImageConverterAPI
+    private let iapService: IAPServiceAPI
     private var lastProgressValue: CGFloat?
     private var disposables = Set<AnyCancellable>()
     private let notificationFeedback = UINotificationFeedbackGenerator()
 
-    init(imageConverter: ImageConverterAPI) {
+    init(imageConverter: ImageConverterAPI, iapService: IAPServiceAPI) {
         self.imageConverter = imageConverter
+        self.iapService = iapService
 
         // show the processing indicator, if documents are currently processed
         if imageConverter.totalDocumentCount.value != 0 {
@@ -32,7 +34,7 @@ final class ScanTabViewModel: ObservableObject, Log {
         }
 
         // trigger processing (if temp images exist)
-        triggerProcessing()
+        triggerImageProcessing()
 
         NotificationCenter.default.publisher(for: .imageProcessingQueue)
             .sink { notification in
@@ -77,40 +79,37 @@ final class ScanTabViewModel: ObservableObject, Log {
         }
     }
 
-//    func process(_ images: [UIImage]) {
-//        assert(!Thread.isMainThread, "This might take some time and should not be executed on the main thread.")
-//
-//        imageConverter.startProcessing()
-//
-//        // validate subscription
-//        guard testAppUsagePermitted() else { return }
-//
-//        // save images in reversed order to fix the API output order
-//        do {
-//            try StorageHelper.save(images)
-//        } catch {
-//            assertionFailure("Could not save temp images with error:\n\(error.localizedDescription)")
-//            AlertViewModel.createAndPost(title: "Save failed!",
-//                                         message: error,
-//                                         primaryButtonTitle: "OK")
-//        }
-//
-//        // notify ImageConverter
-//        triggerProcessing()
-//
-//        // show processing indicator instantly
-//        updateProcessingIndicator(with: 0)
-//    }
+    func process(_ images: [UIImage]) {
+        assert(!Thread.isMainThread, "This might take some time and should not be executed on the main thread.")
+
+        // validate subscription
+        guard testAppUsagePermitted() else { return }
+
+        // save images in reversed order to fix the API output order
+        do {
+            defer {
+                // notify ImageConverter even if the image saving has failed
+                triggerImageProcessing()
+            }
+            try StorageHelper.save(images)
+        } catch {
+            assertionFailure("Could not save temp images with error:\n\(error.localizedDescription)")
+            AlertViewModel.createAndPost(title: "Save failed!",
+                                         message: error,
+                                         primaryButtonTitle: "OK")
+        }
+
+        // show processing indicator instantly
+        updateProcessingIndicator(with: 0)
+    }
 
     // MARK: - Helper Functions
 
-    private func triggerProcessing() {
+    private func triggerImageProcessing() {
         do {
-            try StorageHelper.triggerProcessing()
+            try imageConverter.startProcessing()
         } catch {
-            AlertViewModel.createAndPost(title: "Attention",
-                                         message: "Could not find iCloud Drive.",
-                                         primaryButtonTitle: "OK")
+            log.assertOrError("Failed to start processing.", metadata: ["error": "\(error.localizedDescription)"])
         }
     }
 
@@ -118,7 +117,7 @@ final class ScanTabViewModel: ObservableObject, Log {
         DispatchQueue.main.async {
 
             // we do not need a progress view, if the number of total documents is 0
-            let totalDocuments = imageConverter.totalDocumentCount.value
+            let totalDocuments = self.imageConverter.totalDocumentCount.value
             let tmpDocumentProgress = totalDocuments == 0 ? nil : documentProgress
 
             if let documentProgress = tmpDocumentProgress {
@@ -137,7 +136,7 @@ final class ScanTabViewModel: ObservableObject, Log {
 
     private func testAppUsagePermitted() -> Bool {
 
-        let isPermitted = IAP.service.appUsagePermitted()
+        let isPermitted = iapService.appUsagePermitted()
 
         // show subscription view controller, if no subscription was found
         if !isPermitted {

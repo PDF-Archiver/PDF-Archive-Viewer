@@ -5,7 +5,7 @@
 //  Created by Julian Kahnert on 25.08.20.
 //
 
-@testable import ArchiveCore
+@testable import ArchiveBackend
 import Foundation
 import XCTest
 

@@ -12,16 +12,16 @@ import UIKit.UIColor
 
 public extension UIColor {
 
-    public static var paDelete: UIColor { return UIColor(named: "Delete")! }
-    public static var paDarkGray: UIColor { return UIColor(named: "DarkGray")! }
-    public static var paLightGray: UIColor { return UIColor(named: "LightGray")! }
-    public static var paWhite: UIColor { return UIColor(named: "White")! }
-    public static var paDarkRed: UIColor { return UIColor(named: "DarkRed")! }
-    public static var paLightRed: UIColor { return UIColor(named: "LightRed")! }
+    static var paDelete: UIColor { return UIColor(named: "Delete")! }
+    static var paDarkGray: UIColor { return UIColor(named: "DarkGray")! }
+    static var paLightGray: UIColor { return UIColor(named: "LightGray")! }
+    static var paWhite: UIColor { return UIColor(named: "White")! }
+    static var paDarkRed: UIColor { return UIColor(named: "DarkRed")! }
+    static var paLightRed: UIColor { return UIColor(named: "LightRed")! }
 
-    public static var paPDFBackground: UIColor { return UIColor(named: "PDFBackground")! }
-    public static var paBackground: UIColor { return UIColor(named: "Background")! }
-    public static var paSecondaryBackground: UIColor { return UIColor(named: "SecondaryBackground")! }
-    public static var paKeyboardBackground: UIColor { return UIColor(named: "KeyboardBackground")! }
-    public static var paPlaceholderGray: UIColor { return UIColor(named: "PlaceholderGray")! }
+    static var paPDFBackground: UIColor { return UIColor(named: "PDFBackground")! }
+    static var paBackground: UIColor { return UIColor(named: "Background")! }
+    static var paSecondaryBackground: UIColor { return UIColor(named: "SecondaryBackground")! }
+    static var paKeyboardBackground: UIColor { return UIColor(named: "KeyboardBackground")! }
+    static var paPlaceholderGray: UIColor { return UIColor(named: "PlaceholderGray")! }
 }

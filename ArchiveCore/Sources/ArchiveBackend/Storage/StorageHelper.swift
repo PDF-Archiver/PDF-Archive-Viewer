@@ -10,29 +10,11 @@ import Foundation
 import PDFKit.PDFDocument
 import UIKit.UIImage
 
-enum StorageHelperError: Error {
-    case invalidType
-    case iCloudDriveNotFound
-}
-
-enum StorageHelper {
+public enum StorageHelper {
 
     private static let seperator = "----"
 
-    static func handle(_ url: URL) throws {
-
-        if let image = UIImage(contentsOfFile: url.path) {
-
-            try Self.save([image])
-            try Self.triggerProcessing()
-            try FileManager.default.removeItem(at: url)
-
-        } else {
-            ImageConverter.shared.processPdf(at: url)
-        }
-    }
-
-    static func save(_ images: [UIImage]) throws {
+    public static func save(_ images: [UIImage]) throws {
 
         guard let tempImagePath = Paths.tempImagePath else { throw StorageError.noPathToSave }
         try FileManager.default.createFolderIfNotExists(tempImagePath)
@@ -52,9 +34,9 @@ enum StorageHelper {
         }
     }
 
-    static func loadImageIds() -> Set<UUID> {
+    public static func loadImageIds() -> Set<UUID> {
 
-        guard let tempImagePath = StorageHelper.Paths.tempImagePath else { fatalError("Could not find temp image path.") }
+        guard let tempImagePath = Paths.tempImagePath else { fatalError("Could not find temp image path.") }
 
         let paths = (try? FileManager.default.contentsOfDirectory(at: tempImagePath, includingPropertiesForKeys: nil, options: .skipsHiddenFiles)) ?? []
         let imageIds = paths
@@ -65,16 +47,11 @@ enum StorageHelper {
         return Set(imageIds)
     }
 
-    static func triggerProcessing() throws {
-        guard let untaggedPath = StorageHelper.Paths.untaggedPath else { throw StorageHelperError.iCloudDriveNotFound }
-        ImageConverter.shared.saveProcessAndSaveTempImages(at: untaggedPath)
-    }
-
     // MARK: - Helper functions
 
     private static func getImagePaths() -> [URL] {
 
-        guard let tempImagePath = StorageHelper.Paths.tempImagePath else { fatalError("Could not find temp image path.") }
+        guard let tempImagePath = Paths.tempImagePath else { fatalError("Could not find temp image path.") }
 
         let paths = (try? FileManager.default.contentsOfDirectory(at: tempImagePath, includingPropertiesForKeys: nil, options: .skipsHiddenFiles)) ?? []
         return paths.filter { $0.pathExtension.lowercased() != "pdf" }

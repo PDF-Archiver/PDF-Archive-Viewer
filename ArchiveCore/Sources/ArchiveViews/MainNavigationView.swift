@@ -9,13 +9,15 @@
 import Combine
 import SwiftUI
 
-struct MainNavigationView: View {
+public struct MainNavigationView: View {
     #if os(iOS)
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     #endif
-    @StateObject var viewModel = MainNavigationViewModel()
+    @StateObject public var viewModel = MainNavigationViewModel()
 
-    var body: some View {
+    public init() { }
+
+    public var body: some View {
         ZStack {
             #if os(macOS)
             sidebar

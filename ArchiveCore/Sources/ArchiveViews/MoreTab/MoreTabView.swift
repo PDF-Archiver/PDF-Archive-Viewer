@@ -99,8 +99,23 @@ struct MoreTabView: View {
     }
 }
 
+#if DEBUG
+import StoreKit
 struct MoreTabView_Previews: PreviewProvider {
-    @State static var viewModel = MoreTabViewModel()
+    private class IAPService: IAPServiceAPI {
+        weak var delegate: IAPServiceDelegate?
+        var products = Set<SKProduct>()
+        var requestsRunning: Int = 5
+
+        func appUsagePermitted() -> Bool {
+            true
+        }
+        func buyProduct(_ product: SKProduct) {}
+        func buyProduct(_ productIdentifier: String) {}
+        func restorePurchases() {}
+    }
+
+    @State static var viewModel = MoreTabViewModel(iapService: IAPService())
     static var previews: some View {
         Group {
             MoreTabView(viewModel: viewModel)
@@ -109,3 +124,4 @@ struct MoreTabView_Previews: PreviewProvider {
         }
     }
 }
+#endif

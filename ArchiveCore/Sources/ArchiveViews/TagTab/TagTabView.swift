@@ -34,9 +34,9 @@ struct TagTabView: View {
                 GeometryReader { geometry in
                     VStack(spacing: 0) {
                         pdfView
-                            .frame(height: geometry.size.height * 2 / 3)
+                            .frame(height: geometry.size.height * 0.6)
                         documentInformation
-                            .frame(height: geometry.size.height / 3)
+                            .frame(height: geometry.size.height * 0.4)
                     }
                 }
             }

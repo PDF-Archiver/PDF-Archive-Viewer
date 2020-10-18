@@ -7,13 +7,15 @@
 //
 // swiftlint:disable function_body_length
 
+import ArchiveBackend
 import Combine
 import LoggingKit
 import SwiftUI
 
-final class MainNavigationViewModel: ObservableObject, Log {
-    
-    private static let iapService = IAPService()
+public final class MainNavigationViewModel: ObservableObject, Log {
+
+    private static let imageConverter = ImageConverter.shared
+    private static let iapService = IAPService.shared
 
     @Published var archiveCategories: [String] = []
     @Published var tagCategories: [String] = []
@@ -22,10 +24,10 @@ final class MainNavigationViewModel: ObservableObject, Log {
     @Published var currentOptionalTab: Tab?
     @Published var showTutorial = !UserDefaults.standard.tutorialShown
 
-    var scanViewModel = ScanTabViewModel()
+    var scanViewModel = ScanTabViewModel(imageConverter: imageConverter, iapService: iapService)
     let tagViewModel = TagTabViewModel()
     let archiveViewModel = ArchiveViewModel()
-    let moreViewModel = MoreTabViewModel()
+    let moreViewModel = MoreTabViewModel(iapService: iapService)
 
     let iapViewModel = IAPViewModel(iapService: iapService)
 
@@ -36,7 +38,7 @@ final class MainNavigationViewModel: ObservableObject, Log {
     private var disposables = Set<AnyCancellable>()
     private let selectionFeedback = UISelectionFeedbackGenerator()
 
-    init() {
+    public init() {
 
         $currentTab
             .map { Optional($0) }
@@ -146,15 +148,13 @@ final class MainNavigationViewModel: ObservableObject, Log {
         // TODO: change container!?
         DispatchQueue.global(qos: .userInteractive).async {
 
-//            guard let path = StorageHelper.Paths.archivePath else {
-//                assertionFailure("Could not find a iCloud Drive url.")
-//                AlertViewModel.createAndPost(title: "Attention",
-//                                             message: "Could not find iCloud Drive.",
-//                                             primaryButtonTitle: "OK")
-//                return
-//            }
+            guard let iCloudContainerPath = FileManager.default.url(forUbiquityContainerIdentifier: nil) else {
+                Self.log.assertOrError("Could not find a iCloud Drive url.")
+                AlertViewModel.createAndPostNoICloudDrive()
+                return
+            }
 
-            let path = FileManager.default.url(forUbiquityContainerIdentifier: nil)!.appendingPathComponent("Documents")
+            let path = iCloudContainerPath.appendingPathComponent("Documents")
             ArchiveStore.shared.update(archiveFolder: path, untaggedFolders: [path.appendingPathComponent("untagged")])
         }
 
@@ -224,7 +224,8 @@ final class MainNavigationViewModel: ObservableObject, Log {
 
         do {
             _ = url.startAccessingSecurityScopedResource()
-            try StorageHelper.handle(url)
+            try Self.imageConverter.handle(url)
+//            try StorageHelper.handle(url)
             url.stopAccessingSecurityScopedResource()
         } catch let error {
             url.stopAccessingSecurityScopedResource()

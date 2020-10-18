@@ -24,8 +24,9 @@ public extension IAPServiceDelegate {
     func found(requestsRunning: Int) {}
 }
 
-public final class IAPService: NSObject, IAPServiceAPI, Log {
+public final class IAPService: IAPServiceAPI, Log {
 
+    public static let shared = IAPService()
     private static let productIdentifiers = Set(["SUBSCRIPTION_MONTHLY_IOS", "SUBSCRIPTION_YEARLY_IOS_NEW"])
 
     private var expiryDate: Date? {
@@ -49,10 +50,7 @@ public final class IAPService: NSObject, IAPServiceAPI, Log {
         didSet { delegate?.found(requestsRunning: requestsRunning) }
     }
 
-    override public init() {
-
-        super.init()
-
+    private init() {
         // Start SwiftyStoreKit and complete transactions
         SwiftyStoreKit.completeTransactions(atomically: true) { purchases in
             for purchase in purchases {
@@ -81,7 +79,11 @@ public final class IAPService: NSObject, IAPServiceAPI, Log {
 
     // MARK: - StoreKit API
 
-    public func appUsagePermitted(appStart: Bool = false) -> Bool {
+    public func appUsagePermitted() -> Bool {
+        appUsagePermitted(appStart: false)
+    }
+
+    private func appUsagePermitted(appStart: Bool) -> Bool {
 
         // debug/simulator/testflight: app usage is always permitted
         let environment = AppEnvironment.get()

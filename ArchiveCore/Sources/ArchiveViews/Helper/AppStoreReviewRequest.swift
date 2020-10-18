@@ -58,7 +58,13 @@ public final class AppStoreReviewRequest {
         if count >= reviewThresholdCount {
             let twoSecondsFromNow = DispatchTime.now() + 2.0
             DispatchQueue.main.asyncAfter(deadline: twoSecondsFromNow) {
+                #if os(macOS)
                 SKStoreReviewController.requestReview()
+                #else
+                if let windowScene = UIApplication.shared.windows.first?.windowScene {
+                    SKStoreReviewController.requestReview(in: windowScene)
+                }
+                #endif
                 self.lastVersionPromptedForReview = self.currentVersion
                 self.count = 0
             }

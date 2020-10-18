@@ -9,13 +9,9 @@
 import Foundation
 import SwiftUI
 
-struct AlertViewModel {
-    let title: LocalizedStringKey
-    let message: LocalizedStringKey
-    let primaryButton: Alert.Button
-    let secondaryButton: Alert.Button?
+public struct AlertViewModel {
 
-    static func createAndPost(title: LocalizedStringKey, message: LocalizedStringKey, primaryButtonTitle: LocalizedStringKey, completion: (() -> Void)? = nil) {
+    public static func createAndPost(title: LocalizedStringKey, message: LocalizedStringKey, primaryButtonTitle: LocalizedStringKey, completion: (() -> Void)? = nil) {
 
         let primaryButton: Alert.Button
         if let completion = completion {
@@ -31,7 +27,7 @@ struct AlertViewModel {
         NotificationCenter.default.post(name: .showError, object: viewModel)
     }
 
-    static func createAndPost(title predefinedTitle: LocalizedStringKey? = nil, message error: Error, primaryButtonTitle: LocalizedStringKey) {
+    public static func createAndPost(title predefinedTitle: LocalizedStringKey? = nil, message error: Error, primaryButtonTitle: LocalizedStringKey) {
         let defaultTitle = "Something went wrong!"
         let title: String
         let message: String
@@ -54,11 +50,16 @@ struct AlertViewModel {
         NotificationCenter.default.post(name: .showError, object: viewModel)
     }
 
-    static func createAndPost(title: LocalizedStringKey, message: LocalizedStringKey, primaryButton: Alert.Button, secondaryButton: Alert.Button) {
+    public static func createAndPost(title: LocalizedStringKey, message: LocalizedStringKey, primaryButton: Alert.Button, secondaryButton: Alert.Button) {
         let viewModel = AlertViewModel(title: title,
                                        message: message,
                                        primaryButton: primaryButton,
                                        secondaryButton: secondaryButton)
         NotificationCenter.default.post(name: .showError, object: viewModel)
     }
+
+    public let title: LocalizedStringKey
+    public let message: LocalizedStringKey
+    public let primaryButton: Alert.Button
+    public let secondaryButton: Alert.Button?
 }

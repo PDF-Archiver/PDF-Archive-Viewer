@@ -11,4 +11,5 @@ import Foundation
 enum StorageError: Error {
     case jpgConversion
     case noPathToSave
+    case iCloudDriveNotFound
 }

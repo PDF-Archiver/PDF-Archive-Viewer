@@ -174,13 +174,13 @@ struct IAPView_Previews: PreviewProvider {
 
 extension IAPView_Previews {
     private class IAPMockService: IAPServiceAPI {
-        var delegate: IAPServiceDelegate?
-        
+        weak var delegate: IAPServiceDelegate?
+
         var products: Set<SKProduct> = []
-        
+
         var requestsRunning: Int = 0
-        
-        func appUsagePermitted(appStart: Bool) -> Bool {
+
+        func appUsagePermitted() -> Bool {
             true
         }
         func buyProduct(_ product: SKProduct) {}

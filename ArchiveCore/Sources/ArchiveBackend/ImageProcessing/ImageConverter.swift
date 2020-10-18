@@ -6,18 +6,19 @@
 //  Copyright © 2019 Julian Kahnert. All rights reserved.
 //
 
-import ArchiveCore
 import Foundation
 import PDFKit
 import LoggingKit
 import UIKit
 import Vision
 
-public final class ImageConverter: Log {
+public final class ImageConverter: ImageConverterAPI, Log {
 
-    static let shared = ImageConverter()
+    public static let shared = ImageConverter()
+    private static let seperator = "----"
+    private static var isInitialized = false
 
-    private(set) var totalDocumentCount = Atomic(0)
+    public private(set) var totalDocumentCount = Atomic(0)
     private var observation: NSKeyValueObservation?
     private let queue: OperationQueue = {
         let queue = OperationQueue()
@@ -33,7 +34,34 @@ public final class ImageConverter: Log {
         BackgroundTaskScheduler.shared.delegate = self
     }
 
-    public func saveProcessAndSaveTempImages(at path: URL) {
+    public func handle(_ url: URL) throws {
+
+        if let image = UIImage(contentsOfFile: url.path) {
+            try StorageHelper.save([image])
+            guard let untaggedPath = Paths.untaggedPath else { throw StorageError.iCloudDriveNotFound }
+            saveProcessAndSaveTempImages(at: untaggedPath)
+            try FileManager.default.removeItem(at: url)
+        } else {
+            addOperation(with: .pdf(url))
+        }
+    }
+
+    public func getOperationCount() -> Int {
+        return queue.operationCount
+    }
+
+    public func startProcessing() throws {
+        queue.isSuspended = false
+
+        guard let untaggedPath = Paths.untaggedPath else { throw StorageError.iCloudDriveNotFound }
+        saveProcessAndSaveTempImages(at: untaggedPath)
+    }
+
+    public func stopProcessing() {
+        queue.isSuspended = true
+    }
+
+    private func saveProcessAndSaveTempImages(at path: URL) {
         log.debug("Start processing images")
 
         let currentlyProcessingImageIds = queue.operations.compactMap { ($0 as? PDFProcessing)?.documentId }
@@ -46,15 +74,14 @@ public final class ImageConverter: Log {
         imageIds.forEach { addOperation(with: .images($0)) }
     }
 
-    public func processPdf(at path: URL) {
-        addOperation(with: .pdf(path))
-    }
-
     private func addOperation(with mode: PDFProcessing.Mode) {
         triggerObservation()
 
-        guard let untaggedPath = StorageHelper.Paths.untaggedPath,
-              let tempImagePath = StorageHelper.Paths.tempImagePath else { fatalError() }
+        guard let untaggedPath = Paths.untaggedPath,
+              let tempImagePath = Paths.tempImagePath else {
+            AlertViewModel.createAndPostNoICloudDrive()
+            return
+        }
 
         let availableTags = TagStore.shared.getAvailableTags(with: [])
         let operation = PDFProcessing(of: mode,
@@ -69,18 +96,6 @@ public final class ImageConverter: Log {
         }
         queue.addOperation(operation)
         totalDocumentCount.mutate { $0 += 1 }
-    }
-
-    public func getOperationCount() -> Int {
-        return queue.operationCount
-    }
-
-    public func stopProcessing() {
-        queue.isSuspended = true
-    }
-
-    public func startProcessing() {
-        queue.isSuspended = false
     }
 
     private func triggerObservation() {
@@ -101,7 +116,7 @@ public final class ImageConverter: Log {
 
 extension ImageConverter: BackgroundTaskExecutionDelegate {
     public func executeBackgroundTask(completion: @escaping ((Bool) -> Void)) {
-        startProcessing()
+        try? startProcessing()
 
         #if DEBUG
         UserNotification.schedule(title: "Start PDF processing", message: "Operations left in queue: \(queue.operationCount)")

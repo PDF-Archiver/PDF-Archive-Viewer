@@ -80,10 +80,34 @@ struct ScanTabView: View {
     }
 }
 
+#if DEBUG
+import StoreKit
 struct ScanTabView_Previews: PreviewProvider {
+    private class ImageConverter: ImageConverterAPI {
+        var totalDocumentCount = Atomic<Int>(5)
+        func handle(_ url: URL) throws {}
+        func startProcessing() throws {}
+        func stopProcessing() {}
+        func getOperationCount() -> Int { 4 }
+    }
+
+    private class IAPService: IAPServiceAPI {
+        weak var delegate: IAPServiceDelegate?
+        var products = Set<SKProduct>()
+        var requestsRunning: Int = 5
+
+        func appUsagePermitted() -> Bool {
+            true
+        }
+        func buyProduct(_ product: SKProduct) {}
+        func buyProduct(_ productIdentifier: String) {}
+        func restorePurchases() {}
+    }
+
     static var previews: some View {
-        ScanTabView(viewModel: ScanTabViewModel())
+        ScanTabView(viewModel: ScanTabViewModel(imageConverter: ImageConverter(), iapService: IAPService()))
             .frame(maxWidth: .infinity)
             .padding()
     }
 }
+#endif

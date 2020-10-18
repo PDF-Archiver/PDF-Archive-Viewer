@@ -17,22 +17,19 @@ final class MoreTabViewModel: ObservableObject, Log {
     static let mailRecipients = ["support@pdf-archiver.io"]
     static let mailSubject = "PDF Archiver: iOS Support"
 
-    static func getCurrentStatus(appUsagePermitted: Bool) -> LocalizedStringKey {
-        // TODO: IAP.service.appUsagePermitted()
-        appUsagePermitted ? "Active ✅" : "Inactive ❌"
-    }
-
     @Published var qualities: [LocalizedStringKey]  = ["100% - Lossless 🤯", "75% - Good 👌 (Default)", "50% - Normal 👍", "25% - Small 💾"]
     @Published var selectedQualityIndex = UserDefaults.PDFQuality.toIndex(UserDefaults.standard.pdfQuality)
 
     @Published var isShowingMailView: Bool = false
     @Published var result: Result<MFMailComposeResult, Error>?
-    @Published var subscriptionStatus: LocalizedStringKey
+    @Published var subscriptionStatus: LocalizedStringKey = "Inactive ❌"
 
+    private let iapService: IAPServiceAPI
     private var disposables = Set<AnyCancellable>()
 
-    init() {
-        subscriptionStatus = Self.getCurrentStatus()
+    init(iapService: IAPServiceAPI) {
+        self.iapService = iapService
+        subscriptionStatus = getCurrentStatus()
         $selectedQualityIndex
             .sink { selectedQuality in
                 UserDefaults.standard.pdfQuality = UserDefaults.PDFQuality.allCases[selectedQuality]
@@ -60,7 +57,7 @@ final class MoreTabViewModel: ObservableObject, Log {
     func resetApp() {
         log.info("More table view show: reset app")
         // remove all temporary files
-        if let tempImagePath = StorageHelper.Paths.tempImagePath {
+        if let tempImagePath = Paths.tempImagePath {
             try? FileManager.default.removeItem(at: tempImagePath)
         } else {
             log.error("Could not find tempImagePath.")
@@ -95,6 +92,10 @@ final class MoreTabViewModel: ObservableObject, Log {
     }
 
     func updateSubscription() {
-        subscriptionStatus = MoreTabViewModel.getCurrentStatus()
+        subscriptionStatus = getCurrentStatus()
+    }
+
+    private func getCurrentStatus() -> LocalizedStringKey {
+        iapService.appUsagePermitted() ? "Active ✅" : "Inactive ❌"
     }
 }

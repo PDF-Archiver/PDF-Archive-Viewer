@@ -15,12 +15,12 @@ import SwiftyStoreKit
 final class IAPViewModel: ObservableObject, Log {
     @Published var level1Name = "Level 1"
     @Published var level2Name = "Level 2"
-    
+
     private let iapService: IAPServiceAPI
 
     init(iapService: IAPServiceAPI) {
         self.iapService = iapService
-        
+
         // setup delegate
         self.iapService.delegate = self
 
