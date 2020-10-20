@@ -23,7 +23,7 @@ struct SubscriptionButtonStyle: ButtonStyle {
             .cornerRadius(8)
             .overlay(
                 RoundedRectangle(cornerRadius: 8)
-                    .stroke(isPreferred ? backgroundColor : Color(.systemGray6), lineWidth: 1)
+                    .stroke(isPreferred ? foregroundColor : backgroundColor, lineWidth: 1)
             )
             .shadow(radius: isPreferred ? 4 : 0)
             .scaleEffect(configuration.isPressed ? 0.95 : 1.0)

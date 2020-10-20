@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import LoggingKit
 
 extension UserDefaults: Log {
 
@@ -17,6 +16,8 @@ extension UserDefaults: Log {
         case pdfQuality
         case subscriptionExpiryDate = "SubscriptionExpiryDate"
         case firstDocumentScanAlertPresented
+        case archiveURL
+        case untaggedURL
     }
 
     public enum PDFQuality: Float, CaseIterable {
@@ -86,7 +87,24 @@ extension UserDefaults: Log {
         }
         set {
             UserDefaults.standard.set(newValue, forKey: Names.subscriptionExpiryDate.rawValue)
+        }
+    }
 
+    public var archiveURL: URL? {
+        get {
+            return UserDefaults.standard.object(forKey: Names.archiveURL.rawValue) as? URL
+        }
+        set {
+            UserDefaults.standard.set(newValue, forKey: Names.archiveURL.rawValue)
+        }
+    }
+
+    public var untaggedURL: URL? {
+        get {
+            return UserDefaults.standard.object(forKey: Names.untaggedURL.rawValue) as? URL
+        }
+        set {
+            UserDefaults.standard.set(newValue, forKey: Names.untaggedURL.rawValue)
         }
     }
 }

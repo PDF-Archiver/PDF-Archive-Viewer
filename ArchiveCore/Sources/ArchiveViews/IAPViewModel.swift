@@ -7,7 +7,6 @@
 //
 
 import Combine
-import LoggingKit
 import StoreKit
 import SwiftUI
 import SwiftyStoreKit

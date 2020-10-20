@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import LoggingKit
 #if os(OSX)
 import Quartz.PDFKit
 #else

@@ -5,7 +5,6 @@
 //  Created by Julian Kahnert on 14.09.20.
 //
 
-import LoggingKit
 import UserNotifications
 
 public enum UserNotification: Log {

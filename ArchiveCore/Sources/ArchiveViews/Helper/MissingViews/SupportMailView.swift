@@ -7,7 +7,6 @@
 //
 
 import Diagnostics
-import LogModel
 import MessageUI
 import SwiftUI
 

@@ -11,7 +11,6 @@
 import PDFKit
 import UIKit
 import Vision
-import LoggingKit
 
 public enum PDFProcessingError: Error {
     case unttaggedDocumentsPathNotFound

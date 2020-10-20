@@ -8,8 +8,6 @@
 //
 
 import ArchiveSharedConstants
-import LogModel
-import LoggingKit
 import StoreKit
 import SwiftyStoreKit
 
@@ -26,7 +24,7 @@ public extension IAPServiceDelegate {
 
 public final class IAPService: IAPServiceAPI, Log {
 
-    public static let shared = IAPService()
+    private static var isInitialized = false
     private static let productIdentifiers = Set(["SUBSCRIPTION_MONTHLY_IOS", "SUBSCRIPTION_YEARLY_IOS_NEW"])
 
     private var expiryDate: Date? {
@@ -50,7 +48,10 @@ public final class IAPService: IAPServiceAPI, Log {
         didSet { delegate?.found(requestsRunning: requestsRunning) }
     }
 
-    private init() {
+    public init() {
+        precondition(!Self.isInitialized, "IAPService must only initialized once.")
+        Self.isInitialized = true
+
         // Start SwiftyStoreKit and complete transactions
         SwiftyStoreKit.completeTransactions(atomically: true) { purchases in
             for purchase in purchases {
@@ -84,6 +85,8 @@ public final class IAPService: IAPServiceAPI, Log {
     }
 
     private func appUsagePermitted(appStart: Bool) -> Bool {
+        // TODO: remove this
+        return false
 
         // debug/simulator/testflight: app usage is always permitted
         let environment = AppEnvironment.get()

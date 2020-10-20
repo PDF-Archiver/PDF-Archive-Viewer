@@ -7,7 +7,6 @@
 
 import Combine
 import Foundation
-import LoggingKit
 
 public final class ArchiveStore: ObservableObject, Log {
 

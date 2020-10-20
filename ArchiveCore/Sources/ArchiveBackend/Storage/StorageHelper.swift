@@ -16,8 +16,7 @@ public enum StorageHelper {
 
     public static func save(_ images: [UIImage]) throws {
 
-        guard let tempImagePath = Paths.tempImagePath else { throw StorageError.noPathToSave }
-        try FileManager.default.createFolderIfNotExists(tempImagePath)
+        try FileManager.default.createFolderIfNotExists(PathManager.tempImageURL)
 
         let quality = CGFloat(UserDefaults.standard.pdfQuality.rawValue)
         let uuid = UUID()
@@ -30,15 +29,13 @@ public enum StorageHelper {
             let filename = "\(uuid.uuidString)\(seperator)\(String(format: "%04d", index)).jpg"
 
             // Attempt to write the data
-            try data.write(to: tempImagePath.appendingPathComponent(filename))
+            try data.write(to: PathManager.tempImageURL.appendingPathComponent(filename))
         }
     }
 
     public static func loadImageIds() -> Set<UUID> {
 
-        guard let tempImagePath = Paths.tempImagePath else { fatalError("Could not find temp image path.") }
-
-        let paths = (try? FileManager.default.contentsOfDirectory(at: tempImagePath, includingPropertiesForKeys: nil, options: .skipsHiddenFiles)) ?? []
+        let paths = (try? FileManager.default.contentsOfDirectory(at: PathManager.tempImageURL, includingPropertiesForKeys: nil, options: .skipsHiddenFiles)) ?? []
         let imageIds = paths
             .filter { $0.pathExtension.lowercased() != "pdf" }
             .compactMap { $0.lastPathComponent.components(separatedBy: seperator).first }
@@ -51,9 +48,7 @@ public enum StorageHelper {
 
     private static func getImagePaths() -> [URL] {
 
-        guard let tempImagePath = Paths.tempImagePath else { fatalError("Could not find temp image path.") }
-
-        let paths = (try? FileManager.default.contentsOfDirectory(at: tempImagePath, includingPropertiesForKeys: nil, options: .skipsHiddenFiles)) ?? []
+        let paths = (try? FileManager.default.contentsOfDirectory(at: PathManager.tempImageURL, includingPropertiesForKeys: nil, options: .skipsHiddenFiles)) ?? []
         return paths.filter { $0.pathExtension.lowercased() != "pdf" }
     }
 }

@@ -15,7 +15,7 @@ extension FileManager {
     }
 
     public func createFolderIfNotExists(_ folder: URL) throws {
-        if !fileExists(atPath: folder.path, isDirectory: nil) {
+        if !directoryExists(atPath: folder.path) {
             try createDirectory(at: folder, withIntermediateDirectories: true, attributes: nil)
         }
     }

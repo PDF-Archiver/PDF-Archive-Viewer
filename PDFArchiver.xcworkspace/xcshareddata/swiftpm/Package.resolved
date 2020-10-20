@@ -29,24 +29,6 @@
         }
       },
       {
-        "package": "LoggingKit",
-        "repositoryURL": "https://github.com/PDF-Archiver/LoggingKit",
-        "state": {
-          "branch": null,
-          "revision": "1ad81013e4a24cfe1c7541adef09c581aa61c763",
-          "version": "1.1.7"
-        }
-      },
-      {
-        "package": "LogModel",
-        "repositoryURL": "https://github.com/PDF-Archiver/LogModel.git",
-        "state": {
-          "branch": null,
-          "revision": "fee27fed62db42033f9deb9a478bcd4c05949a7e",
-          "version": "0.0.4"
-        }
-      },
-      {
         "package": "Parma",
         "repositoryURL": "https://github.com/dasautoooo/Parma",
         "state": {

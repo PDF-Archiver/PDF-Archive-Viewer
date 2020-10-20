@@ -50,20 +50,22 @@ struct IAPView: View {
     private var features: some View {
         VStack(alignment: .center, spacing: 16) {
             WidthSyncedRow(spacing: 16) {
-                VStack(alignment: .leading) {
-                    ImageTextView(image: .magnifyingglass, text: "Search PDFs")
-                    ImageTextView(image: .cloud, text: "iCloud Sync")
-                    ImageTextView(image: .lockOpen, text: "Open Source")
+                VStack(alignment: .leading, spacing: 8) {
+                    Label("Search PDFs", systemImage: .magnifyingglass)
+                    Label("iCloud Sync", systemImage: .cloud)
+                    Label("Open Source", systemImage: .lockOpen)
                 }
+                .frame(maxWidth: .infinity, alignment: .center)
                 .padding()
                 .background(Color(.paDarkGray).opacity(0.125))
                 .cornerRadius(8)
                 ZStack(alignment: .topTrailing) {
-                    VStack(alignment: .leading) {
-                        ImageTextView(image: .docTextViewfinder, text: "Scan Documents")
-                        ImageTextView(image: .docTextMagnifyingglass, text: "Searchable PDFs")
-                        ImageTextView(image: .tag, text: "Tag PDFs")
+                    VStack(alignment: .leading, spacing: 8) {
+                        Label("Scan Documents", systemImage: .docTextViewfinder)
+                        Label("Searchable PDFs", systemImage: .docTextMagnifyingglass)
+                        Label("Tag PDFs", systemImage: .tag)
                     }
+                    .frame(maxWidth: .infinity, alignment: .center)
                     .padding()
                     .background(Color(.paDarkGray).opacity(0.125))
                     .cornerRadius(8)
@@ -146,19 +148,6 @@ struct IAPView: View {
                 Text("Cancel")
             })
             .buttonStyle(FilledButtonStyle(foregroundColor: Color(.paDarkRed), backgroundColor: Color(.systemBackground)))
-        }
-    }
-
-    private struct ImageTextView: View {
-        let image: SanFranciscoSymbolName
-        let text: LocalizedStringKey
-
-        var body: some View {
-            HStack(spacing: 16) {
-                Image(systemName: image)
-                Text(text)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-            }
         }
     }
 }

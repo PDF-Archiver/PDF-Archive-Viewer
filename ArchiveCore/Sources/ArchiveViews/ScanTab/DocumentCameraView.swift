@@ -6,7 +6,6 @@
 //  Copyright © 2019 Julian Kahnert. All rights reserved.
 //
 
-import LoggingKit
 import SwiftUI
 import VisionKit
 

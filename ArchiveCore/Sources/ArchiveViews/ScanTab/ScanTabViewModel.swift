@@ -9,11 +9,10 @@
 import AVKit
 import Combine
 import Foundation
-import LoggingKit
 import SwiftUI
 import VisionKit
 
-final class ScanTabViewModel: ObservableObject, Log {
+public final class ScanTabViewModel: ObservableObject, Log {
     @Published var showDocumentScan: Bool = false
     @Published var progressValue: CGFloat = 0.0
     @Published var progressLabel: String = ""
@@ -24,7 +23,7 @@ final class ScanTabViewModel: ObservableObject, Log {
     private var disposables = Set<AnyCancellable>()
     private let notificationFeedback = UINotificationFeedbackGenerator()
 
-    init(imageConverter: ImageConverterAPI, iapService: IAPServiceAPI) {
+    public init(imageConverter: ImageConverterAPI, iapService: IAPServiceAPI) {
         self.imageConverter = imageConverter
         self.iapService = iapService
 

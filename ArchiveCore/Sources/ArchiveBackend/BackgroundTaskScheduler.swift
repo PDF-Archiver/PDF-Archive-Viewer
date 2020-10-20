@@ -22,7 +22,6 @@
 // specific language governing permissions and limitations
 // under the License.
 
-import LoggingKit
 import BackgroundTasks
 import ExposureNotification
 import UIKit

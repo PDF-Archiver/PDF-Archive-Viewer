@@ -8,18 +8,21 @@
 
 import Foundation
 import PDFKit
-import LoggingKit
 import UIKit
 import Vision
 
+public protocol ImageConverterDelegate: class {
+    func getDocumentDestination() -> URL?
+}
+
 public final class ImageConverter: ImageConverterAPI, Log {
 
-    public static let shared = ImageConverter()
     private static let seperator = "----"
     private static var isInitialized = false
 
     public private(set) var totalDocumentCount = Atomic(0)
     private var observation: NSKeyValueObservation?
+    private let getDocumentDestination: () -> URL?
     private let queue: OperationQueue = {
         let queue = OperationQueue()
 
@@ -30,16 +33,38 @@ public final class ImageConverter: ImageConverterAPI, Log {
         return queue
     }()
 
-    private init() {
-        BackgroundTaskScheduler.shared.delegate = self
+    public init(getDocumentDestination: @escaping () -> URL?, shouldStartBackgroundTask: Bool) {
+        precondition(!Self.isInitialized, "ImageConverter must only initialized once.")
+        Self.isInitialized = true
+        self.getDocumentDestination = getDocumentDestination
+
+        // move files from the temp folder to the current destination
+        if let destinationFolder = getDocumentDestination(),
+           destinationFolder != PathManager.tempPdfURL {
+            do {
+                let documentUrls = try FileManager.default.contentsOfDirectory(at: PathManager.tempPdfURL, includingPropertiesForKeys: nil, options: [.skipsHiddenFiles, .skipsSubdirectoryDescendants])
+                    .filter { $0.pathExtension.lowercased().hasSuffix("pdf") }
+                for documentUrl in documentUrls {
+                    let destinationUrl = destinationFolder.appendingPathComponent(documentUrl.lastPathComponent)
+                    try FileManager.default.moveItem(at: documentUrl, to: destinationUrl)
+                }
+            } catch {
+                log.assertOrError("Error while moving files.", metadata: ["error": "\(error.localizedDescription)"])
+            }
+        }
+
+        // by setting the delegate, the BackgroundTaskScheduler will be initialized
+        if shouldStartBackgroundTask {
+            BackgroundTaskScheduler.shared.delegate = self
+        }
     }
 
     public func handle(_ url: URL) throws {
 
         if let image = UIImage(contentsOfFile: url.path) {
             try StorageHelper.save([image])
-            guard let untaggedPath = Paths.untaggedPath else { throw StorageError.iCloudDriveNotFound }
-            saveProcessAndSaveTempImages(at: untaggedPath)
+            guard let destinationURL = getDocumentDestination() else { throw StorageError.noPathToSave }
+            saveProcessAndSaveTempImages(at: destinationURL)
             try FileManager.default.removeItem(at: url)
         } else {
             addOperation(with: .pdf(url))
@@ -53,8 +78,8 @@ public final class ImageConverter: ImageConverterAPI, Log {
     public func startProcessing() throws {
         queue.isSuspended = false
 
-        guard let untaggedPath = Paths.untaggedPath else { throw StorageError.iCloudDriveNotFound }
-        saveProcessAndSaveTempImages(at: untaggedPath)
+        guard let destinationURL = getDocumentDestination() else { throw StorageError.noPathToSave }
+        saveProcessAndSaveTempImages(at: destinationURL)
     }
 
     public func stopProcessing() {
@@ -77,16 +102,17 @@ public final class ImageConverter: ImageConverterAPI, Log {
     private func addOperation(with mode: PDFProcessing.Mode) {
         triggerObservation()
 
-        guard let untaggedPath = Paths.untaggedPath,
-              let tempImagePath = Paths.tempImagePath else {
-            AlertViewModel.createAndPostNoICloudDrive()
+        guard let destinationURL = getDocumentDestination() else {
+            AlertViewModel.createAndPost(title: "Attention",
+                                         message: "Failed to get destination path.",
+                                         primaryButtonTitle: "OK")
             return
         }
 
         let availableTags = TagStore.shared.getAvailableTags(with: [])
         let operation = PDFProcessing(of: mode,
-                                      destinationFolder: untaggedPath,
-                                      tempImagePath: tempImagePath,
+                                      destinationFolder: destinationURL,
+                                      tempImagePath: PathManager.tempImageURL,
                                       archiveTags: availableTags) { progress in
             NotificationCenter.default.post(name: .imageProcessingQueue, object: progress)
         }

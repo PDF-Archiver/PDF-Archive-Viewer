@@ -10,7 +10,6 @@
 
 import Diagnostics
 import Foundation
-import LogModel
 import Sentry
 import SwiftUI
 

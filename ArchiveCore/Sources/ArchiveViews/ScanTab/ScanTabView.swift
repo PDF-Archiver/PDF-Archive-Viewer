@@ -9,11 +9,15 @@
 import SwiftUI
 import SwiftUIX
 
-struct ScanTabView: View {
+public struct ScanTabView: View {
     @ObservedObject var viewModel: ScanTabViewModel
     @State private var opacity = 0.0
 
-    var body: some View {
+    public init(viewModel: ScanTabViewModel) {
+        self.viewModel = viewModel
+    }
+
+    public var body: some View {
         VStack {
             Spacer()
             staticInfo
@@ -39,7 +43,7 @@ struct ScanTabView: View {
         .padding(EdgeInsets(top: 32.0, leading: 16.0, bottom: 32.0, trailing: 16.0))
     }
 
-    var staticInfo: some View {
+    private var staticInfo: some View {
         VStack(alignment: .leading) {
             Image("Logo")
                 .resizable()

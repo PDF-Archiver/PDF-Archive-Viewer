@@ -10,6 +10,13 @@ import Foundation
 import SwiftUI
 
 public struct AlertViewModel {
+    public let title: LocalizedStringKey
+    public let message: LocalizedStringKey
+    public let primaryButton: Alert.Button
+    public let secondaryButton: Alert.Button?
+}
+
+extension AlertViewModel {
 
     public static func createAndPost(title: LocalizedStringKey, message: LocalizedStringKey, primaryButtonTitle: LocalizedStringKey, completion: (() -> Void)? = nil) {
 
@@ -58,8 +65,9 @@ public struct AlertViewModel {
         NotificationCenter.default.post(name: .showError, object: viewModel)
     }
 
-    public let title: LocalizedStringKey
-    public let message: LocalizedStringKey
-    public let primaryButton: Alert.Button
-    public let secondaryButton: Alert.Button?
+    public static func createAndPostNoICloudDrive() {
+        createAndPost(title: "Attention",
+                      message: "Could not find iCloud Drive.",
+                      primaryButtonTitle: "OK")
+    }
 }

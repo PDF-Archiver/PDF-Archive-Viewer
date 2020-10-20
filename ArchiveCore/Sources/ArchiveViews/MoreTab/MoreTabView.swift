@@ -6,7 +6,6 @@
 //  Copyright © 2019 Julian Kahnert. All rights reserved.
 //
 
-import LogModel
 import MessageUI
 import SwiftUI
 import SwiftUIX
@@ -76,7 +75,7 @@ struct MoreTabView: View {
             Link("PDF Archiver (macOS)  🖥", destination: viewModel.macOSAppUrl)
             markdownView(for: "Terms of Use & Privacy Policy", withKey: "Privacy")
             markdownView(for: "Imprint", withKey: "Imprint")
-            DetailRowView(name: "Support  🚑") {
+            DetailRowView(name: "Contact Support  🚑") {
                 self.viewModel.showSupport()
             }
         }

@@ -31,9 +31,12 @@ public struct MainNavigationView: View {
             if viewModel.scanViewModel.showDocumentScan {
                 documentCameraView
             }
-            if viewModel.showSubscriptionView {
-                IAPView(viewModel: self.viewModel.iapViewModel)
-            }
+//            if viewModel.showSubscriptionView {
+//                IAPView(viewModel: self.viewModel.iapViewModel)
+//            }
+            IAPView(viewModel: self.viewModel.iapViewModel)
+                .scaleEffect(viewModel.showSubscriptionView ? 1 : 0)
+                .animation(Animation.spring().delay(0.3))
         }
         .intro(when: $viewModel.showTutorial)
         .alert(isPresented: $viewModel.showAlert) {

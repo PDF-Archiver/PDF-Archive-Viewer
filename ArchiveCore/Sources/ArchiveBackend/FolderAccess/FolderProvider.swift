@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import LoggingKit
 
 public protocol FolderProvider: class, Log {
     typealias FolderChangeHandler = (FolderProvider, [FileChange]) -> Void

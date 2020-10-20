@@ -9,13 +9,13 @@
 
 import ArchiveBackend
 import Combine
-import LoggingKit
 import SwiftUI
 
 public final class MainNavigationViewModel: ObservableObject, Log {
 
-    private static let imageConverter = ImageConverter.shared
-    private static let iapService = IAPService.shared
+    public static let imageConverter = ImageConverter(getDocumentDestination: { PathManager.shared.untaggedURL },
+                                                      shouldStartBackgroundTask: true)
+    public static let iapService = IAPService()
 
     @Published var archiveCategories: [String] = []
     @Published var tagCategories: [String] = []

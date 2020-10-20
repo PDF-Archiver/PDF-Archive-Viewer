@@ -8,7 +8,6 @@
 // swiftlint:disable force_unwrapping function_body_length
 
 import Combine
-import LoggingKit
 import PDFKit
 import SwiftUI
 

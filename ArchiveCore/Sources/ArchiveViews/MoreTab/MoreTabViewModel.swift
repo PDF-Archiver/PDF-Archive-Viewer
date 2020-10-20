@@ -9,7 +9,6 @@
 
 import Combine
 import MessageUI
-import LoggingKit
 import SwiftUI
 
 final class MoreTabViewModel: ObservableObject, Log {
@@ -57,11 +56,7 @@ final class MoreTabViewModel: ObservableObject, Log {
     func resetApp() {
         log.info("More table view show: reset app")
         // remove all temporary files
-        if let tempImagePath = Paths.tempImagePath {
-            try? FileManager.default.removeItem(at: tempImagePath)
-        } else {
-            log.error("Could not find tempImagePath.")
-        }
+        try? FileManager.default.removeItem(at: PathManager.tempImageURL)
 
         // remove all user defaults
         if let bundleIdentifier = Bundle.main.bundleIdentifier {

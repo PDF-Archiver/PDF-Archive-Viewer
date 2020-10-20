@@ -7,7 +7,6 @@
 //
 
 import SwiftUI
-import LoggingKit
 
 extension Alert: Log {
     init(viewModel: AlertViewModel?) {

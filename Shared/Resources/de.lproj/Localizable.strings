@@ -246,3 +246,7 @@
 "First Scan processed! 🙂" = "Erster Scan verarbeitet! 🙂";
 
 "The first document was processed successfully and is now waiting for you in the 'Tag' tab.\n\n📄   ➡️   🗄" = "Das erste Dokument wurde erfolgreich verarbeitet und wartet nun in dem 'Tag' Tab auf dich.\n\n📄   ➡️   🗄";
+
+"Failed to get destination path." = "Der Zielpfad konnte nicht ermittelt werden.";
+
+"Contact Support  🚑" = "Support kontaktieren  🚑";
