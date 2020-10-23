@@ -9,7 +9,7 @@
 import SwiftUI
 
 extension Alert: Log {
-    init(viewModel: AlertViewModel?) {
+    public init(viewModel: AlertDataModel?) {
         if let viewModel = viewModel {
             Self.log.error("An error was presented", metadata: ["type": "custom", "title": "\(viewModel.title)"])
 

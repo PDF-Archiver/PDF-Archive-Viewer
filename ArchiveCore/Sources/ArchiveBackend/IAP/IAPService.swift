@@ -29,13 +29,13 @@ public final class IAPService: IAPServiceAPI, Log {
 
     private var expiryDate: Date? {
         get {
-            let expiryDate = UserDefaults.standard.subscriptionExpiryDate
+            let expiryDate = UserDefaults.appGroup.subscriptionExpiryDate
             log.debug("Getting new expiry date: \(expiryDate?.description ?? "")")
             return expiryDate
         }
         set {
             log.debug("Setting new expiry date: \(newValue?.description ?? "")")
-            UserDefaults.standard.subscriptionExpiryDate = newValue
+            UserDefaults.appGroup.subscriptionExpiryDate = newValue
         }
     }
 
@@ -85,8 +85,6 @@ public final class IAPService: IAPServiceAPI, Log {
     }
 
     private func appUsagePermitted(appStart: Bool) -> Bool {
-        // TODO: remove this
-        return false
 
         // debug/simulator/testflight: app usage is always permitted
         let environment = AppEnvironment.get()

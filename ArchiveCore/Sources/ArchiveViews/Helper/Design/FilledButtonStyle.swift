@@ -8,13 +8,18 @@
 
 import SwiftUI
 
-struct FilledButtonStyle: ButtonStyle {
+public struct FilledButtonStyle: ButtonStyle {
+    public var foregroundColor = Color(.paWhite)
+    public var backgroundColor = Color(.paDarkGray)
+    public var isInverted: Bool = false
+    
+    public init(foregroundColor: Color = Color(.paWhite), backgroundColor: Color = Color(.paDarkGray), isInverted: Bool = false) {
+        self.foregroundColor = foregroundColor
+        self.backgroundColor = backgroundColor
+        self.isInverted = isInverted
+    }
 
-    var foregroundColor = Color(.paWhite)
-    var backgroundColor = Color(.paDarkGray)
-    var isInverted: Bool = false
-
-    func makeBody(configuration: Self.Configuration) -> some View {
+    public func makeBody(configuration: Self.Configuration) -> some View {
         configuration.label
             .padding(12.0)
             .frame(maxWidth: 350.0)

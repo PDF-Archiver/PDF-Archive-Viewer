@@ -18,6 +18,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate, Log {
 
         do {
             try DiagnosticsLogger.setup()
+            UserDefaultsReporter.userDefaults = UserDefaults.appGroup
         } catch {
             log.warning("Failed to setup the Diagnostics Logger")
         }
@@ -29,6 +30,8 @@ final class AppDelegate: UIResponder, UIApplicationDelegate, Log {
         }
 
         DispatchQueue.global().async {
+
+            UserDefaults.runMigration()
 
             // start document service
             _ = ArchiveStore.shared

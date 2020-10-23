@@ -36,36 +36,36 @@ extension UserDefaults: Log {
 
     public var tutorialShown: Bool {
         get {
-            return UserDefaults.standard.bool(forKey: Names.tutorialShown.rawValue)
+            bool(forKey: Names.tutorialShown.rawValue)
         }
         set {
-            UserDefaults.standard.set(newValue, forKey: Names.tutorialShown.rawValue)
+            set(newValue, forKey: Names.tutorialShown.rawValue)
         }
     }
 
     public var firstDocumentScanAlertPresented: Bool {
         get {
-            return UserDefaults.standard.bool(forKey: Names.firstDocumentScanAlertPresented.rawValue)
+            bool(forKey: Names.firstDocumentScanAlertPresented.rawValue)
         }
         set {
-            UserDefaults.standard.set(newValue, forKey: Names.firstDocumentScanAlertPresented.rawValue)
+            set(newValue, forKey: Names.firstDocumentScanAlertPresented.rawValue)
         }
     }
 
     public var lastSelectedTab: Tab {
         get {
-            guard let name = UserDefaults.standard.string(forKey: Names.lastSelectedTabName.rawValue),
+            guard let name = string(forKey: Names.lastSelectedTabName.rawValue),
                 let tab = Tab(rawValue: name) else { return .scan }
             return tab
         }
         set {
-            UserDefaults.standard.set(newValue.rawValue, forKey: Names.lastSelectedTabName.rawValue)
+            set(newValue.rawValue, forKey: Names.lastSelectedTabName.rawValue)
         }
     }
 
     public var pdfQuality: PDFQuality {
         get {
-            var value = UserDefaults.standard.float(forKey: Names.pdfQuality.rawValue)
+            var value = float(forKey: Names.pdfQuality.rawValue)
 
             // set default to 0.75
             if value == 0.0 {
@@ -77,34 +77,57 @@ extension UserDefaults: Log {
         }
         set {
             log.info("PDF Quality Changed.", metadata: ["quality": "\(newValue.rawValue)"])
-            UserDefaults.standard.set(newValue.rawValue, forKey: Names.pdfQuality.rawValue)
+            set(newValue.rawValue, forKey: Names.pdfQuality.rawValue)
         }
     }
 
     public var subscriptionExpiryDate: Date? {
         get {
-            return UserDefaults.standard.object(forKey: Names.subscriptionExpiryDate.rawValue) as? Date
+            object(forKey: Names.subscriptionExpiryDate.rawValue) as? Date
         }
         set {
-            UserDefaults.standard.set(newValue, forKey: Names.subscriptionExpiryDate.rawValue)
+            set(newValue, forKey: Names.subscriptionExpiryDate.rawValue)
         }
     }
 
     public var archiveURL: URL? {
         get {
-            return UserDefaults.standard.object(forKey: Names.archiveURL.rawValue) as? URL
+            object(forKey: Names.archiveURL.rawValue) as? URL
         }
         set {
-            UserDefaults.standard.set(newValue, forKey: Names.archiveURL.rawValue)
+            set(newValue, forKey: Names.archiveURL.rawValue)
         }
     }
 
     public var untaggedURL: URL? {
         get {
-            return UserDefaults.standard.object(forKey: Names.untaggedURL.rawValue) as? URL
+            object(forKey: Names.untaggedURL.rawValue) as? URL
         }
         set {
-            UserDefaults.standard.set(newValue, forKey: Names.untaggedURL.rawValue)
+            set(newValue, forKey: Names.untaggedURL.rawValue)
         }
+    }
+
+    // MARK: - Migration
+
+    public static var appGroup: UserDefaults {
+        UserDefaults(suiteName: Constants.sharedContainerIdentifier)!
+    }
+
+    public static func runMigration() {
+        var old = UserDefaults.standard
+        var new = UserDefaults.appGroup
+
+        migrate(\.tutorialShown, from: &old, to: &new)
+        migrate(\.firstDocumentScanAlertPresented, from: &old, to: &new)
+        migrate(\.lastSelectedTab, from: &old, to: &new)
+        migrate(\.pdfQuality, from: &old, to: &new)
+        migrate(\.subscriptionExpiryDate, from: &old, to: &new)
+        migrate(\.archiveURL, from: &old, to: &new)
+        migrate(\.untaggedURL, from: &old, to: &new)
+    }
+
+    public static func migrate<T>(_ keyPath: WritableKeyPath<UserDefaults, T>, from source: inout UserDefaults, to destination: inout UserDefaults) {
+        destination[keyPath: keyPath] = source[keyPath: keyPath]
     }
 }

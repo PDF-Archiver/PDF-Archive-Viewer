@@ -1,5 +1,5 @@
 //
-//  AlertViewModel.swift
+//  AlertDataModel.swift
 //  PDFArchiver
 //
 //  Created by Julian Kahnert on 19.11.19.
@@ -9,14 +9,14 @@
 import Foundation
 import SwiftUI
 
-public struct AlertViewModel {
+public struct AlertDataModel {
     public let title: LocalizedStringKey
     public let message: LocalizedStringKey
     public let primaryButton: Alert.Button
     public let secondaryButton: Alert.Button?
 }
 
-extension AlertViewModel {
+extension AlertDataModel {
 
     public static func createAndPost(title: LocalizedStringKey, message: LocalizedStringKey, primaryButtonTitle: LocalizedStringKey, completion: (() -> Void)? = nil) {
 
@@ -27,7 +27,7 @@ extension AlertViewModel {
         } else {
             primaryButton = .default(Text(primaryButtonTitle))
         }
-        let viewModel = AlertViewModel(title: title,
+        let viewModel = AlertDataModel(title: title,
                                        message: message,
                                        primaryButton: primaryButton,
                                        secondaryButton: nil)
@@ -50,7 +50,7 @@ extension AlertViewModel {
             message = error.localizedDescription
         }
 
-        let viewModel = AlertViewModel(title: predefinedTitle ?? LocalizedStringKey(title),
+        let viewModel = AlertDataModel(title: predefinedTitle ?? LocalizedStringKey(title),
                                        message: LocalizedStringKey(message),
                                        primaryButton: .default(Text(primaryButtonTitle)),
                                        secondaryButton: nil)
@@ -58,7 +58,7 @@ extension AlertViewModel {
     }
 
     public static func createAndPost(title: LocalizedStringKey, message: LocalizedStringKey, primaryButton: Alert.Button, secondaryButton: Alert.Button) {
-        let viewModel = AlertViewModel(title: title,
+        let viewModel = AlertDataModel(title: title,
                                        message: message,
                                        primaryButton: primaryButton,
                                        secondaryButton: secondaryButton)

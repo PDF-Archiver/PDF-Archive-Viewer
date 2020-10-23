@@ -120,7 +120,7 @@ final class TagTabViewModel: ObservableObject, Log {
                         do {
                             try archiveStore.download(document)
                         } catch {
-                            AlertViewModel.createAndPost(message: error, primaryButtonTitle: "ok")
+                            AlertDataModel.createAndPost(message: error, primaryButtonTitle: "ok")
                         }
                     }
 
@@ -248,7 +248,7 @@ final class TagTabViewModel: ObservableObject, Log {
 
             } catch {
                 Self.log.error("Error in PDFProcessing!", metadata: ["error": "\(error.localizedDescription)"])
-                AlertViewModel.createAndPost(title: "Save failed!",
+                AlertDataModel.createAndPost(title: "Save failed!",
                                              message: error,
                                              primaryButtonTitle: "OK")
 
@@ -277,7 +277,7 @@ final class TagTabViewModel: ObservableObject, Log {
                 }
             } catch {
                 Self.log.error("Error while deleting document!", metadata: ["error": "\(error.localizedDescription)"])
-                AlertViewModel.createAndPost(title: "Delete failed!",
+                AlertDataModel.createAndPost(title: "Delete failed!",
                                              message: error,
                                              primaryButtonTitle: "OK")
             }

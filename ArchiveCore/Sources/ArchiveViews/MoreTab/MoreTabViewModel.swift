@@ -17,7 +17,7 @@ final class MoreTabViewModel: ObservableObject, Log {
     static let mailSubject = "PDF Archiver: iOS Support"
 
     @Published var qualities: [LocalizedStringKey]  = ["100% - Lossless 🤯", "75% - Good 👌 (Default)", "50% - Normal 👍", "25% - Small 💾"]
-    @Published var selectedQualityIndex = UserDefaults.PDFQuality.toIndex(UserDefaults.standard.pdfQuality)
+    @Published var selectedQualityIndex = UserDefaults.PDFQuality.toIndex(UserDefaults.appGroup.pdfQuality)
 
     @Published var isShowingMailView: Bool = false
     @Published var result: Result<MFMailComposeResult, Error>?
@@ -31,7 +31,7 @@ final class MoreTabViewModel: ObservableObject, Log {
         subscriptionStatus = getCurrentStatus()
         $selectedQualityIndex
             .sink { selectedQuality in
-                UserDefaults.standard.pdfQuality = UserDefaults.PDFQuality.allCases[selectedQuality]
+                UserDefaults.appGroup.pdfQuality = UserDefaults.PDFQuality.allCases[selectedQuality]
             }
             .store(in: &disposables)
 
@@ -60,12 +60,12 @@ final class MoreTabViewModel: ObservableObject, Log {
 
         // remove all user defaults
         if let bundleIdentifier = Bundle.main.bundleIdentifier {
-            UserDefaults.standard.removePersistentDomain(forName: bundleIdentifier)
+            UserDefaults.appGroup.removePersistentDomain(forName: bundleIdentifier)
         } else {
             log.error("Bundle Identifier not found.")
         }
 
-        AlertViewModel.createAndPost(title: "Reset App", message: "Please restart the app to complete the reset.", primaryButtonTitle: "OK")
+        AlertDataModel.createAndPost(title: "Reset App", message: "Please restart the app to complete the reset.", primaryButtonTitle: "OK")
     }
 
     var manageSubscriptionUrl: URL {

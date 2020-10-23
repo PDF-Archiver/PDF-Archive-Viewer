@@ -103,7 +103,7 @@ public final class ImageConverter: ImageConverterAPI, Log {
         triggerObservation()
 
         guard let destinationURL = getDocumentDestination() else {
-            AlertViewModel.createAndPost(title: "Attention",
+            AlertDataModel.createAndPost(title: "Attention",
                                          message: "Failed to get destination path.",
                                          primaryButtonTitle: "OK")
             return
@@ -118,7 +118,7 @@ public final class ImageConverter: ImageConverterAPI, Log {
         }
         operation.completionBlock = {
             guard let error = operation.error else { return }
-            AlertViewModel.createAndPost(message: error, primaryButtonTitle: "OK")
+            AlertDataModel.createAndPost(message: error, primaryButtonTitle: "OK")
         }
         queue.addOperation(operation)
         totalDocumentCount.mutate { $0 += 1 }

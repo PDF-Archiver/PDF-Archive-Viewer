@@ -109,7 +109,7 @@ struct ScanTabView_Previews: PreviewProvider {
     }
 
     static var previews: some View {
-        ScanTabView(viewModel: ScanTabViewModel(imageConverter: ImageConverter(), iapService: IAPService()))
+        ScanTabView(viewModel: ScanTabViewModel(imageConverter: ImageConverter(), iapService: IAPService(), documentsFinishedHandler: { print("Scan completed!") }))
             .frame(maxWidth: .infinity)
             .padding()
     }

@@ -14,7 +14,7 @@ public final class PathManager: Log {
     private static var iCloudDriveURL: URL? {
         let url = FileManager.default.url(forUbiquityContainerIdentifier: nil)?.appendingPathComponent("Documents")
         if url == nil {
-            AlertViewModel.createAndPostNoICloudDrive()
+            AlertDataModel.createAndPostNoICloudDrive()
         }
         return url
     }
@@ -52,7 +52,7 @@ public final class PathManager: Log {
     public private(set) var untaggedURL: URL?
 
     private init() {
-        self.archiveURL = UserDefaults.standard.archiveURL ?? Self.iCloudDriveURL
-        self.untaggedURL = UserDefaults.standard.untaggedURL ?? Self.iCloudDriveURL?.appendingPathComponent("untagged")
+        self.archiveURL = UserDefaults.appGroup.archiveURL ?? Self.iCloudDriveURL
+        self.untaggedURL = UserDefaults.appGroup.untaggedURL ?? Self.iCloudDriveURL?.appendingPathComponent("untagged")
     }
 }

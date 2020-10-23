@@ -153,7 +153,7 @@ final class ArchiveViewModel: ObservableObject, Log {
             do {
                 try archiveStore.download(document)
             } catch {
-                AlertViewModel.createAndPost(message: error, primaryButtonTitle: "ok")
+                AlertDataModel.createAndPost(message: error, primaryButtonTitle: "ok")
             }
 
 //            var filteredDocuments = archiveStore.documents.filter { $0.id != document.id }
@@ -182,7 +182,7 @@ final class ArchiveViewModel: ObservableObject, Log {
             do {
                 try archiveStore.delete(deletedDocument)
             } catch {
-                AlertViewModel.createAndPost(message: error, primaryButtonTitle: "ok")
+                AlertDataModel.createAndPost(message: error, primaryButtonTitle: "ok")
             }
         }
         notificationFeedback.notificationOccurred(.success)

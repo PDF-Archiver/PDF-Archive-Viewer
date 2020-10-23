@@ -9,15 +9,15 @@
 import PDFKit
 import SwiftUI
 
-struct PDFCustomView: UIViewRepresentable {
+public struct PDFCustomView: UIViewRepresentable {
 
     private let pdfDocument: PDFDocument?
 
-    init(_ pdfDocument: PDFDocument?) {
+    public init(_ pdfDocument: PDFDocument?) {
         self.pdfDocument = pdfDocument
     }
 
-    func makeUIView(context: Context) -> PDFView {
+    public func makeUIView(context: Context) -> PDFView {
         let view = PDFView()
         view.displayMode = .singlePageContinuous
         view.autoScales = true
@@ -28,7 +28,7 @@ struct PDFCustomView: UIViewRepresentable {
         return view
     }
 
-    func updateUIView(_ view: PDFView, context: Context) {
+    public func updateUIView(_ view: PDFView, context: Context) {
         if let pdfDocument = pdfDocument {
             view.document = pdfDocument
             view.goToFirstPage(self)

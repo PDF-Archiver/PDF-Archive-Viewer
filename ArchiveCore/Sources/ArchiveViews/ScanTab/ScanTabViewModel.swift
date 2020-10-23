@@ -13,19 +13,22 @@ import SwiftUI
 import VisionKit
 
 public final class ScanTabViewModel: ObservableObject, Log {
-    @Published var showDocumentScan: Bool = false
-    @Published var progressValue: CGFloat = 0.0
-    @Published var progressLabel: String = ""
+    @Published public var showDocumentScan: Bool = false
+    @Published public var progressValue: CGFloat = 0.0
+    @Published public var progressLabel: String = ""
 
     private let imageConverter: ImageConverterAPI
     private let iapService: IAPServiceAPI
+    private let documentsFinishedHandler: () -> Void
+
     private var lastProgressValue: CGFloat?
     private var disposables = Set<AnyCancellable>()
     private let notificationFeedback = UINotificationFeedbackGenerator()
 
-    public init(imageConverter: ImageConverterAPI, iapService: IAPServiceAPI) {
+    public init(imageConverter: ImageConverterAPI, iapService: IAPServiceAPI, documentsFinishedHandler: @escaping () -> Void) {
         self.imageConverter = imageConverter
         self.iapService = iapService
+        self.documentsFinishedHandler = documentsFinishedHandler
 
         // show the processing indicator, if documents are currently processed
         if imageConverter.totalDocumentCount.value != 0 {
@@ -36,49 +39,56 @@ public final class ScanTabViewModel: ObservableObject, Log {
         triggerImageProcessing()
 
         NotificationCenter.default.publisher(for: .imageProcessingQueue)
-            .sink { notification in
+            .sink { [weak self] notification in
+                guard let self = self else { return }
                 let documentProgress = notification.object as? Float
                 self.updateProcessingIndicator(with: documentProgress)
 
-                if documentProgress == nil,
-                   !UserDefaults.standard.firstDocumentScanAlertPresented {
-                    UserDefaults.standard.firstDocumentScanAlertPresented = true
-
-                    AlertViewModel.createAndPost(title: "First Scan processed! 🙂",
-                                                 message: "The first document was processed successfully and is now waiting for you in the 'Tag' tab.\n\n📄   ➡️   🗄",
-                                                 primaryButtonTitle: "OK")
-                }
+                guard documentProgress == nil else { return }
+                self.documentsFinishedHandler()
             }
             .store(in: &disposables)
     }
 
-    func startScanning() {
+    public func startScanning() {
         notificationFeedback.prepare()
         let authorizationStatus = AVCaptureDevice.authorizationStatus(for: .video)
-        if authorizationStatus ==  .denied || authorizationStatus == .restricted {
-            log.info("Authorization status blocks camera access. Switch to preferences.")
+        switch authorizationStatus {
+            case .authorized:
+                log.info("Start scanning a document.")
+                showDocumentScan = true
+                notificationFeedback.notificationOccurred(.success)
 
-            notificationFeedback.notificationOccurred(.warning)
-            AlertViewModel.createAndPost(title: "Need Camera Access",
-                                         message: "Camera access is required to scan documents.",
-                                         primaryButton: .default(Text("Grant Access"),
-                                                                 action: {
-                                                                    guard let settingsAppURL = URL(string: UIApplication.openSettingsURLString) else { fatalError("Could not find settings url!") }
-                                                                    UIApplication.shared.open(settingsAppURL, options: [:], completionHandler: nil)
-                                         }),
-                                         secondaryButton: .cancel())
-        } else {
+                // stop current image processing
+                imageConverter.stopProcessing()
 
-            log.info("Start scanning a document.")
-            showDocumentScan = true
-            notificationFeedback.notificationOccurred(.success)
+            case .notDetermined:
+                AVCaptureDevice.requestAccess(for: .video) { granted in
+                    guard granted else { return }
+                    DispatchQueue.main.async {
+                        self.startScanning()
+                    }
+                }
 
-            // stop current image processing
-            imageConverter.stopProcessing()
+            case .denied, .restricted:
+                log.info("Authorization status blocks camera access. Switch to preferences.")
+
+                notificationFeedback.notificationOccurred(.warning)
+                AlertDataModel.createAndPost(title: "Need Camera Access",
+                                             message: "Camera access is required to scan documents.",
+                                             primaryButton: .default(Text("Grant Access"),
+                                                                     action: {
+                                                                        guard let settingsAppURL = URL(string: UIApplication.openSettingsURLString) else { fatalError("Could not find settings url!") }
+                                                                        UIApplication.shared.open(settingsAppURL, options: [:], completionHandler: nil)
+                                             }),
+                                             secondaryButton: .cancel())
+
+            @unknown default:
+                preconditionFailure("This authorization status is unkown.")
         }
     }
 
-    func process(_ images: [UIImage]) {
+    public func process(_ images: [UIImage]) {
         assert(!Thread.isMainThread, "This might take some time and should not be executed on the main thread.")
 
         // validate subscription
@@ -93,7 +103,7 @@ public final class ScanTabViewModel: ObservableObject, Log {
             try StorageHelper.save(images)
         } catch {
             assertionFailure("Could not save temp images with error:\n\(error.localizedDescription)")
-            AlertViewModel.createAndPost(title: "Save failed!",
+            AlertDataModel.createAndPost(title: "Save failed!",
                                          message: error,
                                          primaryButtonTitle: "OK")
         }
@@ -139,7 +149,7 @@ public final class ScanTabViewModel: ObservableObject, Log {
 
         // show subscription view controller, if no subscription was found
         if !isPermitted {
-            AlertViewModel.createAndPost(title: "No Subscription",
+            AlertDataModel.createAndPost(title: "No Subscription",
                                          message: "No active subscription could be found. Your document will therefore not be saved.\nPlease support the app and subscribe.",
                                          primaryButton: .default(Text("Activate"), action: {
                                             // show the subscription view

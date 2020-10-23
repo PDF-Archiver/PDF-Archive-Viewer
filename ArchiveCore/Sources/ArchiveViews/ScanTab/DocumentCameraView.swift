@@ -9,39 +9,39 @@
 import SwiftUI
 import VisionKit
 
-struct DocumentCameraView: UIViewControllerRepresentable, Log {
+public struct DocumentCameraView: UIViewControllerRepresentable, Log {
 
     private let controller = VNDocumentCameraViewController()
     private let isShown: Binding<Bool>
     private let imageHandler: ([UIImage]) -> Void
 
-    init(isShown: Binding<Bool>, imageHandler: @escaping ([UIImage]) -> Void) {
+    public init(isShown: Binding<Bool>, imageHandler: @escaping ([UIImage]) -> Void) {
         self.isShown = isShown
         self.imageHandler = imageHandler
     }
 
-    func makeUIViewController(context: Context) -> VNDocumentCameraViewController {
+    public func makeUIViewController(context: Context) -> VNDocumentCameraViewController {
         controller.delegate = context.coordinator
         return controller
     }
 
-    func updateUIViewController(_ uiViewController: VNDocumentCameraViewController, context: Context) { }
+    public func updateUIViewController(_ uiViewController: VNDocumentCameraViewController, context: Context) { }
 
-    func makeCoordinator() -> Coordinator {
+    public func makeCoordinator() -> Coordinator {
         Coordinator(isShown: isShown, imageHandler: imageHandler)
     }
 
-    final class Coordinator: NSObject, VNDocumentCameraViewControllerDelegate {
+    public final class Coordinator: NSObject, VNDocumentCameraViewControllerDelegate {
 
         private let isShown: Binding<Bool>
         private let imageHandler: ([UIImage]) -> Void
 
-        init(isShown: Binding<Bool>, imageHandler: @escaping ([UIImage]) -> Void) {
+        fileprivate init(isShown: Binding<Bool>, imageHandler: @escaping ([UIImage]) -> Void) {
             self.isShown = isShown
             self.imageHandler = imageHandler
         }
 
-        func documentCameraViewController(_ controller: VNDocumentCameraViewController, didFinishWith scan: VNDocumentCameraScan) {
+        public func documentCameraViewController(_ controller: VNDocumentCameraViewController, didFinishWith scan: VNDocumentCameraScan) {
             self.isShown.wrappedValue = false
 
             DispatchQueue.global(qos: .utility).async {
@@ -54,11 +54,11 @@ struct DocumentCameraView: UIViewControllerRepresentable, Log {
             }
         }
 
-        func documentCameraViewControllerDidCancel(_ controller: VNDocumentCameraViewController) {
+        public func documentCameraViewControllerDidCancel(_ controller: VNDocumentCameraViewController) {
             self.isShown.wrappedValue = false
         }
 
-        func documentCameraViewController(_ controller: VNDocumentCameraViewController, didFailWithError error: Error) {
+        public func documentCameraViewController(_ controller: VNDocumentCameraViewController, didFailWithError error: Error) {
             log.error("Scan did fail with error.", metadata: ["error": "\(error.localizedDescription)"])
             self.isShown.wrappedValue = false
         }

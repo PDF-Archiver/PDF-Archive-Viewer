@@ -20,11 +20,11 @@ public final class MainNavigationViewModel: ObservableObject, Log {
     @Published var archiveCategories: [String] = []
     @Published var tagCategories: [String] = []
 
-    @Published var currentTab: Tab = UserDefaults.standard.lastSelectedTab
+    @Published var currentTab: Tab = UserDefaults.appGroup.lastSelectedTab
     @Published var currentOptionalTab: Tab?
-    @Published var showTutorial = !UserDefaults.standard.tutorialShown
+    @Published var showTutorial = !UserDefaults.appGroup.tutorialShown
 
-    var scanViewModel = ScanTabViewModel(imageConverter: imageConverter, iapService: iapService)
+    var scanViewModel = ScanTabViewModel(imageConverter: imageConverter, iapService: iapService, documentsFinishedHandler: scanFinished)
     let tagViewModel = TagTabViewModel()
     let archiveViewModel = ArchiveViewModel()
     let moreViewModel = MoreTabViewModel(iapService: iapService)
@@ -32,8 +32,6 @@ public final class MainNavigationViewModel: ObservableObject, Log {
     let iapViewModel = IAPViewModel(iapService: iapService)
 
     @Published var showSubscriptionView: Bool = false
-    @Published var showAlert: Bool = false
-    @Published var alertViewModel: AlertViewModel?
 
     private var disposables = Set<AnyCancellable>()
     private let selectionFeedback = UISelectionFeedbackGenerator()
@@ -58,7 +56,7 @@ public final class MainNavigationViewModel: ObservableObject, Log {
             .store(in: &disposables)
 
         // MARK: UserDefaults
-        if !UserDefaults.standard.tutorialShown {
+        if !UserDefaults.appGroup.tutorialShown {
             currentTab = .archive
         }
 
@@ -67,7 +65,7 @@ public final class MainNavigationViewModel: ObservableObject, Log {
             .removeDuplicates()
             .sink { selectedTab in
                 // save the selected index for the next app start
-                UserDefaults.standard.lastSelectedTab = selectedTab
+                UserDefaults.appGroup.lastSelectedTab = selectedTab
                 Self.log.info("Changed tab.", metadata: ["selectedTab": "\(selectedTab)"])
 
                 self.selectionFeedback.prepare()
@@ -78,7 +76,7 @@ public final class MainNavigationViewModel: ObservableObject, Log {
         // MARK: Intro
         $showTutorial
             .sink { shouldPresentTutorial in
-                UserDefaults.standard.tutorialShown = !shouldPresentTutorial
+                UserDefaults.appGroup.tutorialShown = !shouldPresentTutorial
             }
             .store(in: &disposables)
 
@@ -110,21 +108,6 @@ public final class MainNavigationViewModel: ObservableObject, Log {
             }
             .store(in: &disposables)
 
-        // MARK: Alerts
-        $alertViewModel
-            .receive(on: DispatchQueue.main)
-            .sink { viewModel in
-                self.showAlert = viewModel != nil
-            }
-            .store(in: &disposables)
-
-        NotificationCenter.default.publisher(for: .showError)
-            .receive(on: DispatchQueue.main)
-            .sink { notification in
-                self.alertViewModel = notification.object as? AlertViewModel
-            }
-            .store(in: &disposables)
-
         ArchiveStore.shared.$years
             .map { years -> [String] in
                 let tmp = years.sorted()
@@ -150,7 +133,7 @@ public final class MainNavigationViewModel: ObservableObject, Log {
 
             guard let iCloudContainerPath = FileManager.default.url(forUbiquityContainerIdentifier: nil) else {
                 Self.log.assertOrError("Could not find a iCloud Drive url.")
-                AlertViewModel.createAndPostNoICloudDrive()
+                AlertDataModel.createAndPostNoICloudDrive()
                 return
             }
 
@@ -218,6 +201,15 @@ public final class MainNavigationViewModel: ObservableObject, Log {
     }
 
     // MARK: - Helper Functions
+    
+    private static func scanFinished() {
+        guard !UserDefaults.appGroup.firstDocumentScanAlertPresented else { return }
+        UserDefaults.appGroup.firstDocumentScanAlertPresented = true
+        
+        AlertDataModel.createAndPost(title: "First Scan processed! 🙂",
+                                     message: "The first document was processed successfully and is now waiting for you in the 'Tag' tab.\n\n📄   ➡️   🗄",
+                                     primaryButtonTitle: "OK")
+    }
 
     private func handle(url: URL) {
         log.info("Handling shared document", metadata: ["filetype": "\(url.pathExtension)"])
@@ -232,7 +224,7 @@ public final class MainNavigationViewModel: ObservableObject, Log {
             log.error("Unable to handle file.", metadata: ["filetype": "\(url.pathExtension)", "error": "\(error.localizedDescription)"])
             try? FileManager.default.removeItem(at: url)
 
-            AlertViewModel.createAndPost(message: error, primaryButtonTitle: "OK")
+            AlertDataModel.createAndPost(message: error, primaryButtonTitle: "OK")
         }
     }
 

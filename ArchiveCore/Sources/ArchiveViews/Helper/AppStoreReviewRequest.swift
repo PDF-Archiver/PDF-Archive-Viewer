@@ -24,12 +24,12 @@ public final class AppStoreReviewRequest {
 
     private var count: Int {
         didSet {
-            UserDefaults.standard.set(count, forKey: UserDefaultsKeys.processCompletedCountKey.rawValue)
+            UserDefaults.appGroup.set(count, forKey: UserDefaultsKeys.processCompletedCountKey.rawValue)
         }
     }
     private var lastVersionPromptedForReview: String {
         didSet {
-            UserDefaults.standard.set(lastVersionPromptedForReview, forKey: UserDefaultsKeys.lastVersionPromptedForReviewKey.rawValue)
+            UserDefaults.appGroup.set(lastVersionPromptedForReview, forKey: UserDefaultsKeys.lastVersionPromptedForReviewKey.rawValue)
         }
     }
 
@@ -40,8 +40,8 @@ public final class AppStoreReviewRequest {
         self.currentVersion = currentVersion
 
         // get the last count and version from UserDefaults
-        count = UserDefaults.standard.integer(forKey: UserDefaultsKeys.processCompletedCountKey.rawValue)
-        lastVersionPromptedForReview = UserDefaults.standard.string(forKey: UserDefaultsKeys.lastVersionPromptedForReviewKey.rawValue) ?? ""
+        count = UserDefaults.appGroup.integer(forKey: UserDefaultsKeys.processCompletedCountKey.rawValue)
+        lastVersionPromptedForReview = UserDefaults.appGroup.string(forKey: UserDefaultsKeys.lastVersionPromptedForReviewKey.rawValue) ?? ""
     }
 
     private func isSameMajorMinorVersion(version1: String, version2: String) -> Bool {

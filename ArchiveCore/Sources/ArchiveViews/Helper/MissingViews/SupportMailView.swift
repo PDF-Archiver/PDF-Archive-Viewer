@@ -85,7 +85,7 @@ extension SupportMailView {
                 "Version": AppEnvironment.getFullVersion(),
                 "Number of tagged Documents": String(taggedCount),
                 "Number of untagged Documents": String(untaggedCount),
-                "Subscription Expiry Date": UserDefaults.standard.subscriptionExpiryDate?.description ?? "NULL"
+                "Subscription Expiry Date": UserDefaults.appGroup.subscriptionExpiryDate?.description ?? "NULL"
             ]
             return DiagnosticsChapter(title: "App Environment", diagnostics: diagnostics)
         }

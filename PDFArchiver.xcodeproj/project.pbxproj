@@ -17,8 +17,8 @@
 		341BCD90253C7D3A00E807EF /* ArchiveBackend in Frameworks */ = {isa = PBXBuildFile; productRef = 341BCD8F253C7D3A00E807EF /* ArchiveBackend */; };
 		341BCD92253C7D3A00E807EF /* ArchiveSharedConstants in Frameworks */ = {isa = PBXBuildFile; productRef = 341BCD91253C7D3A00E807EF /* ArchiveSharedConstants */; };
 		341BCD94253C7D3A00E807EF /* ArchiveViews in Frameworks */ = {isa = PBXBuildFile; productRef = 341BCD93253C7D3A00E807EF /* ArchiveViews */; };
-		3432510F253F6CFC0085EBD3 /* Config.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 3416B1B024A9282800D5F4E0 /* Config.xcconfig */; };
 		345A497E24AFB0CE00EC4DC2 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 3416B1AD24A9282700D5F4E0 /* Settings.bundle */; };
+		346547272543637C0029F05B /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 34E7DB12250189D400E94352 /* Localizable.strings */; };
 		346B1BDA253C65B700D3F8AB /* ArchiveBackend in Frameworks */ = {isa = PBXBuildFile; productRef = 346B1BD9253C65B700D3F8AB /* ArchiveBackend */; };
 		346B1BDC253C65B700D3F8AB /* ArchiveSharedConstants in Frameworks */ = {isa = PBXBuildFile; productRef = 346B1BDB253C65B700D3F8AB /* ArchiveSharedConstants */; };
 		346B1BDE253C65B700D3F8AB /* ArchiveViews in Frameworks */ = {isa = PBXBuildFile; productRef = 346B1BDD253C65B700D3F8AB /* ArchiveViews */; };
@@ -38,11 +38,14 @@
 		34E7DB0F250189D400E94352 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 34E7DB12250189D400E94352 /* Localizable.strings */; };
 		34E7DB10250189D400E94352 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 34E7DB12250189D400E94352 /* Localizable.strings */; };
 		34ECB09C25324FCF00E69448 /* AppClipApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34ECB09B25324FCF00E69448 /* AppClipApp.swift */; };
-		34ECB09E25324FCF00E69448 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34ECB09D25324FCF00E69448 /* ContentView.swift */; };
+		34ECB09E25324FCF00E69448 /* MainContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34ECB09D25324FCF00E69448 /* MainContentView.swift */; };
 		34ECB0A025324FD100E69448 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 34ECB09F25324FD100E69448 /* Assets.xcassets */; };
 		34ECB0A325324FD100E69448 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 34ECB0A225324FD100E69448 /* Preview Assets.xcassets */; };
 		34ECB0A825324FD100E69448 /* AppClip.app in Embed App Clips */ = {isa = PBXBuildFile; fileRef = 34ECB09925324FCF00E69448 /* AppClip.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		34ECB0B92532500000E69448 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3416B1AE24A9282800D5F4E0 /* Assets.xcassets */; };
+		34FD2AE1254376F00044A594 /* PDFSharingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34FD2AE0254376F00044A594 /* PDFSharingView.swift */; };
+		34FD2AE9254377180044A594 /* PDFSharingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34FD2AE8254377180044A594 /* PDFSharingViewModel.swift */; };
+		34FD2AF125437E490044A594 /* AppClipIAPService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34FD2AF025437E490044A594 /* AppClipIAPService.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -136,11 +139,14 @@
 		34E7DB1325018A0000E94352 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
 		34ECB09925324FCF00E69448 /* AppClip.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AppClip.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		34ECB09B25324FCF00E69448 /* AppClipApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppClipApp.swift; sourceTree = "<group>"; };
-		34ECB09D25324FCF00E69448 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		34ECB09D25324FCF00E69448 /* MainContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainContentView.swift; sourceTree = "<group>"; };
 		34ECB09F25324FD100E69448 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		34ECB0A225324FD100E69448 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		34ECB0A425324FD100E69448 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		34ECB0A525324FD100E69448 /* AppClip.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = AppClip.entitlements; sourceTree = "<group>"; };
+		34FD2AE0254376F00044A594 /* PDFSharingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFSharingView.swift; sourceTree = "<group>"; };
+		34FD2AE8254377180044A594 /* PDFSharingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFSharingViewModel.swift; sourceTree = "<group>"; };
+		34FD2AF025437E490044A594 /* AppClipIAPService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppClipIAPService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -318,11 +324,14 @@
 		34ECB09A25324FCF00E69448 /* AppClip */ = {
 			isa = PBXGroup;
 			children = (
-				34ECB09B25324FCF00E69448 /* AppClipApp.swift */,
-				34ECB09D25324FCF00E69448 /* ContentView.swift */,
-				34ECB09F25324FD100E69448 /* Assets.xcassets */,
-				34ECB0A425324FD100E69448 /* Info.plist */,
 				34ECB0A525324FD100E69448 /* AppClip.entitlements */,
+				34ECB0A425324FD100E69448 /* Info.plist */,
+				34ECB09B25324FCF00E69448 /* AppClipApp.swift */,
+				34FD2AF025437E490044A594 /* AppClipIAPService.swift */,
+				34ECB09D25324FCF00E69448 /* MainContentView.swift */,
+				34FD2AE0254376F00044A594 /* PDFSharingView.swift */,
+				34FD2AE8254377180044A594 /* PDFSharingViewModel.swift */,
+				34ECB09F25324FD100E69448 /* Assets.xcassets */,
 				34ECB0A125324FD100E69448 /* Preview Content */,
 			);
 			path = AppClip;
@@ -470,7 +479,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 1200;
-				LastUpgradeCheck = 1200;
+				LastUpgradeCheck = 1210;
 				TargetAttributes = {
 					3489D71A24A3C53E0035E64F = {
 						CreatedOnToolsVersion = 12.0;
@@ -533,7 +542,6 @@
 				34A23FD02519386200EBE1D5 /* Privacy.md in Resources */,
 				345A497E24AFB0CE00EC4DC2 /* Settings.bundle in Resources */,
 				3416B23C24A9282800D5F4E0 /* Assets.xcassets in Resources */,
-				3432510F253F6CFC0085EBD3 /* Config.xcconfig in Resources */,
 				34E7DB0F250189D400E94352 /* Localizable.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -578,6 +586,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				34ECB0A325324FD100E69448 /* Preview Assets.xcassets in Resources */,
+				346547272543637C0029F05B /* Localizable.strings in Resources */,
 				34ECB0B92532500000E69448 /* Assets.xcassets in Resources */,
 				34ECB0A025324FD100E69448 /* Assets.xcassets in Resources */,
 			);
@@ -671,7 +680,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				34ECB09E25324FCF00E69448 /* ContentView.swift in Sources */,
+				34ECB09E25324FCF00E69448 /* MainContentView.swift in Sources */,
+				34FD2AE1254376F00044A594 /* PDFSharingView.swift in Sources */,
+				34FD2AE9254377180044A594 /* PDFSharingViewModel.swift in Sources */,
+				34FD2AF125437E490044A594 /* AppClipIAPService.swift in Sources */,
 				34ECB09C25324FCF00E69448 /* AppClipApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -861,7 +873,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = iOS/PDFArchiver.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 7;
+				CURRENT_PROJECT_VERSION = 10;
 				DEVELOPMENT_TEAM = 87KNVHZ8C7;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = iOS/Info.plist;
@@ -887,7 +899,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = iOS/PDFArchiver.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 7;
+				CURRENT_PROJECT_VERSION = 10;
 				DEVELOPMENT_TEAM = 87KNVHZ8C7;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = iOS/Info.plist;
@@ -912,6 +924,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = macOS/macOS.entitlements;
+				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = 87KNVHZ8C7;
@@ -937,6 +950,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = macOS/macOS.entitlements;
+				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = 87KNVHZ8C7;
@@ -1051,7 +1065,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = ShareExtension/ShareExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 7;
+				CURRENT_PROJECT_VERSION = 10;
 				DEVELOPMENT_TEAM = 87KNVHZ8C7;
 				INFOPLIST_FILE = ShareExtension/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
@@ -1077,7 +1091,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = ShareExtension/ShareExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 7;
+				CURRENT_PROJECT_VERSION = 10;
 				DEVELOPMENT_TEAM = 87KNVHZ8C7;
 				INFOPLIST_FILE = ShareExtension/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
@@ -1104,7 +1118,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = AppClip/AppClip.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 7;
+				CURRENT_PROJECT_VERSION = 10;
 				DEVELOPMENT_ASSET_PATHS = "\"AppClip/Preview Content\"";
 				DEVELOPMENT_TEAM = 87KNVHZ8C7;
 				ENABLE_PREVIEWS = YES;
@@ -1130,7 +1144,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = AppClip/AppClip.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 7;
+				CURRENT_PROJECT_VERSION = 10;
 				DEVELOPMENT_ASSET_PATHS = "\"AppClip/Preview Content\"";
 				DEVELOPMENT_TEAM = 87KNVHZ8C7;
 				ENABLE_PREVIEWS = YES;
