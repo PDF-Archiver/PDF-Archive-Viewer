@@ -39,13 +39,14 @@
 		34E7DB10250189D400E94352 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 34E7DB12250189D400E94352 /* Localizable.strings */; };
 		34ECB09C25324FCF00E69448 /* AppClipApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34ECB09B25324FCF00E69448 /* AppClipApp.swift */; };
 		34ECB09E25324FCF00E69448 /* MainContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34ECB09D25324FCF00E69448 /* MainContentView.swift */; };
-		34ECB0A025324FD100E69448 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 34ECB09F25324FD100E69448 /* Assets.xcassets */; };
 		34ECB0A325324FD100E69448 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 34ECB0A225324FD100E69448 /* Preview Assets.xcassets */; };
 		34ECB0A825324FD100E69448 /* AppClip.app in Embed App Clips */ = {isa = PBXBuildFile; fileRef = 34ECB09925324FCF00E69448 /* AppClip.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		34ECB0B92532500000E69448 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3416B1AE24A9282800D5F4E0 /* Assets.xcassets */; };
+		34FB40712548839B00A415DA /* ArchiveSharedConstants in Frameworks */ = {isa = PBXBuildFile; productRef = 34FB40702548839A00A415DA /* ArchiveSharedConstants */; };
 		34FD2AE1254376F00044A594 /* PDFSharingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34FD2AE0254376F00044A594 /* PDFSharingView.swift */; };
 		34FD2AE9254377180044A594 /* PDFSharingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34FD2AE8254377180044A594 /* PDFSharingViewModel.swift */; };
 		34FD2AF125437E490044A594 /* AppClipIAPService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34FD2AF025437E490044A594 /* AppClipIAPService.swift */; };
+		34FD2B10254443760044A594 /* MainContentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34FD2B0F254443760044A594 /* MainContentViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -140,13 +141,13 @@
 		34ECB09925324FCF00E69448 /* AppClip.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AppClip.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		34ECB09B25324FCF00E69448 /* AppClipApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppClipApp.swift; sourceTree = "<group>"; };
 		34ECB09D25324FCF00E69448 /* MainContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainContentView.swift; sourceTree = "<group>"; };
-		34ECB09F25324FD100E69448 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		34ECB0A225324FD100E69448 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		34ECB0A425324FD100E69448 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		34ECB0A525324FD100E69448 /* AppClip.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = AppClip.entitlements; sourceTree = "<group>"; };
 		34FD2AE0254376F00044A594 /* PDFSharingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFSharingView.swift; sourceTree = "<group>"; };
 		34FD2AE8254377180044A594 /* PDFSharingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFSharingViewModel.swift; sourceTree = "<group>"; };
 		34FD2AF025437E490044A594 /* AppClipIAPService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppClipIAPService.swift; sourceTree = "<group>"; };
+		34FD2B0F254443760044A594 /* MainContentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainContentViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -188,6 +189,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				34FB40712548839B00A415DA /* ArchiveSharedConstants in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -331,8 +333,8 @@
 				34ECB09D25324FCF00E69448 /* MainContentView.swift */,
 				34FD2AE0254376F00044A594 /* PDFSharingView.swift */,
 				34FD2AE8254377180044A594 /* PDFSharingViewModel.swift */,
-				34ECB09F25324FD100E69448 /* Assets.xcassets */,
 				34ECB0A125324FD100E69448 /* Preview Content */,
+				34FD2B0F254443760044A594 /* MainContentViewModel.swift */,
 			);
 			path = AppClip;
 			sourceTree = "<group>";
@@ -446,6 +448,9 @@
 			dependencies = (
 			);
 			name = ShareExtension;
+			packageProductDependencies = (
+				34FB40702548839A00A415DA /* ArchiveSharedConstants */,
+			);
 			productName = ShareExtension;
 			productReference = 34A53F9724AA656B008A3377 /* ShareExtension.appex */;
 			productType = "com.apple.product-type.app-extension";
@@ -588,7 +593,6 @@
 				34ECB0A325324FD100E69448 /* Preview Assets.xcassets in Resources */,
 				346547272543637C0029F05B /* Localizable.strings in Resources */,
 				34ECB0B92532500000E69448 /* Assets.xcassets in Resources */,
-				34ECB0A025324FD100E69448 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -681,6 +685,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				34ECB09E25324FCF00E69448 /* MainContentView.swift in Sources */,
+				34FD2B10254443760044A594 /* MainContentViewModel.swift in Sources */,
 				34FD2AE1254376F00044A594 /* PDFSharingView.swift in Sources */,
 				34FD2AE9254377180044A594 /* PDFSharingViewModel.swift in Sources */,
 				34FD2AF125437E490044A594 /* AppClipIAPService.swift in Sources */,
@@ -873,7 +878,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = iOS/PDFArchiver.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 10;
+				CURRENT_PROJECT_VERSION = 12;
 				DEVELOPMENT_TEAM = 87KNVHZ8C7;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = iOS/Info.plist;
@@ -899,7 +904,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = iOS/PDFArchiver.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 10;
+				CURRENT_PROJECT_VERSION = 12;
 				DEVELOPMENT_TEAM = 87KNVHZ8C7;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = iOS/Info.plist;
@@ -1065,7 +1070,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = ShareExtension/ShareExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 10;
+				CURRENT_PROJECT_VERSION = 12;
 				DEVELOPMENT_TEAM = 87KNVHZ8C7;
 				INFOPLIST_FILE = ShareExtension/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
@@ -1091,7 +1096,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = ShareExtension/ShareExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 10;
+				CURRENT_PROJECT_VERSION = 12;
 				DEVELOPMENT_TEAM = 87KNVHZ8C7;
 				INFOPLIST_FILE = ShareExtension/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
@@ -1118,7 +1123,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = AppClip/AppClip.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 10;
+				CURRENT_PROJECT_VERSION = 12;
 				DEVELOPMENT_ASSET_PATHS = "\"AppClip/Preview Content\"";
 				DEVELOPMENT_TEAM = 87KNVHZ8C7;
 				ENABLE_PREVIEWS = YES;
@@ -1144,7 +1149,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = AppClip/AppClip.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 10;
+				CURRENT_PROJECT_VERSION = 12;
 				DEVELOPMENT_ASSET_PATHS = "\"AppClip/Preview Content\"";
 				DEVELOPMENT_TEAM = 87KNVHZ8C7;
 				ENABLE_PREVIEWS = YES;
@@ -1285,6 +1290,10 @@
 		346B1BDD253C65B700D3F8AB /* ArchiveViews */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = ArchiveViews;
+		};
+		34FB40702548839A00A415DA /* ArchiveSharedConstants */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = ArchiveSharedConstants;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

@@ -131,22 +131,20 @@ public final class MainNavigationViewModel: ObservableObject, Log {
         // TODO: change container!?
         DispatchQueue.global(qos: .userInteractive).async {
 
-            guard let iCloudContainerPath = FileManager.default.url(forUbiquityContainerIdentifier: nil) else {
+            guard let iCloudContainerPath = PathManager.iCloudDriveURL else {
                 Self.log.assertOrError("Could not find a iCloud Drive url.")
                 AlertDataModel.createAndPostNoICloudDrive()
                 return
             }
 
-            let path = iCloudContainerPath.appendingPathComponent("Documents")
-            ArchiveStore.shared.update(archiveFolder: path, untaggedFolders: [path.appendingPathComponent("untagged")])
+            ArchiveStore.shared.update(archiveFolder: iCloudContainerPath, untaggedFolders: [iCloudContainerPath.appendingPathComponent("untagged")])
         }
 
-        // TODO: refactor/move this
-        guard let url = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: Constants.sharedContainerIdentifier) else {
-            log.critical("Failed to get url for forSecurityApplicationGroupIdentifier.")
-            return
-        }
-        let urls = ((try? FileManager.default.contentsOfDirectory(at: url, includingPropertiesForKeys: [], options: [.skipsHiddenFiles, .skipsSubdirectoryDescendants])) ?? [])
+        // get documents from ShareExtension and AppClip
+        let extensionURLs = (try? FileManager.default.contentsOfDirectory(at: PathManager.extensionTempPdfURL, includingPropertiesForKeys: [], options: [.skipsHiddenFiles, .skipsSubdirectoryDescendants])) ?? []
+        let appClipURLs = (try? FileManager.default.contentsOfDirectory(at: PathManager.appClipTempPdfURL, includingPropertiesForKeys: [], options: [.skipsHiddenFiles, .skipsSubdirectoryDescendants])) ?? []
+        let urls = [extensionURLs, appClipURLs]
+            .flatMap { $0 }
             .filter { !$0.hasDirectoryPath }
 
         if !urls.isEmpty {
@@ -201,11 +199,11 @@ public final class MainNavigationViewModel: ObservableObject, Log {
     }
 
     // MARK: - Helper Functions
-    
+
     private static func scanFinished() {
         guard !UserDefaults.appGroup.firstDocumentScanAlertPresented else { return }
         UserDefaults.appGroup.firstDocumentScanAlertPresented = true
-        
+
         AlertDataModel.createAndPost(title: "First Scan processed! 🙂",
                                      message: "The first document was processed successfully and is now waiting for you in the 'Tag' tab.\n\n📄   ➡️   🗄",
                                      primaryButtonTitle: "OK")
@@ -215,12 +213,12 @@ public final class MainNavigationViewModel: ObservableObject, Log {
         log.info("Handling shared document", metadata: ["filetype": "\(url.pathExtension)"])
 
         do {
+            defer {
+                url.stopAccessingSecurityScopedResource()
+            }
             _ = url.startAccessingSecurityScopedResource()
             try Self.imageConverter.handle(url)
-//            try StorageHelper.handle(url)
-            url.stopAccessingSecurityScopedResource()
-        } catch let error {
-            url.stopAccessingSecurityScopedResource()
+        } catch {
             log.error("Unable to handle file.", metadata: ["filetype": "\(url.pathExtension)", "error": "\(error.localizedDescription)"])
             try? FileManager.default.removeItem(at: url)
 

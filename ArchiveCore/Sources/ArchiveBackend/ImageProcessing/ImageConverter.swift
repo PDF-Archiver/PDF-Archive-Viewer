@@ -66,8 +66,10 @@ public final class ImageConverter: ImageConverterAPI, Log {
             guard let destinationURL = getDocumentDestination() else { throw StorageError.noPathToSave }
             saveProcessAndSaveTempImages(at: destinationURL)
             try FileManager.default.removeItem(at: url)
-        } else {
+        } else if url.pathExtension.lowercased() == "pdf" {
             addOperation(with: .pdf(url))
+        } else {
+            throw StorageError.wrongExtension(url.pathExtension)
         }
     }
 

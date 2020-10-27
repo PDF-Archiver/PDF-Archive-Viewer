@@ -8,6 +8,7 @@
 
 import PDFKit
 import UIKit
+import ArchiveSharedConstants
 
 final class ShareViewController: UIViewController {
 
@@ -18,7 +19,6 @@ final class ShareViewController: UIViewController {
         case invalidData
     }
 
-    private static let sharedContainerIdentifier = "group.PDFArchiverShared"
     private static let validUTIs = [
         "public.file-url",
         "public.url",
@@ -70,7 +70,7 @@ final class ShareViewController: UIViewController {
 
     private func handleAttachments() {
         do {
-            guard let url = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: Self.sharedContainerIdentifier) else { throw ShareError.containerNotFound }
+            let url = PathManager.extensionTempPdfURL
             let inputItems = (extensionContext?.inputItems as? [NSExtensionItem]) ?? []
             var success = false
             for item in inputItems {

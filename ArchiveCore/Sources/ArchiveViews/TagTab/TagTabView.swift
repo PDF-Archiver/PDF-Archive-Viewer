@@ -54,7 +54,7 @@ struct TagTabView: View {
             VStack {
                 Image(systemName: "trash")
                 Text("Delete")
-                    .font(.system(size: 11.0))
+                    .font(.caption)
             }
             .padding(.horizontal, 24)
         })
@@ -67,7 +67,7 @@ struct TagTabView: View {
             VStack {
                 Image(systemName: "square.and.arrow.down")
                 Text("Add")
-                    .font(.system(size: 11.0))
+                    .font(.caption)
             }
             .padding(.horizontal, 24)
         })

@@ -23,19 +23,8 @@ public struct ScanTabView: View {
             staticInfo
             Spacer()
             VStack(alignment: .leading) {
-                if viewModel.progressValue > 0.0 {
-                    Text(viewModel.progressLabel)
-                    LinearProgressBar(viewModel.progressValue)
-                        .foregroundColor(Color(.paDarkGray))
-                        .frame(maxHeight: 4.0)
-                } else {
-                    Text(viewModel.progressLabel)
-                        .hidden()
-                    LinearProgressBar(viewModel.progressValue)
-                        .foregroundColor(Color(.paDarkGray))
-                        .frame(maxHeight: 4.0)
-                        .hidden()
-                }
+                ProgressView(viewModel.progressLabel, value: viewModel.progressValue)
+                    .opacity(viewModel.progressValue > 0.0 ? 1 : 0)
                 scanButton
             }
             .fixedSize(horizontal: false, vertical: true)
@@ -47,15 +36,17 @@ public struct ScanTabView: View {
         VStack(alignment: .leading) {
             Image("Logo")
                 .resizable()
-                .frame(width: 100.0, height: 100.0, alignment: .leading)
+                .frame(width: 100, height: 100, alignment: .leading)
                 .padding()
             Text("Welcome to")
-                .font(.system(size: 24.0, weight: .heavy))
+                .font(.largeTitle)
+                .fontWeight(.heavy)
             Text("PDF Archiver")
                 .foregroundColor(Color(.paDarkRed))
-                .font(.system(size: 24.0, weight: .heavy))
+                .font(.largeTitle)
+                .fontWeight(.heavy)
             Text("Scan your documents, tag them and find them sorted in your iCloud Drive.")
-                .font(.system(size: 15.0))
+                .font(.title3)
                 .fixedSize(horizontal: false, vertical: true)
                 .lineLimit(nil)
         }

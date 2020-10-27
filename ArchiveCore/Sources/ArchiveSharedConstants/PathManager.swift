@@ -11,7 +11,7 @@ public final class PathManager: Log {
 
     public static let shared = PathManager()
 
-    private static var iCloudDriveURL: URL? {
+    public static var iCloudDriveURL: URL? {
         let url = FileManager.default.url(forUbiquityContainerIdentifier: nil)?.appendingPathComponent("Documents")
         if url == nil {
             AlertDataModel.createAndPostNoICloudDrive()
@@ -47,6 +47,14 @@ public final class PathManager: Log {
         }
         return tempImageURL
     }()
+
+    public static var extensionTempPdfURL: URL {
+        appGroupContainerURL
+    }
+
+    public static var appClipTempPdfURL: URL {
+        tempPdfURL
+    }
 
     public private(set) var archiveURL: URL?
     public private(set) var untaggedURL: URL?

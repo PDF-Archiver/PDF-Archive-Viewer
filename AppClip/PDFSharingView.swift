@@ -11,53 +11,74 @@ import SwiftUI
 import SwiftUIX
 
 struct PDFSharingView: View {
-    @State var viewModel = PDFSharingViewModel()
-    
+    var viewModel: PDFSharingViewModel
+
     var body: some View {
         ZStack {
             Color.systemBackground
             documentView
-            
-            if let sharingUrl = viewModel.sharingUrl {
-                ActivityView(activityItems: [sharingUrl])
-            }
         }
-        .hidden(viewModel.pdfDocument == nil)
+        .onChange(of: viewModel.pdfDocument, perform: { _ in
+            print("ViewModel has changed.")
+        })
     }
-    
+
     private var documentView: some View {
-        VStack {
-            
-            
+        VStack(spacing: 16) {
+            header
+
+            Text("Processing Completed! 📄")
+                .font(.body)
+                .foregroundColor(Color(.paDarkGray))
+
             if let pdfDocument = viewModel.pdfDocument {
                 PDFCustomView(pdfDocument)
                     .padding()
                     .frame(maxWidth: 500, maxHeight: 500)
+                    .shadow(radius: 8)
+                    .padding()
             }
-            
-            Spacer()
-            
+
             HStack {
                 Button(action: {
                     viewModel.shareDocument()
                 }, label: {
                     Label("Share", systemImage: .squareAndArrowUp)
-                }).buttonStyle(FilledButtonStyle())
-                
+                })
+                .buttonStyle(FilledButtonStyle(foregroundColor: Color(.paWhite), backgroundColor: Color(.paDarkGray)))
+
                 Button(action: {
-                    viewModel.cancel()
+                    viewModel.delete()
                 }, label: {
-                    Text("Cancel")
-                }).buttonStyle(FilledButtonStyle())
+                    Text("Delete")
+                })
+                .buttonStyle(FilledButtonStyle(foregroundColor: Color(.paDarkRed), backgroundColor: Color(.systemBackground)))
             }
-            
+            .padding()
+
             Spacer()
+        }
+    }
+
+    private var header: some View {
+        HStack(spacing: 8) {
+            Image("Logo")
+                .resizable()
+                .frame(width: 75, height: 75, alignment: .leading)
+            Text("PDF Archiver")
+                .foregroundColor(Color(.paDarkRed))
+                .font(.largeTitle)
+                .fontWeight(.heavy)
         }
     }
 }
 
+#if DEBUG
 struct PDFSharingView_Previews: PreviewProvider {
     static var previews: some View {
-        PDFSharingView()
+        PDFSharingView(viewModel: PDFSharingViewModel())
+            .previewLayout(.sizeThatFits)
+            .makeForPreviewProvider()
     }
 }
+#endif

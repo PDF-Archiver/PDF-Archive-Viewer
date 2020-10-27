@@ -94,6 +94,9 @@ public final class ScanTabViewModel: ObservableObject, Log {
         // validate subscription
         guard testAppUsagePermitted() else { return }
 
+        // show processing indicator instantly
+        updateProcessingIndicator(with: 0)
+
         // save images in reversed order to fix the API output order
         do {
             defer {
@@ -107,9 +110,6 @@ public final class ScanTabViewModel: ObservableObject, Log {
                                          message: error,
                                          primaryButtonTitle: "OK")
         }
-
-        // show processing indicator instantly
-        updateProcessingIndicator(with: 0)
     }
 
     // MARK: - Helper Functions

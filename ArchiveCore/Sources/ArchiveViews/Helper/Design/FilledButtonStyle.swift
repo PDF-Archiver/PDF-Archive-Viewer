@@ -12,7 +12,7 @@ public struct FilledButtonStyle: ButtonStyle {
     public var foregroundColor = Color(.paWhite)
     public var backgroundColor = Color(.paDarkGray)
     public var isInverted: Bool = false
-    
+
     public init(foregroundColor: Color = Color(.paWhite), backgroundColor: Color = Color(.paDarkGray), isInverted: Bool = false) {
         self.foregroundColor = foregroundColor
         self.backgroundColor = backgroundColor
@@ -21,8 +21,8 @@ public struct FilledButtonStyle: ButtonStyle {
 
     public func makeBody(configuration: Self.Configuration) -> some View {
         configuration.label
-            .padding(12.0)
-            .frame(maxWidth: 350.0)
+            .padding(12)
+            .frame(maxWidth: 350)
             .foregroundColor(isInverted ? backgroundColor : foregroundColor)
             .background(isInverted ? foregroundColor : backgroundColor)
             .cornerRadius(8)

@@ -9,58 +9,46 @@ import ArchiveViews
 import ArchiveBackend
 import Combine
 import SwiftUI
+import SwiftUIX
 import StoreKit
 
 struct MainContentView: View {
-    static let imageConverter = ImageConverter(getDocumentDestination: { PathManager.tempPdfURL },
-                                               shouldStartBackgroundTask: false)
 
-    @StateObject private var scanViewModel = ScanTabViewModel(imageConverter: imageConverter,
-                                                              iapService: AppClipIAPService(),
-                                                              documentsFinishedHandler: documentsProcessingCompleted)
-    @StateObject private var alertViewModel = AlertViewModel()
+    @StateObject var viewModel = MainContentViewModel()
 
-    private static func documentsProcessingCompleted() {
-        // TODO: find document in folder first
-        NotificationCenter.default.post(name: .foundProcessedDocument, object: nil)
-    }
-    
     var body: some View {
         ZStack {
-            ScanTabView(viewModel: scanViewModel)
-                .alert(isPresented: $alertViewModel.showAlert) {
-                    Alert(viewModel: alertViewModel.alertViewModel)
+            ScanTabView(viewModel: viewModel.scanViewModel)
+                .alert(isPresented: $viewModel.alertViewModel.showAlert) {
+                    Alert(viewModel: viewModel.alertViewModel.alertViewModel)
                 }
 
-            PDFSharingView()
+            if viewModel.sharingViewModel.pdfDocument != nil {
+                PDFSharingView(viewModel: viewModel.sharingViewModel)
+            }
 
-            if scanViewModel.showDocumentScan {
+            if viewModel.scanViewModel.showDocumentScan {
                 documentCameraView
-            } else {
-                VStack {
-                    Spacer()
-                    Text("App Store Overlay")
-                        .hidden()
-                        .appStoreOverlay(isPresented: .constant(true)) {
-                            SKOverlay.AppClipConfiguration(position: .bottom)
-                        }
-                }
             }
         }
-        // TODO: remove this
-        .onAppear {
-            #if DEBUG
-            NotificationCenter.default.post(name: .foundProcessedDocument, object: nil)
-            #endif
+        .sheet(item: $viewModel.sharingViewModel.sharingUrl) { sharingUrl in
+            AppActivityView(activityItems: [sharingUrl])
+        }
+        .appStoreOverlay(isPresented: $viewModel.showAppStoreOverlay) {
+            SKOverlay.AppClipConfiguration(position: .bottomRaised)
         }
     }
 
     private var documentCameraView: some View {
-        DocumentCameraView(isShown: $scanViewModel.showDocumentScan,
-                           imageHandler: scanViewModel.process)
+        DocumentCameraView(isShown: $viewModel.scanViewModel.showDocumentScan,
+                           imageHandler: viewModel.scanViewModel.process)
             .edgesIgnoringSafeArea(.all)
             .statusBar(hidden: true)
     }
+}
+
+extension URL: Identifiable {
+    public var id: String { path }
 }
 
 #if DEBUG

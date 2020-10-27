@@ -29,10 +29,11 @@ struct AboutMeView: View {
                 .frame(width: 50.0, height: 50.0, alignment: .center)
             VStack(alignment: .leading, spacing: 4.0) {
                 Text("PDF Archiver")
-                    .font(.system(size: 24.0, weight: .heavy, design: .default))
+                    .font(.largeTitle)
+                    .fontWeight(.heavy)
                     .foregroundColor(Color(.paDarkGray))
                 Text("Scan it. Tag it. Find it.")
-                    .font(.system(size: 17.0, weight: .regular, design: .default))
+                    .font(.title)
                     .foregroundColor(Color(.paLightGray))
             }
         }
@@ -51,8 +52,11 @@ struct AboutMeView: View {
     }
 }
 
+#if DEBUG
 struct AboutMeView_Previews: PreviewProvider {
     static var previews: some View {
         AboutMeView()
+            .makeForPreviewProvider()
     }
 }
+#endif

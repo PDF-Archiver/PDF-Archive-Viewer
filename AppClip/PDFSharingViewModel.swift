@@ -6,13 +6,20 @@
 //
 
 import ArchiveSharedConstants
+import Combine
+import SwiftUI
 import PDFKit
 
-final class PDFSharingViewModel: ObservableObject {
-    
+final class PDFSharingViewModel: ObservableObject, Equatable {
+    static func == (lhs: PDFSharingViewModel, rhs: PDFSharingViewModel) -> Bool {
+        lhs.pdfDocument == rhs.pdfDocument && lhs.sharingUrl == rhs.sharingUrl
+    }
+
     @Published var pdfDocument: PDFDocument?
     @Published var sharingUrl: URL?
-    
+
+    private var disposables = Set<AnyCancellable>()
+
     init() {
         NotificationCenter.default.publisher(for: .foundProcessedDocument)
             .compactMap { _ -> URL? in
@@ -27,17 +34,22 @@ final class PDFSharingViewModel: ObservableObject {
             .compactMap(PDFDocument.init)
             .assign(to: &$pdfDocument)
     }
-    
+
     func shareDocument() {
-        DispatchQueue.main.async {
+        withAnimation {
             self.sharingUrl = self.pdfDocument?.documentURL
         }
     }
-    
-    func cancel() {
-        DispatchQueue.main.async {
+
+    func delete() {
+        withAnimation {
             self.pdfDocument = nil
-            self.sharingUrl = nil
+            guard let sharingUrl = self.sharingUrl else { return }
+            do {
+                try FileManager.default.removeItem(at: sharingUrl)
+            } catch {
+                AlertDataModel.createAndPost(message: error, primaryButtonTitle: "OK")
+            }
         }
     }
 }

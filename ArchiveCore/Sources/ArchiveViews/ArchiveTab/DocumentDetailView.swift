@@ -6,7 +6,7 @@
 //  Copyright © 2019 Julian Kahnert. All rights reserved.
 //
 
-import SwiftUI
+import SwiftUIX
 
 struct DocumentDetailView: View {
     @ObservedObject var viewModel: DocumentDetailViewModel
@@ -20,7 +20,7 @@ struct DocumentDetailView: View {
         .navigationBarItems(trailing: shareNavigationButton)
         .onAppear(perform: viewModel.viewAppeared)
         .sheet(isPresented: $viewModel.showActivityView) {
-            ActivityView(activityItems: self.viewModel.activityItems)
+            AppActivityView(activityItems: self.viewModel.activityItems)
         }
     }
 

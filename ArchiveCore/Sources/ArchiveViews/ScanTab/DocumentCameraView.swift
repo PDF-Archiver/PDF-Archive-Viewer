@@ -44,7 +44,7 @@ public struct DocumentCameraView: UIViewControllerRepresentable, Log {
         public func documentCameraViewController(_ controller: VNDocumentCameraViewController, didFinishWith scan: VNDocumentCameraScan) {
             self.isShown.wrappedValue = false
 
-            DispatchQueue.global(qos: .utility).async {
+            DispatchQueue.global(qos: .userInitiated).async {
                 var images = [UIImage]()
                 for index in 0..<scan.pageCount {
                     let image = scan.imageOfPage(at: index)

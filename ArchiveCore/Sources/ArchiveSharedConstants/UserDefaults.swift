@@ -10,7 +10,7 @@ import Foundation
 
 extension UserDefaults: Log {
 
-    private enum Names: String {
+    public enum Names: String, CaseIterable {
         case tutorialShown = "tutorial-v1"
         case lastSelectedTabName
         case pdfQuality
@@ -115,19 +115,17 @@ extension UserDefaults: Log {
     }
 
     public static func runMigration() {
-        var old = UserDefaults.standard
-        var new = UserDefaults.appGroup
+        let old = UserDefaults.standard
+        let new = UserDefaults.appGroup
 
-        migrate(\.tutorialShown, from: &old, to: &new)
-        migrate(\.firstDocumentScanAlertPresented, from: &old, to: &new)
-        migrate(\.lastSelectedTab, from: &old, to: &new)
-        migrate(\.pdfQuality, from: &old, to: &new)
-        migrate(\.subscriptionExpiryDate, from: &old, to: &new)
-        migrate(\.archiveURL, from: &old, to: &new)
-        migrate(\.untaggedURL, from: &old, to: &new)
-    }
+        for name in Names.allCases {
+            if let value = old.object(forKey: name.rawValue) {
+                // if an old value could be found, set it in the new UserDefaults
+                new.set(value, forKey: name.rawValue)
 
-    public static func migrate<T>(_ keyPath: WritableKeyPath<UserDefaults, T>, from source: inout UserDefaults, to destination: inout UserDefaults) {
-        destination[keyPath: keyPath] = source[keyPath: keyPath]
+                // remove the old value after the migration has been completed, so that this will only run one time
+                old.set(nil, forKey: name.rawValue)
+            }
+        }
     }
 }
