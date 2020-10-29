@@ -87,17 +87,13 @@ public final class MainNavigationViewModel: ObservableObject, Log {
             .store(in: &disposables)
 
         // MARK: Subscription
-        $currentTab
-            .sink { selectedTab in
-                self.validateSubscriptionState(of: selectedTab)
-            }
-            .store(in: &disposables)
-
-        NotificationCenter.default.publisher(for: .subscriptionChanges)
+        Self.iapService.appUsagePermittedPublisher
+            .removeDuplicates()
+            .combineLatest($currentTab)
             .receive(on: DispatchQueue.main)
-            .sink { _ in
+            .sink { (_, selectedTab) in
                 self.showSubscriptionDismissed()
-                self.validateSubscriptionState(of: self.currentTab)
+                self.showSubscriptionView = !Self.iapService.appUsagePermitted && selectedTab == .tag
             }
             .store(in: &disposables)
 
@@ -132,7 +128,7 @@ public final class MainNavigationViewModel: ObservableObject, Log {
         DispatchQueue.global(qos: .userInteractive).async {
 
             guard let iCloudContainerPath = PathManager.iCloudDriveURL else {
-                Self.log.assertOrError("Could not find a iCloud Drive url.")
+                Self.log.error("Could not find a iCloud Drive url.")
                 AlertDataModel.createAndPostNoICloudDrive()
                 return
             }
@@ -161,7 +157,7 @@ public final class MainNavigationViewModel: ObservableObject, Log {
     }
 
     func showSubscriptionDismissed() {
-        guard !Self.iapService.appUsagePermitted() && currentTab == .tag else { return }
+        guard !Self.iapService.appUsagePermitted && currentTab == .tag else { return }
         currentTab = .archive
     }
 
@@ -180,7 +176,7 @@ public final class MainNavigationViewModel: ObservableObject, Log {
 
     func selectedArchive(_ category: String) {
         guard let date = DateComponents(calendar: .current, timeZone: .current, year: Int(category)).date else {
-            log.assertOrError("Could not create matching date.", metadata: ["input": "\(category)"])
+            log.errorAndAssert("Could not create matching date.", metadata: ["input": "\(category)"])
             return
         }
 
@@ -196,6 +192,11 @@ public final class MainNavigationViewModel: ObservableObject, Log {
         if !archiveViewModel.selectedFilters.contains(newTagFilter) {
             archiveViewModel.selectedFilters.append(newTagFilter)
         }
+    }
+
+    func handleIAPViewDismiss() {
+        guard !Self.iapService.appUsagePermitted else { return }
+        currentTab = .scan
     }
 
     // MARK: - Helper Functions
@@ -224,9 +225,5 @@ public final class MainNavigationViewModel: ObservableObject, Log {
 
             AlertDataModel.createAndPost(message: error, primaryButtonTitle: "OK")
         }
-    }
-
-    private func validateSubscriptionState(of selectedTab: Tab) {
-        self.showSubscriptionView = !Self.iapService.appUsagePermitted() && selectedTab == .tag
     }
 }

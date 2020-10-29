@@ -12,24 +12,18 @@ import SwiftUIX
 struct IAPView: View {
 
     @ObservedObject var viewModel: IAPViewModel
+    @Environment(\.presentationMode) private var presentationMode
 
     var body: some View {
-        ZStack {
-            Color.secondarySystemBackground
-                .opacity(0.8)
-
-            VStack(alignment: .leading, spacing: 32.0) {
-                title
-                features
-                subscriptionButtons
-                text
-                otherButtons
-            }.padding(EdgeInsets(top: 32.0, leading: 16.0, bottom: 32.0, trailing: 16.0))
-            .background(Color(.systemBackground))
-            .maxWidth(600)
-            .cornerRadius(25)
-            .shadow(radius: 8)
-        }.edgesIgnoringSafeArea(.all)
+        VStack(alignment: .leading, spacing: 32.0) {
+            title
+            features
+            subscriptionButtons
+            text
+            otherButtons
+        }
+        .padding()
+        .maxWidth(600)
     }
 
     private var title: some View {
@@ -99,7 +93,7 @@ struct IAPView: View {
     private var subscriptionButtons: some View {
         HStack(spacing: 16.0) {
             Button(action: {
-                self.viewModel.tapped(button: .level1)
+                self.viewModel.tapped(button: .level1, presentationMode: self.presentationMode)
             }, label: {
                 VStack(spacing: 8) {
                     Text("Monthly")
@@ -111,7 +105,7 @@ struct IAPView: View {
             .buttonStyle(SubscriptionButtonStyle(isPreferred: false))
 
             Button(action: {
-                self.viewModel.tapped(button: .level2)
+                self.viewModel.tapped(button: .level2, presentationMode: self.presentationMode)
             }, label: {
                 VStack(spacing: 8) {
                     Text("Yearly")
@@ -136,14 +130,15 @@ struct IAPView: View {
     private var otherButtons: some View {
         HStack(spacing: 16.0) {
             Button(action: {
-                self.viewModel.tapped(button: .restore)
+                self.viewModel.tapped(button: .restore, presentationMode: self.presentationMode)
             }, label: {
                 Text("Restore")
             })
             .buttonStyle(FilledButtonStyle(foregroundColor: Color(.paDarkGray), backgroundColor: Color(.systemBackground)))
 
             Button(action: {
-                self.viewModel.tapped(button: .cancel)
+                self.viewModel.tapped(button: .cancel, presentationMode: self.presentationMode)
+
             }, label: {
                 Text("Cancel")
             })
@@ -153,27 +148,27 @@ struct IAPView: View {
 }
 
 #if DEBUG
+import Combine
 import StoreKit
 struct IAPView_Previews: PreviewProvider {
-    @State static var viewModel = IAPViewModel(iapService: IAPMockService())
+    @State static var viewModel = IAPViewModel(iapService: MockIAPService())
     static var previews: some View {
         IAPView(viewModel: viewModel)
     }
 }
 
 extension IAPView_Previews {
-    private class IAPMockService: IAPServiceAPI {
-        weak var delegate: IAPServiceDelegate?
-
-        var products: Set<SKProduct> = []
-
-        var requestsRunning: Int = 0
-
-        func appUsagePermitted() -> Bool {
-            true
+    private class MockIAPService: IAPServiceAPI {
+        var products = Set<SKProduct>()
+        var productsPublisher: AnyPublisher<Set<SKProduct>, Never> {
+            Just(products).eraseToAnyPublisher()
         }
-        func buyProduct(_ product: SKProduct) {}
-        func buyProduct(_ productIdentifier: String) {}
+        var state: IAPService.State = .initialized
+        var appUsagePermitted: Bool = true
+        var appUsagePermittedPublisher: AnyPublisher<Bool, Never> {
+            Just(appUsagePermitted).eraseToAnyPublisher()
+        }
+        func buy(subscription: IAPService.SubscriptionType) throws {}
         func restorePurchases() {}
     }
 }

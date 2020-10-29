@@ -31,7 +31,6 @@ struct MoreTabView: View {
         }
         .navigationTitle("Preferences & More")
         .navigationViewStyle(StackNavigationViewStyle())
-        .onAppear(perform: viewModel.updateSubscription)
     }
 
     private var preferences: some View {
@@ -60,7 +59,7 @@ struct MoreTabView: View {
                 Text(viewModel.subscriptionStatus)
             }
 
-            DetailRowView(name: "Activate Subscription") {
+            DetailRowView(name: "Activate/Restore Subscription") {
                 NotificationCenter.default.post(.showSubscriptionView)
             }
             Link("Manage Subscription", destination: viewModel.manageSubscriptionUrl)
@@ -90,6 +89,7 @@ struct MoreTabView: View {
                 ScrollView {
                     Parma(markdown)
                 }
+                .padding(.horizontal, 16)
             }
             .navigationTitle(title)
         } label: {
@@ -99,22 +99,25 @@ struct MoreTabView: View {
 }
 
 #if DEBUG
+import Combine
 import StoreKit
+import InAppPurchases
 struct MoreTabView_Previews: PreviewProvider {
-    private class IAPService: IAPServiceAPI {
-        weak var delegate: IAPServiceDelegate?
+    private class MockIAPService: IAPServiceAPI {
         var products = Set<SKProduct>()
-        var requestsRunning: Int = 5
-
-        func appUsagePermitted() -> Bool {
-            true
+        var productsPublisher: AnyPublisher<Set<SKProduct>, Never> {
+            Just(products).eraseToAnyPublisher()
         }
-        func buyProduct(_ product: SKProduct) {}
-        func buyProduct(_ productIdentifier: String) {}
+        var state: IAPService.State = .initialized
+        var appUsagePermitted: Bool = true
+        var appUsagePermittedPublisher: AnyPublisher<Bool, Never> {
+            Just(appUsagePermitted).eraseToAnyPublisher()
+        }
+        func buy(subscription: IAPService.SubscriptionType) throws {}
         func restorePurchases() {}
     }
 
-    @State static var viewModel = MoreTabViewModel(iapService: IAPService())
+    @State static var viewModel = MoreTabViewModel(iapService: MockIAPService())
     static var previews: some View {
         Group {
             MoreTabView(viewModel: viewModel)

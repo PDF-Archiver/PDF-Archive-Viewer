@@ -147,7 +147,7 @@ public final class Document: ObservableObject, Identifiable, Codable, Log {
 
     func updateProperties(with downloadStatus: FileChange.DownloadStatus, contentParsingOptions: ParsingOptions) {
         if Thread.isMainThread {
-            log.assertOrError("updateProperties() must not be called from the main thread.")
+            log.errorAndAssert("updateProperties() must not be called from the main thread.")
         }
         filename = (try? path.resourceValues(forKeys: [.localizedNameKey]).localizedName) ?? self.path.lastPathComponent
 
@@ -211,7 +211,7 @@ public final class Document: ObservableObject, Identifiable, Codable, Log {
     /// - Parameter tagManager: TagManager that will be used when adding new tags.
     private func parseContent(_ options: ParsingOptions) {
         if Thread.isMainThread {
-            log.assertOrError("parseContent() must not be called from the main thread.")
+            log.errorAndAssert("parseContent() must not be called from the main thread.")
         }
 
         // skip the calculations if the OptionSet is empty

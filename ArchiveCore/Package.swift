@@ -13,6 +13,7 @@ let package = Package(
         // Products define the executables and libraries a package produces, and make them visible to other packages.
         .library(name: "ArchiveBackend", targets: ["ArchiveBackend"]),
         .library(name: "ArchiveViews", targets: ["ArchiveViews"]),
+        .library(name: "InAppPurchases", targets: ["InAppPurchases"]),
         .library(name: "ArchiveSharedConstants", targets: ["ArchiveSharedConstants"])
     ],
     dependencies: [
@@ -21,7 +22,7 @@ let package = Package(
         .package(url: "https://github.com/SwiftUIX/SwiftUIX", from: "0.0.3"),
         .package(url: "https://github.com/dasautoooo/Parma", from: "0.1.1"),
         .package(url: "https://github.com/WeTransfer/Diagnostics", from: "1.7.0"),
-        .package(url: "https://github.com/bizz84/SwiftyStoreKit", from: "0.16.1")
+        .package(url: "https://github.com/tikhop/TPInAppReceipt", from: "3.0.2")
     ],
     targets: [
         // Targets are the basic building blocks of a package. A target can define a module or a test suite.
@@ -29,17 +30,21 @@ let package = Package(
         .target(name: "ArchiveBackend",
                 dependencies: [
                     "ArchiveSharedConstants",
-                    "DeepDiff",
-                    "SwiftyStoreKit"
+                    "DeepDiff"
                 ]),
         .target(name: "ArchiveViews",
                 dependencies: [
                     "ArchiveBackend",
                     "ArchiveSharedConstants",
-                    "SwiftyStoreKit",
                     "SwiftUIX",
                     "Parma",
+                    "InAppPurchases",
                     "Diagnostics"
+                ]),
+        .target(name: "InAppPurchases",
+                dependencies: [
+                    "ArchiveSharedConstants",
+                    "TPInAppReceipt"
                 ]),
         .target(name: "ArchiveSharedConstants",
                 dependencies: [

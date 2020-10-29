@@ -32,7 +32,7 @@ final class DirectoryDeepWatcher: NSObject, Log {
         let enumerator = FileManager.default.enumerator(at: url,
                                                         includingPropertiesForKeys: [.creationDateKey, .isDirectoryKey],
                                                         options: [.skipsHiddenFiles]) { (url, error) -> Bool in
-            log.assertOrCritical("Directory enumerator error", metadata: ["error": "\(error.localizedDescription)", "url": "\(url.path)"])
+            log.criticalAndAssert("Directory enumerator error", metadata: ["error": "\(error.localizedDescription)", "url": "\(url.path)"])
             return true
         }
 
@@ -58,7 +58,7 @@ final class DirectoryDeepWatcher: NSObject, Log {
             let enumerator = FileManager.default.enumerator(at: url,
                                                             includingPropertiesForKeys: [.creationDateKey, .isDirectoryKey],
                                                             options: [.skipsHiddenFiles]) { (url, error) -> Bool in
-                Self.log.assertOrCritical("Directory enumerator error", metadata: ["error": "\(error.localizedDescription)", "url": "\(url.path)"])
+                Self.log.criticalAndAssert("Directory enumerator error", metadata: ["error": "\(error.localizedDescription)", "url": "\(url.path)"])
                 return true
             }
 

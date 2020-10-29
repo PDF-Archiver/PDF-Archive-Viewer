@@ -28,16 +28,18 @@ final class MoreTabViewModel: ObservableObject, Log {
 
     init(iapService: IAPServiceAPI) {
         self.iapService = iapService
-        subscriptionStatus = getCurrentStatus()
+//        subscriptionStatus = getCurrentStatus()
         $selectedQualityIndex
             .sink { selectedQuality in
                 UserDefaults.appGroup.pdfQuality = UserDefaults.PDFQuality.allCases[selectedQuality]
             }
             .store(in: &disposables)
-
-        NotificationCenter.default.publisher(for: .subscriptionChanges)
-            .sink { _ in
-                self.updateSubscription()
+        // TODO: this is not updated
+        iapService.appUsagePermittedPublisher
+            .removeDuplicates()
+            .receive(on: DispatchQueue.main)
+            .sink { appUsagePermitted in
+                self.subscriptionStatus = appUsagePermitted ? "Active ✅" : "Inactive ❌"
             }
             .store(in: &disposables)
     }
@@ -86,11 +88,11 @@ final class MoreTabViewModel: ObservableObject, Log {
         }
     }
 
-    func updateSubscription() {
-        subscriptionStatus = getCurrentStatus()
-    }
+//    func updateSubscription() {
+//        subscriptionStatus = getCurrentStatus()
+//    }
 
-    private func getCurrentStatus() -> LocalizedStringKey {
-        iapService.appUsagePermitted() ? "Active ✅" : "Inactive ❌"
-    }
+//    private func getCurrentStatus() -> LocalizedStringKey {
+//        iapService.appUsagePermitted() ? "Active ✅" : "Inactive ❌"
+//    }
 }

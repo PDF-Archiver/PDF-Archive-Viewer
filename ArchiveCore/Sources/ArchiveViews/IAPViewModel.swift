@@ -9,51 +9,57 @@
 import Combine
 import StoreKit
 import SwiftUI
-import SwiftyStoreKit
+import InAppPurchases
 
 final class IAPViewModel: ObservableObject, Log {
     @Published var level1Name = "Level 1"
     @Published var level2Name = "Level 2"
 
     private let iapService: IAPServiceAPI
+    private var disposables = Set<AnyCancellable>()
 
     init(iapService: IAPServiceAPI) {
         self.iapService = iapService
 
-        // setup delegate
-        self.iapService.delegate = self
-
-        // setup button names
-        guard !self.iapService.products.isEmpty else { return }
-        updateButtonNames(with: self.iapService.products)
+        // TODO: is this working?
+        iapService.productsPublisher
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                self?.updateButtonNames(with: iapService.products)
+            }
+            .store(in: &disposables)
     }
 
-    func tapped(button: IAPButton) {
+    func tapped(button: IAPButton, presentationMode: Binding<PresentationMode>) {
 
         switch button {
         case .level1:
             log.info("SubscriptionViewController - buy: Monthly subscription.")
-            iapService.buyProduct("SUBSCRIPTION_MONTHLY_IOS")
-            cancel()
+            do {
+                try iapService.buy(subscription: .monthly)
+                presentationMode.dismiss()
+            } catch {
+                // TODO: catch error
+            }
         case .level2:
             log.info("SubscriptionViewController - buy: Yearly subscription.")
-            iapService.buyProduct("SUBSCRIPTION_YEARLY_IOS_NEW")
-            cancel()
+            do {
+                try iapService.buy(subscription: .monthly)
+                presentationMode.dismiss()
+            } catch {
+                // TODO: catch error
+            }
         case .restore:
             log.info("SubscriptionViewController - Restore purchases.")
             iapService.restorePurchases()
             AlertDataModel.createAndPost(title: "Subscription",
                                          message: "Active subscriptions will be restored from the App Store.\nPlease contact me if you have any problems:\nMore > Support",
                                          primaryButtonTitle: "OK",
-                                         completion: { self.cancel() })
+                                         completion: { presentationMode.dismiss() })
         case .cancel:
             log.info("SubscriptionViewController - Cancel subscription view.")
-            cancel()
+            presentationMode.dismiss()
         }
-    }
-
-    private func cancel() {
-        NotificationCenter.default.post(.subscriptionChanges)
     }
 
     private func updateButtonNames(with products: Set<SKProduct>) {
@@ -78,15 +84,5 @@ extension IAPViewModel {
         case level2
         case restore
         case cancel
-    }
-}
-
-extension IAPViewModel: IAPServiceDelegate {
-    func unlocked() {
-        tapped(button: .cancel)
-    }
-
-    func found(products: Set<SKProduct>) {
-        updateButtonNames(with: products)
     }
 }

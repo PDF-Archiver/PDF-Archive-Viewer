@@ -25,7 +25,7 @@ public enum UserNotification: Log {
 
         notificationCenter.add(request) { error in
            if error != nil {
-            Self.log.assertOrError("Notification could not be scheduled.")
+            Self.log.errorAndAssert("Notification could not be scheduled.")
            }
         }
     }

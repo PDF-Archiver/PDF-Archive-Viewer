@@ -76,6 +76,7 @@ public struct ScanTabView: View {
 }
 
 #if DEBUG
+import Combine
 import StoreKit
 struct ScanTabView_Previews: PreviewProvider {
     private class ImageConverter: ImageConverterAPI {
@@ -86,21 +87,22 @@ struct ScanTabView_Previews: PreviewProvider {
         func getOperationCount() -> Int { 4 }
     }
 
-    private class IAPService: IAPServiceAPI {
-        weak var delegate: IAPServiceDelegate?
+    private class MockIAPService: IAPServiceAPI {
         var products = Set<SKProduct>()
-        var requestsRunning: Int = 5
-
-        func appUsagePermitted() -> Bool {
-            true
+        var productsPublisher: AnyPublisher<Set<SKProduct>, Never> {
+            Just(products).eraseToAnyPublisher()
         }
-        func buyProduct(_ product: SKProduct) {}
-        func buyProduct(_ productIdentifier: String) {}
+        var state: IAPService.State = .initialized
+        var appUsagePermitted: Bool = true
+        var appUsagePermittedPublisher: AnyPublisher<Bool, Never> {
+            Just(appUsagePermitted).eraseToAnyPublisher()
+        }
+        func buy(subscription: IAPService.SubscriptionType) throws {}
         func restorePurchases() {}
     }
 
     static var previews: some View {
-        ScanTabView(viewModel: ScanTabViewModel(imageConverter: ImageConverter(), iapService: IAPService(), documentsFinishedHandler: { print("Scan completed!") }))
+        ScanTabView(viewModel: ScanTabViewModel(imageConverter: ImageConverter(), iapService: MockIAPService(), documentsFinishedHandler: { print("Scan completed!") }))
             .frame(maxWidth: .infinity)
             .padding()
     }

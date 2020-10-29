@@ -21,19 +21,19 @@ public extension Log {
 }
 
 public extension Logger {
-    func assertOrError(_ message: @autoclosure () -> Logger.Message,
+    func errorAndAssert(_ message: @autoclosure () -> Logger.Message,
                       metadata: @autoclosure () -> Logger.Metadata? = nil,
                       source: @autoclosure () -> String? = nil,
                       file: String = #file, function: String = #function, line: UInt = #line) {
-        assertionFailure(message().description)
         self.error(message(), metadata: metadata(), file: file, function: function, line: line)
+        assertionFailure(message().description)
     }
 
-    func assertOrCritical(_ message: @autoclosure () -> Logger.Message,
+    func criticalAndAssert(_ message: @autoclosure () -> Logger.Message,
                       metadata: @autoclosure () -> Logger.Metadata? = nil,
                       source: @autoclosure () -> String? = nil,
                       file: String = #file, function: String = #function, line: UInt = #line) {
-        assertionFailure(message().description)
         self.critical(message(), metadata: metadata(), file: file, function: function, line: line)
+        assertionFailure(message().description)
     }
 }

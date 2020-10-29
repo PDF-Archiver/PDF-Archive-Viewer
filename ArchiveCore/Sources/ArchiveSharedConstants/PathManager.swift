@@ -20,7 +20,7 @@ public final class PathManager: Log {
     }
     private static let appGroupContainerURL: URL = {
         guard let tempImageURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: Constants.sharedContainerIdentifier) else {
-            log.assertOrCritical("AppGroup folder could not be found.")
+            log.criticalAndAssert("AppGroup folder could not be found.")
             preconditionFailure("AppGroup folder could not be found.")
         }
         return tempImageURL
@@ -31,7 +31,7 @@ public final class PathManager: Log {
         do {
             try FileManager.default.createFolderIfNotExists(tempImageURL)
         } catch {
-            log.assertOrCritical("Failed to create temp folder.", metadata: ["error": "\(error.localizedDescription)"])
+            log.criticalAndAssert("Failed to create temp folder.", metadata: ["error": "\(error.localizedDescription)"])
             preconditionFailure("Failed to create temp folder.")
         }
         return tempImageURL
@@ -42,7 +42,7 @@ public final class PathManager: Log {
         do {
             try FileManager.default.createFolderIfNotExists(tempImageURL)
         } catch {
-            log.assertOrCritical("Failed to create temp folder.", metadata: ["error": "\(error.localizedDescription)"])
+            log.criticalAndAssert("Failed to create temp folder.", metadata: ["error": "\(error.localizedDescription)"])
             preconditionFailure("Failed to create temp folder.")
         }
         return tempImageURL

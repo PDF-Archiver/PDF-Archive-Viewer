@@ -32,11 +32,15 @@ public struct MainNavigationView: View {
             if viewModel.scanViewModel.showDocumentScan {
                 documentCameraView
             }
-            IAPView(viewModel: self.viewModel.iapViewModel)
-                .scaleEffect(viewModel.showSubscriptionView ? 1 : 0)
-                .animation(Animation.spring().delay(0.3))
         }
         .intro(when: $viewModel.showTutorial)
+        .sheet(isPresented: $viewModel.showSubscriptionView,
+               onDismiss: viewModel.handleIAPViewDismiss) {
+            IAPView(viewModel: self.viewModel.iapViewModel)
+                .alert(isPresented: $alertViewModel.showAlert) {
+                    Alert(viewModel: alertViewModel.alertViewModel)
+                }
+        }
         .alert(isPresented: $alertViewModel.showAlert) {
             Alert(viewModel: alertViewModel.alertViewModel)
         }

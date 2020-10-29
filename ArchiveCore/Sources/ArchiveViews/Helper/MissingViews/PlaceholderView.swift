@@ -17,7 +17,7 @@ struct PlaceholderView: View {
                 .frame(width: 100.0, height: 100.0, alignment: .leading)
                 .padding()
             Text(name)
-                .font(.title)
+                .font(.body)
                 .multilineTextAlignment(.center)
                 .frame(maxWidth: 400.0)
         }

@@ -60,7 +60,7 @@ final class LocalFolderProvider: FolderProvider {
     }
 
     func startDownload(of url: URL) throws {
-        log.assertOrError("Download of a local file is not supported")
+        log.errorAndAssert("Download of a local file is not supported")
     }
 
     func fetch(url: URL) throws -> Data {
@@ -96,7 +96,7 @@ final class LocalFolderProvider: FolderProvider {
 
                 guard let resourceValues = try? url.resourceValues(forKeys: Set(fileProperties)),
                       let fileSize = resourceValues.fileSize else {
-                    log.assertOrError("Could not fetch resource values from url.", metadata: ["url": "\(url.path)"])
+                    log.errorAndAssert("Could not fetch resource values from url.", metadata: ["url": "\(url.path)"])
                     return nil
                 }
 
@@ -107,7 +107,7 @@ final class LocalFolderProvider: FolderProvider {
                 } else if let localizedName = resourceValues.localizedName {
                     filename = localizedName
                 } else {
-                    log.assertOrError("Filename could not be fetched.", metadata: ["url": "\(url.path)"])
+                    log.errorAndAssert("Filename could not be fetched.", metadata: ["url": "\(url.path)"])
                     return nil
                 }
 

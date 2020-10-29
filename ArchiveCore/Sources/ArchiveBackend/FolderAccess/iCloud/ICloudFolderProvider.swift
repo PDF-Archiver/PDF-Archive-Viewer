@@ -74,7 +74,7 @@ class ICloudFolderProvider: NSObject, FolderProvider {
 
     static func canHandle(_ url: URL) -> Bool {
         guard let cloudUrl = FileManager.default.url(forUbiquityContainerIdentifier: nil) else {
-            log.assertOrCritical("Could not find iCloud Drive path.")
+            log.criticalAndAssert("Could not find iCloud Drive path.")
             return false
         }
         return url.path.starts(with: cloudUrl.path)
@@ -146,17 +146,17 @@ class ICloudFolderProvider: NSObject, FolderProvider {
     static func createDetails(from item: NSMetadataItem) -> FileChange.Details? {
         // get the document path
         guard let documentPath = item.value(forAttribute: NSMetadataItemURLKey) as? URL else {
-            log.assertOrError("Could not parse Metadata URL.")
+            log.errorAndAssert("Could not parse Metadata URL.")
             return nil
         }
 
         // get file size and filename
         guard let size = item.value(forAttribute: NSMetadataItemFSSizeKey) as? Int64 else {
-            log.assertOrError("Could not parse Metadata Size.")
+            log.errorAndAssert("Could not parse Metadata Size.")
             return nil
         }
         guard let filename = item.value(forAttribute: NSMetadataItemDisplayNameKey) as? String else {
-            log.assertOrError("Could not parse Metadata DisplayName.")
+            log.errorAndAssert("Could not parse Metadata DisplayName.")
             return nil
         }
 
@@ -164,7 +164,7 @@ class ICloudFolderProvider: NSObject, FolderProvider {
         // - NSMetadataUbiquitousItemDownloadingStatusCurrent
         // - NSMetadataUbiquitousItemDownloadingStatusNotDownloaded
         guard let downloadingStatus = item.value(forAttribute: NSMetadataUbiquitousItemDownloadingStatusKey) as? String else {
-            log.assertOrError("Could not parse Metadata DownloadStatus.")
+            log.errorAndAssert("Could not parse Metadata DownloadStatus.")
             return nil
         }
 
@@ -183,7 +183,7 @@ class ICloudFolderProvider: NSObject, FolderProvider {
                 documentStatus = .remote
             }
         default:
-            log.assertOrCritical("Unkown download status.", metadata: ["status": "\(downloadingStatus)"])
+            log.criticalAndAssert("Unkown download status.", metadata: ["status": "\(downloadingStatus)"])
             preconditionFailure("The downloading status '\(downloadingStatus)' was not handled correctly!")
         }
 
@@ -221,7 +221,7 @@ fileprivate extension Array where Array.Element == NSMetadataItem {
             if let details = ICloudFolderProvider.createDetails(from: item) {
                 return handler(details)
             } else {
-                log.assertOrError("Could not create details for item.", metadata: ["item": "\(item)"])
+                log.errorAndAssert("Could not create details for item.", metadata: ["item": "\(item)"])
                 return nil
             }
         }

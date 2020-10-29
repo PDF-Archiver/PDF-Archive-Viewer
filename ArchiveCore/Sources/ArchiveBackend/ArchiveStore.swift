@@ -127,7 +127,7 @@ public final class ArchiveStore: ObservableObject, Log {
             try provider.startDownload(of: document.path)
             document.downloadStatus = .downloading(percent: 0)
         } catch {
-            log.assertOrError("Document download error.", metadata: ["error": "\(error.localizedDescription)"])
+            log.errorAndAssert("Document download error.", metadata: ["error": "\(error.localizedDescription)"])
             throw error
         }
     }
@@ -150,7 +150,7 @@ public final class ArchiveStore: ObservableObject, Log {
         do {
             return try provider.getCreationDate(of: url)
         } catch {
-            log.assertOrError("Document download error.", metadata: ["error": "\(error.localizedDescription)"])
+            log.errorAndAssert("Document download error.", metadata: ["error": "\(error.localizedDescription)"])
             throw error
         }
     }
@@ -219,7 +219,7 @@ public final class ArchiveStore: ObservableObject, Log {
         DispatchQueue.global(qos: .background).async {
             let timeout = documentProcessingGroup.wait(wallTimeout: .now() + .seconds(15))
             if timeout == .timedOut {
-                Self.log.assertOrError("Timeout while waiting for documents to be processed.")
+                Self.log.errorAndAssert("Timeout while waiting for documents to be processed.")
             }
             self.updateDocuments()
         }

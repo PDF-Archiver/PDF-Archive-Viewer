@@ -49,7 +49,7 @@ public final class ImageConverter: ImageConverterAPI, Log {
                     try FileManager.default.moveItem(at: documentUrl, to: destinationUrl)
                 }
             } catch {
-                log.assertOrError("Error while moving files.", metadata: ["error": "\(error.localizedDescription)"])
+                log.errorAndAssert("Error while moving files.", metadata: ["error": "\(error.localizedDescription)"])
             }
         }
 

@@ -6,22 +6,26 @@
 //
 
 import ArchiveBackend
+import Combine
+import InAppPurchases
 import StoreKit
 
 final class AppClipIAPService: IAPServiceAPI {
-    weak var delegate: IAPServiceDelegate?
+    var state: IAPService.State = .initialized
 
     var products = Set<SKProduct>()
 
-    var requestsRunning: Int = 0
-
-    func appUsagePermitted() -> Bool {
-        true
+    var productsPublisher: AnyPublisher<Set<SKProduct>, Never> {
+        Just(products).eraseToAnyPublisher()
     }
 
-    func buyProduct(_ product: SKProduct) {}
+    var appUsagePermitted: Bool = true
 
-    func buyProduct(_ productIdentifier: String) {}
+    var appUsagePermittedPublisher: AnyPublisher<Bool, Never> {
+        Just(appUsagePermitted).eraseToAnyPublisher()
+    }
 
-    func restorePurchases() {}
+    func buy(subscription: IAPService.SubscriptionType) throws { }
+
+    func restorePurchases() { }
 }

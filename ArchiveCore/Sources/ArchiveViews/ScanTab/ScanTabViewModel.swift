@@ -118,7 +118,8 @@ public final class ScanTabViewModel: ObservableObject, Log {
         do {
             try imageConverter.startProcessing()
         } catch {
-            log.assertOrError("Failed to start processing.", metadata: ["error": "\(error.localizedDescription)"])
+            log.error("Failed to start processing.", metadata: ["error": "\(error.localizedDescription)"])
+            // TODO: show error to the user
         }
     }
 
@@ -145,7 +146,7 @@ public final class ScanTabViewModel: ObservableObject, Log {
 
     private func testAppUsagePermitted() -> Bool {
 
-        let isPermitted = iapService.appUsagePermitted()
+        let isPermitted = iapService.appUsagePermitted
 
         // show subscription view controller, if no subscription was found
         if !isPermitted {
@@ -157,7 +158,10 @@ public final class ScanTabViewModel: ObservableObject, Log {
                                          }),
                                          secondaryButton: .cancel({
                                             // cancel this alert and validate subscription state
-                                            NotificationCenter.default.post(.subscriptionChanges)
+
+                                            // TODO: handle changes
+//                                            NotificationCenter.default.post(.subscriptionChanges)
+
                                          }))
         }
 

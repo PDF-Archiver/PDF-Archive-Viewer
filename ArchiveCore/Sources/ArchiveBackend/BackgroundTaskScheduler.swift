@@ -93,7 +93,7 @@ public final class BackgroundTaskScheduler: Log {
             taskRequest.earliestBeginDate = nil
             try BGTaskScheduler.shared.submit(taskRequest)
         } catch {
-            Self.log.assertOrError("ERROR: scheduleTask() could NOT submit task request: \(error)")
+            Self.log.errorAndAssert("ERROR: scheduleTask() could NOT submit task request: \(error)")
         }
     }
 
