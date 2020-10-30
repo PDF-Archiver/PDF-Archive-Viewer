@@ -22,6 +22,7 @@ struct TagTabView: View {
     var body: some View {
         if viewModel.showLoadingView {
             LoadingView()
+                .emittingError(viewModel.error)
         } else if viewModel.currentDocument != nil {
             Stack(spacing: 8) {
                 #if os(iOS)
@@ -42,8 +43,10 @@ struct TagTabView: View {
             }
             .navigationBarTitle(Text("Document"), displayMode: .inline)
             .navigationBarItems(leading: deleteNavBarView, trailing: saveNavBarView)
+            .emittingError(viewModel.error)
         } else {
             PlaceholderView(name: "No iCloud Drive documents found. Please scan and tag documents first.")
+                .emittingError(viewModel.error)
         }
     }
 

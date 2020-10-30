@@ -10,8 +10,6 @@ import StoreKit
 
 public protocol IAPServiceAPI: class {
 
-    var state: IAPService.State { get }
-    var products: Set<SKProduct> { get }
     var productsPublisher: AnyPublisher<Set<SKProduct>, Never> { get }
     var appUsagePermitted: Bool { get }
     var appUsagePermittedPublisher: AnyPublisher<Bool, Never> { get }

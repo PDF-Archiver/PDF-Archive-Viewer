@@ -17,6 +17,8 @@ public final class MainNavigationViewModel: ObservableObject, Log {
                                                       shouldStartBackgroundTask: true)
     public static let iapService = IAPService()
 
+    @Published var error: Error?
+
     @Published var archiveCategories: [String] = []
     @Published var tagCategories: [String] = []
 
@@ -37,6 +39,12 @@ public final class MainNavigationViewModel: ObservableObject, Log {
     private let selectionFeedback = UISelectionFeedbackGenerator()
 
     public init() {
+
+        Self.iapService.$error
+            .assign(to: &$error)
+
+        Self.imageConverter.$error
+            .assign(to: &$error)
 
         $currentTab
             .map { Optional($0) }
@@ -217,7 +225,9 @@ public final class MainNavigationViewModel: ObservableObject, Log {
             log.error("Unable to handle file.", metadata: ["filetype": "\(url.pathExtension)", "error": "\(error.localizedDescription)"])
             try? FileManager.default.removeItem(at: url)
 
-            AlertDataModel.createAndPost(message: error, primaryButtonTitle: "OK")
+            DispatchQueue.main.async {
+                self.error = error
+            }
         }
     }
 }

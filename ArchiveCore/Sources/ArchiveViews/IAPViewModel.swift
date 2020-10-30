@@ -12,6 +12,8 @@ import SwiftUI
 import InAppPurchases
 
 final class IAPViewModel: ObservableObject, Log {
+
+    @Published var error: Error?
     @Published var level1Name = "Level 1"
     @Published var level2Name = "Level 2"
 
@@ -21,11 +23,10 @@ final class IAPViewModel: ObservableObject, Log {
     init(iapService: IAPServiceAPI) {
         self.iapService = iapService
 
-        // TODO: is this working?
         iapService.productsPublisher
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] _ in
-                self?.updateButtonNames(with: iapService.products)
+            .sink { [weak self] products in
+                self?.updateButtonNames(with: products)
             }
             .store(in: &disposables)
     }

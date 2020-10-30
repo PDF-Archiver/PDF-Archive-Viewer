@@ -30,6 +30,7 @@ public struct ScanTabView: View {
             .fixedSize(horizontal: false, vertical: true)
         }
         .padding(EdgeInsets(top: 32.0, leading: 16.0, bottom: 32.0, trailing: 16.0))
+        .emittingError(viewModel.error)
     }
 
     private var staticInfo: some View {
@@ -88,11 +89,9 @@ struct ScanTabView_Previews: PreviewProvider {
     }
 
     private class MockIAPService: IAPServiceAPI {
-        var products = Set<SKProduct>()
         var productsPublisher: AnyPublisher<Set<SKProduct>, Never> {
-            Just(products).eraseToAnyPublisher()
+            Just([]).eraseToAnyPublisher()
         }
-        var state: IAPService.State = .initialized
         var appUsagePermitted: Bool = true
         var appUsagePermittedPublisher: AnyPublisher<Bool, Never> {
             Just(appUsagePermitted).eraseToAnyPublisher()

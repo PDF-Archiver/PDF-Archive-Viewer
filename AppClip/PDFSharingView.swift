@@ -21,6 +21,7 @@ struct PDFSharingView: View {
         .onChange(of: viewModel.pdfDocument, perform: { _ in
             print("ViewModel has changed.")
         })
+        .emittingError(viewModel.error)
     }
 
     private var documentView: some View {

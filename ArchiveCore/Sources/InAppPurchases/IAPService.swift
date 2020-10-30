@@ -14,17 +14,7 @@ public final class IAPService: NSObject, ObservableObject, Log {
 
     private static var isInitialized = false
 
-    public enum State {
-        case loading, initialized
-//        case error(Error)
-    }
-
-    public enum SubscriptionType: String, CaseIterable {
-        case monthly = "SUBSCRIPTION_MONTHLY_IOS"
-        case yearly = "SUBSCRIPTION_YEARLY_IOS_NEW"
-    }
-
-    @Published public private(set) var state: State = .loading
+    @Published public private(set) var error: Error?
     @Published public private(set) var products = Set<SKProduct>()
     @Published public private(set) var appUsagePermitted = false
 
@@ -41,12 +31,13 @@ public final class IAPService: NSObject, ObservableObject, Log {
 
         super.init()
 
-//        #if DEBUG
-//        appUsagePermitted = true
-//        #else
+        #if DEBUG
+        appUsagePermitted = true
+        #else
         InAppReceipt.refresh { [weak self] error in
             if let error = error {
                 Self.log.errorAndAssert("Failed to refresh receipt.", metadata: ["error": "\(error.localizedDescription)"])
+                self?.error = error
             } else {
                 self?.validateReciept()
             }
@@ -65,14 +56,13 @@ public final class IAPService: NSObject, ObservableObject, Log {
             }
             self.validateReciept()
         }
-
-//        #endif
+        #endif
     }
 
     /// Create and add a payment request to the payment queue.
     public func buy(subscription: SubscriptionType) throws {
         log.debug("buy \(subscription)")
-        guard let product = products.first(where: { $0.productIdentifier == subscription.rawValue }) else { throw IAPError.productNotFound }
+        guard let product = products.first(where: { $0.productIdentifier == subscription.rawValue }) else { throw IAPError.purchaseFailedProductNotFound }
         let payment = SKMutablePayment(product: product)
         paymentQueue.add(payment)
     }
@@ -80,13 +70,11 @@ public final class IAPService: NSObject, ObservableObject, Log {
     /// Restores all previously completed purchases.
     public func restorePurchases() {
         log.debug("restore")
-        state = .loading
         // state changes will be handled at: paymentQueueRestoreCompletedTransactionsFinished
         paymentQueue.restoreCompletedTransactions()
     }
 
     private func validateReciept() {
-        state = .loading
         do {
             // Initialize receipt
             let receipt = try InAppReceipt.localReceipt()
@@ -103,9 +91,10 @@ public final class IAPService: NSObject, ObservableObject, Log {
         } catch {
             appUsagePermitted = false
             log.errorAndAssert("Failed to validate receaipt", metadata: ["error": "\(error.localizedDescription)"])
-            // TODO: show error to user
+            DispatchQueue.main.async {
+                self.error = error
+            }
         }
-        state = .initialized
     }
 }
 
@@ -154,7 +143,9 @@ extension IAPService: SKPaymentTransactionObserver {
         log.error("restoreCompletedTransactionsFailedWithError", metadata: ["error": "\(error.localizedDescription)"])
         guard let error = error as? SKError,
               error.code != .paymentCancelled else { return }
-        // TODO: post error
+        DispatchQueue.main.async {
+            self.error = error
+        }
     }
 
     /// Called when all restorable transactions have been processed by the payment queue.

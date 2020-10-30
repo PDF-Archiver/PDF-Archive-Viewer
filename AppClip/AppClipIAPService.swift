@@ -11,12 +11,9 @@ import InAppPurchases
 import StoreKit
 
 final class AppClipIAPService: IAPServiceAPI {
-    var state: IAPService.State = .initialized
-
-    var products = Set<SKProduct>()
 
     var productsPublisher: AnyPublisher<Set<SKProduct>, Never> {
-        Just(products).eraseToAnyPublisher()
+        Just([]).eraseToAnyPublisher()
     }
 
     var appUsagePermitted: Bool = true

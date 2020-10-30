@@ -34,28 +34,28 @@ extension AlertDataModel {
         NotificationCenter.default.post(name: .showError, object: viewModel)
     }
 
-    public static func createAndPost(title predefinedTitle: LocalizedStringKey? = nil, message error: Error, primaryButtonTitle: LocalizedStringKey) {
-        let defaultTitle = "Something went wrong!"
-        let title: String
-        let message: String
-        if let error = error as? LocalizedError {
-            title = error.errorDescription ?? defaultTitle
-            message = [
-                error.failureReason,
-                error.recoverySuggestion]
-                .compactMap { $0 }
-                .joined(separator: "\n\n")
-        } else {
-            title = defaultTitle
-            message = error.localizedDescription
-        }
-
-        let viewModel = AlertDataModel(title: predefinedTitle ?? LocalizedStringKey(title),
-                                       message: LocalizedStringKey(message),
-                                       primaryButton: .default(Text(primaryButtonTitle)),
-                                       secondaryButton: nil)
-        NotificationCenter.default.post(name: .showError, object: viewModel)
-    }
+//    public static func createAndPost(title predefinedTitle: LocalizedStringKey? = nil, message error: Error, primaryButtonTitle: LocalizedStringKey) {
+//        let defaultTitle = "Something went wrong!"
+//        let title: String
+//        let message: String
+//        if let error = error as? LocalizedError {
+//            title = error.errorDescription ?? defaultTitle
+//            message = [
+//                error.failureReason,
+//                error.recoverySuggestion]
+//                .compactMap { $0 }
+//                .joined(separator: "\n\n")
+//        } else {
+//            title = defaultTitle
+//            message = error.localizedDescription
+//        }
+//
+//        let viewModel = AlertDataModel(title: predefinedTitle ?? LocalizedStringKey(title),
+//                                       message: LocalizedStringKey(message),
+//                                       primaryButton: .default(Text(primaryButtonTitle)),
+//                                       secondaryButton: nil)
+//        NotificationCenter.default.post(name: .showError, object: viewModel)
+//    }
 
     public static func createAndPost(title: LocalizedStringKey, message: LocalizedStringKey, primaryButton: Alert.Button, secondaryButton: Alert.Button) {
         let viewModel = AlertDataModel(title: title,

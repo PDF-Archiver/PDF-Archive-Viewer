@@ -13,6 +13,8 @@ import SwiftUI
 
 final class TagTabViewModel: ObservableObject, Log {
 
+    @Published private(set) var error: Error?
+
     // set this property manually
     @Published var documents = [Document]()
     @Published var currentDocument: Document?
@@ -120,7 +122,9 @@ final class TagTabViewModel: ObservableObject, Log {
                         do {
                             try archiveStore.download(document)
                         } catch {
-                            AlertDataModel.createAndPost(message: error, primaryButtonTitle: "ok")
+                            DispatchQueue.main.async {
+                                self.error = error
+                            }
                         }
                     }
 
@@ -248,9 +252,9 @@ final class TagTabViewModel: ObservableObject, Log {
 
             } catch {
                 Self.log.error("Error in PDFProcessing!", metadata: ["error": "\(error.localizedDescription)"])
-                AlertDataModel.createAndPost(title: "Save failed!",
-                                             message: error,
-                                             primaryButtonTitle: "OK")
+                DispatchQueue.main.async {
+                    self.error = error
+                }
 
                 self.notificationFeedback.notificationOccurred(.error)
             }
@@ -277,9 +281,9 @@ final class TagTabViewModel: ObservableObject, Log {
                 }
             } catch {
                 Self.log.error("Error while deleting document!", metadata: ["error": "\(error.localizedDescription)"])
-                AlertDataModel.createAndPost(title: "Delete failed!",
-                                             message: error,
-                                             primaryButtonTitle: "OK")
+                DispatchQueue.main.async {
+                    self.error = error
+                }
             }
         }
     }

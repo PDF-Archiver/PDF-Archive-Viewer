@@ -104,11 +104,9 @@ import StoreKit
 import InAppPurchases
 struct MoreTabView_Previews: PreviewProvider {
     private class MockIAPService: IAPServiceAPI {
-        var products = Set<SKProduct>()
         var productsPublisher: AnyPublisher<Set<SKProduct>, Never> {
-            Just(products).eraseToAnyPublisher()
+            Just([]).eraseToAnyPublisher()
         }
-        var state: IAPService.State = .initialized
         var appUsagePermitted: Bool = true
         var appUsagePermittedPublisher: AnyPublisher<Bool, Never> {
             Just(appUsagePermitted).eraseToAnyPublisher()

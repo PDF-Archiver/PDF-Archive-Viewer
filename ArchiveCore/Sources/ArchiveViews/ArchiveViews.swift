@@ -7,4 +7,5 @@
 
 @_exported import ArchiveBackend
 @_exported import ArchiveSharedConstants
+@_exported import ErrorHandling
 @_exported import InAppPurchases

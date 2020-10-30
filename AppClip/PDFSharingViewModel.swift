@@ -15,6 +15,7 @@ final class PDFSharingViewModel: ObservableObject, Equatable {
         lhs.pdfDocument == rhs.pdfDocument && lhs.sharingUrl == rhs.sharingUrl
     }
 
+    @Published var error: Error?
     @Published var pdfDocument: PDFDocument?
     @Published var sharingUrl: URL?
 
@@ -48,7 +49,9 @@ final class PDFSharingViewModel: ObservableObject, Equatable {
             do {
                 try FileManager.default.removeItem(at: sharingUrl)
             } catch {
-                AlertDataModel.createAndPost(message: error, primaryButtonTitle: "OK")
+                DispatchQueue.main.async {
+                    self.error = error
+                }
             }
         }
     }

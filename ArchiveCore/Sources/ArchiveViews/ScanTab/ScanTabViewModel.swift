@@ -13,9 +13,10 @@ import SwiftUI
 import VisionKit
 
 public final class ScanTabViewModel: ObservableObject, Log {
+    @Published public private(set) var error: Error?
     @Published public var showDocumentScan: Bool = false
-    @Published public var progressValue: CGFloat = 0.0
-    @Published public var progressLabel: String = ""
+    @Published public private(set) var progressValue: CGFloat = 0.0
+    @Published public private(set) var progressLabel: String = ""
 
     private let imageConverter: ImageConverterAPI
     private let iapService: IAPServiceAPI
@@ -106,9 +107,9 @@ public final class ScanTabViewModel: ObservableObject, Log {
             try StorageHelper.save(images)
         } catch {
             assertionFailure("Could not save temp images with error:\n\(error.localizedDescription)")
-            AlertDataModel.createAndPost(title: "Save failed!",
-                                         message: error,
-                                         primaryButtonTitle: "OK")
+            DispatchQueue.main.async {
+                self.error = error
+            }
         }
     }
 
@@ -119,7 +120,9 @@ public final class ScanTabViewModel: ObservableObject, Log {
             try imageConverter.startProcessing()
         } catch {
             log.error("Failed to start processing.", metadata: ["error": "\(error.localizedDescription)"])
-            // TODO: show error to the user
+            DispatchQueue.main.async {
+                self.error = error
+            }
         }
     }
 
@@ -156,13 +159,7 @@ public final class ScanTabViewModel: ObservableObject, Log {
                                             // show the subscription view
                                             NotificationCenter.default.post(.showSubscriptionView)
                                          }),
-                                         secondaryButton: .cancel({
-                                            // cancel this alert and validate subscription state
-
-                                            // TODO: handle changes
-//                                            NotificationCenter.default.post(.subscriptionChanges)
-
-                                         }))
+                                         secondaryButton: .cancel())
         }
 
         return isPermitted

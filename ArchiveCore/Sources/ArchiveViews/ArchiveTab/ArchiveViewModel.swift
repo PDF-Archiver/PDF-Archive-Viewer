@@ -22,6 +22,7 @@ final class ArchiveViewModel: ObservableObject, Log {
         return DocumentDetailView(viewModel: viewModel)
     }
 
+    @Published private(set) var error: Error?
     @Published private(set) var selectedDocument: Document?
     @Published private(set) var documents: [Document] = []
     @Published var years: [String] = ["All", "2019", "2018", "2017"]
@@ -153,7 +154,9 @@ final class ArchiveViewModel: ObservableObject, Log {
             do {
                 try archiveStore.download(document)
             } catch {
-                AlertDataModel.createAndPost(message: error, primaryButtonTitle: "ok")
+                DispatchQueue.main.async {
+                    self.error = error
+                }
             }
 
 //            var filteredDocuments = archiveStore.documents.filter { $0.id != document.id }
@@ -182,7 +185,9 @@ final class ArchiveViewModel: ObservableObject, Log {
             do {
                 try archiveStore.delete(deletedDocument)
             } catch {
-                AlertDataModel.createAndPost(message: error, primaryButtonTitle: "ok")
+                DispatchQueue.main.async {
+                    self.error = error
+                }
             }
         }
         notificationFeedback.notificationOccurred(.success)

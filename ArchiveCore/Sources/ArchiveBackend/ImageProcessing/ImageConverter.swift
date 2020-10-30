@@ -15,7 +15,9 @@ public protocol ImageConverterDelegate: class {
     func getDocumentDestination() -> URL?
 }
 
-public final class ImageConverter: ImageConverterAPI, Log {
+public final class ImageConverter: ObservableObject, ImageConverterAPI, Log {
+
+    @Published public private(set) var error: Error?
 
     private static let seperator = "----"
     private static var isInitialized = false
@@ -120,7 +122,9 @@ public final class ImageConverter: ImageConverterAPI, Log {
         }
         operation.completionBlock = {
             guard let error = operation.error else { return }
-            AlertDataModel.createAndPost(message: error, primaryButtonTitle: "OK")
+            DispatchQueue.main.async {
+                self.error = error
+            }
         }
         queue.addOperation(operation)
         totalDocumentCount.mutate { $0 += 1 }

@@ -44,6 +44,7 @@ public struct MainNavigationView: View {
         .alert(isPresented: $alertViewModel.showAlert) {
             Alert(viewModel: alertViewModel.alertViewModel)
         }
+        .emittingError(viewModel.error)
     }
 
     private var sidebar: some View {
