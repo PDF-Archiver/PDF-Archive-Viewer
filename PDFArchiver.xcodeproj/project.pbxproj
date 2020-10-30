@@ -17,6 +17,10 @@
 		341BCD90253C7D3A00E807EF /* ArchiveBackend in Frameworks */ = {isa = PBXBuildFile; productRef = 341BCD8F253C7D3A00E807EF /* ArchiveBackend */; };
 		341BCD92253C7D3A00E807EF /* ArchiveSharedConstants in Frameworks */ = {isa = PBXBuildFile; productRef = 341BCD91253C7D3A00E807EF /* ArchiveSharedConstants */; };
 		341BCD94253C7D3A00E807EF /* ArchiveViews in Frameworks */ = {isa = PBXBuildFile; productRef = 341BCD93253C7D3A00E807EF /* ArchiveViews */; };
+		343B4BB2254C0592008AD859 /* ArchiveBackend in Frameworks */ = {isa = PBXBuildFile; productRef = 343B4BB1254C0592008AD859 /* ArchiveBackend */; };
+		343B4BB4254C0592008AD859 /* ArchiveSharedConstants in Frameworks */ = {isa = PBXBuildFile; productRef = 343B4BB3254C0592008AD859 /* ArchiveSharedConstants */; };
+		343B4BB6254C0592008AD859 /* ArchiveViews in Frameworks */ = {isa = PBXBuildFile; productRef = 343B4BB5254C0592008AD859 /* ArchiveViews */; };
+		343B4BB8254C0592008AD859 /* InAppPurchases in Frameworks */ = {isa = PBXBuildFile; productRef = 343B4BB7254C0592008AD859 /* InAppPurchases */; };
 		345A497E24AFB0CE00EC4DC2 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 3416B1AD24A9282700D5F4E0 /* Settings.bundle */; };
 		346547272543637C0029F05B /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 34E7DB12250189D400E94352 /* Localizable.strings */; };
 		346B1BDA253C65B700D3F8AB /* ArchiveBackend in Frameworks */ = {isa = PBXBuildFile; productRef = 346B1BD9253C65B700D3F8AB /* ArchiveBackend */; };
@@ -169,6 +173,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				343B4BB8254C0592008AD859 /* InAppPurchases in Frameworks */,
+				343B4BB4254C0592008AD859 /* ArchiveSharedConstants in Frameworks */,
+				343B4BB2254C0592008AD859 /* ArchiveBackend in Frameworks */,
+				343B4BB6254C0592008AD859 /* ArchiveViews in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -396,6 +404,10 @@
 			);
 			name = macOS;
 			packageProductDependencies = (
+				343B4BB1254C0592008AD859 /* ArchiveBackend */,
+				343B4BB3254C0592008AD859 /* ArchiveSharedConstants */,
+				343B4BB5254C0592008AD859 /* ArchiveViews */,
+				343B4BB7254C0592008AD859 /* InAppPurchases */,
 			);
 			productName = macOS;
 			productReference = 3489D72324A3C53E0035E64F /* PDFArchiver.app */;
@@ -1280,6 +1292,22 @@
 		341BCD93253C7D3A00E807EF /* ArchiveViews */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = ArchiveViews;
+		};
+		343B4BB1254C0592008AD859 /* ArchiveBackend */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = ArchiveBackend;
+		};
+		343B4BB3254C0592008AD859 /* ArchiveSharedConstants */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = ArchiveSharedConstants;
+		};
+		343B4BB5254C0592008AD859 /* ArchiveViews */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = ArchiveViews;
+		};
+		343B4BB7254C0592008AD859 /* InAppPurchases */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = InAppPurchases;
 		};
 		346B1BD9253C65B700D3F8AB /* ArchiveBackend */ = {
 			isa = XCSwiftPackageProductDependency;

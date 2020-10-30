@@ -16,11 +16,13 @@ struct IAPView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 32.0) {
+            Spacer()
             title
             features
             subscriptionButtons
             text
             otherButtons
+            Spacer()
         }
         .padding()
         .maxWidth(600)
@@ -42,24 +44,24 @@ struct IAPView: View {
     }
 
     private var features: some View {
-        VStack(alignment: .center, spacing: 16) {
-            WidthSyncedRow(spacing: 16) {
+        VStack(alignment: .center, spacing: 8) {
+            WidthSyncedRow(spacing: 8) {
                 VStack(alignment: .leading, spacing: 8) {
-                    Label("Search PDFs", systemImage: .magnifyingglass)
-                    Label("iCloud Sync", systemImage: .cloud)
-                    Label("Open Source", systemImage: .lockOpen)
+                    Label("Search PDFs" as LocalizedStringKey, systemImage: .magnifyingglass)
+                    Label("iCloud Sync" as LocalizedStringKey, systemImage: .cloud)
+                    Label("Open Source" as LocalizedStringKey, systemImage: .lockOpen)
                 }
-                .frame(maxWidth: .infinity, alignment: .center)
+                .frame(maxWidth: .infinity, alignment: .leading)
                 .padding()
                 .background(Color(.paDarkGray).opacity(0.125))
                 .cornerRadius(8)
                 ZStack(alignment: .topTrailing) {
                     VStack(alignment: .leading, spacing: 8) {
-                        Label("Scan Documents", systemImage: .docTextViewfinder)
-                        Label("Searchable PDFs", systemImage: .docTextMagnifyingglass)
-                        Label("Tag PDFs", systemImage: .tag)
+                        Label("Scan Documents" as LocalizedStringKey, systemImage: .docTextViewfinder)
+                        Label("Searchable PDFs" as LocalizedStringKey, systemImage: .docTextMagnifyingglass)
+                        Label("Tag PDFs" as LocalizedStringKey, systemImage: .tag)
                     }
-                    .frame(maxWidth: .infinity, alignment: .center)
+                    .frame(maxWidth: .infinity, alignment: .leading)
                     .padding()
                     .background(Color(.paDarkGray).opacity(0.125))
                     .cornerRadius(8)
@@ -124,7 +126,7 @@ struct IAPView: View {
                 .font(.caption)
                 .foregroundColor(Color(.paLightGray))
         }
-        .maxHeight(100)
+        .maxHeight(200)
     }
 
     private var otherButtons: some View {

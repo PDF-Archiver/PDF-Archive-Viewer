@@ -92,7 +92,6 @@ public final class MainNavigationViewModel: ObservableObject, Log {
             .combineLatest($currentTab)
             .receive(on: DispatchQueue.main)
             .sink { (_, selectedTab) in
-                self.showSubscriptionDismissed()
                 self.showSubscriptionView = !Self.iapService.appUsagePermitted && selectedTab == .tag
             }
             .store(in: &disposables)
@@ -154,11 +153,6 @@ public final class MainNavigationViewModel: ObservableObject, Log {
         for url in urls {
             self.handle(url: url)
         }
-    }
-
-    func showSubscriptionDismissed() {
-        guard !Self.iapService.appUsagePermitted && currentTab == .tag else { return }
-        currentTab = .archive
     }
 
     func view(for type: Tab) -> AnyView {

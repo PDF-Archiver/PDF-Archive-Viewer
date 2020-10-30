@@ -43,7 +43,7 @@ struct PDFSharingView: View {
                 Button(action: {
                     viewModel.shareDocument()
                 }, label: {
-                    Label("Share", systemImage: .squareAndArrowUp)
+                    Label("Share" as LocalizedStringKey, systemImage: .squareAndArrowUp)
                 })
                 .buttonStyle(FilledButtonStyle(foregroundColor: Color(.paWhite), backgroundColor: Color(.paDarkGray)))
 

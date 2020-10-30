@@ -35,7 +35,7 @@ struct MainContentView: View {
             AppActivityView(activityItems: [sharingUrl])
         }
         .appStoreOverlay(isPresented: $viewModel.showAppStoreOverlay) {
-            SKOverlay.AppClipConfiguration(position: .bottomRaised)
+            SKOverlay.AppClipConfiguration(position: .bottom)
         }
     }
 

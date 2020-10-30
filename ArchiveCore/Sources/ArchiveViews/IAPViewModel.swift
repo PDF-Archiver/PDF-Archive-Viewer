@@ -52,10 +52,7 @@ final class IAPViewModel: ObservableObject, Log {
         case .restore:
             log.info("SubscriptionViewController - Restore purchases.")
             iapService.restorePurchases()
-            AlertDataModel.createAndPost(title: "Subscription",
-                                         message: "Active subscriptions will be restored from the App Store.\nPlease contact me if you have any problems:\nMore > Support",
-                                         primaryButtonTitle: "OK",
-                                         completion: { presentationMode.dismiss() })
+            presentationMode.dismiss()
         case .cancel:
             log.info("SubscriptionViewController - Cancel subscription view.")
             presentationMode.dismiss()

@@ -162,8 +162,15 @@ extension IAPService: SKPaymentTransactionObserver {
         log.debug("paymentQueueRestoreCompletedTransactionsFinished")
         validateReciept()
 
-        if !appUsagePermitted {
-            // TODO: post 
+        // TODO: refactor this
+        if appUsagePermitted {
+            AlertDataModel.createAndPost(title: "Subscription",
+                                         message: "✅ An active subscription was successfully restored.",
+                                         primaryButtonTitle: "OK")
+        } else {
+            AlertDataModel.createAndPost(title: "Subscription",
+                                         message: "❌ No active subscription could be restored.\nPlease contact us if this is an error:\nMore > Support",
+                                         primaryButtonTitle: "OK")
         }
     }
 

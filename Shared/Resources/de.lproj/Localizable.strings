@@ -151,7 +151,8 @@
 
 "Premium Subscription" = "Premium Abo";
 
-"Active subscriptions will be restored from the App Store.\nPlease contact me if you have any problems:\nMore > Support" = "Aktive Abos werden über den App Store wiederhergestellt.\nMelde dich bitte falls es zu Problemen kommen sollte:\nMehr > Support";
+"❌ No active subscription could be restored.\nPlease contact us if this is an error:\nMore > Support" = "❌ Es konnte kein aktives Abo wiederhergestellt werden.\nMelde dich bitte falls es sich hierbei um einen Fehler handelt:\nMehr > Support";
+"✅ An active subscription was successfully restored." = "✅ Ein aktives Abo wurdew erfolgreich wiederhergestellt.";
 
 "Search" = "Suchen";
 
@@ -225,7 +226,7 @@
 
 "Search PDFs" = "Suche PDFs";
 
-"Scan Documents" = "Scanners";
+"Scan Documents" = "Scan Dokumente";
 
 "Searchable PDFs" = "Textanalyse";
 
@@ -250,3 +251,7 @@
 "Failed to get destination path." = "Der Zielpfad konnte nicht ermittelt werden.";
 
 "Contact Support  🚑" = "Support kontaktieren  🚑";
+
+"Processing Completed! 📄" = "Verarbeitung abgeschlossen! 📄";
+
+"Share" = "Teilen";
