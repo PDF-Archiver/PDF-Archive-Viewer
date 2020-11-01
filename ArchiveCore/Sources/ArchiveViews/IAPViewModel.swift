@@ -40,7 +40,9 @@ final class IAPViewModel: ObservableObject, Log {
                 try iapService.buy(subscription: .monthly)
                 presentationMode.dismiss()
             } catch {
-                // TODO: catch error
+                DispatchQueue.main.async {
+                    self.error = error
+                }
             }
         case .level2:
             log.info("SubscriptionViewController - buy: Yearly subscription.")
@@ -48,7 +50,9 @@ final class IAPViewModel: ObservableObject, Log {
                 try iapService.buy(subscription: .monthly)
                 presentationMode.dismiss()
             } catch {
-                // TODO: catch error
+                DispatchQueue.main.async {
+                    self.error = error
+                }
             }
         case .restore:
             log.info("SubscriptionViewController - Restore purchases.")

@@ -14,7 +14,6 @@ public struct MainNavigationView: View {
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     #endif
     @StateObject public var viewModel = MainNavigationViewModel()
-    @StateObject var alertViewModel = AlertViewModel()
 
     public init() { }
 
@@ -37,12 +36,6 @@ public struct MainNavigationView: View {
         .sheet(isPresented: $viewModel.showSubscriptionView,
                onDismiss: viewModel.handleIAPViewDismiss) {
             IAPView(viewModel: self.viewModel.iapViewModel)
-                .alert(isPresented: $alertViewModel.showAlert) {
-                    Alert(viewModel: alertViewModel.alertViewModel)
-                }
-        }
-        .alert(isPresented: $alertViewModel.showAlert) {
-            Alert(viewModel: alertViewModel.alertViewModel)
         }
         .emittingError(viewModel.error)
     }

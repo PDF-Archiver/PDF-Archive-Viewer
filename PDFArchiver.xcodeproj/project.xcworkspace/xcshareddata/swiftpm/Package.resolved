@@ -2,6 +2,15 @@
   "object": {
     "pins": [
       {
+        "package": "ASN1Swift",
+        "repositoryURL": "https://github.com/tikhop/ASN1Swift",
+        "state": {
+          "branch": null,
+          "revision": "b53bee03a942623db25afc5bfb80227b2cb3b425",
+          "version": "1.2.4"
+        }
+      },
+      {
         "package": "DeepDiff",
         "repositoryURL": "https://github.com/onmyway133/DeepDiff.git",
         "state": {
@@ -26,24 +35,6 @@
           "branch": null,
           "revision": "427aec0a0ab342246ec02369dea398597b61174a",
           "version": "0.9.3"
-        }
-      },
-      {
-        "package": "LoggingKit",
-        "repositoryURL": "https://github.com/PDF-Archiver/LoggingKit",
-        "state": {
-          "branch": null,
-          "revision": "1ad81013e4a24cfe1c7541adef09c581aa61c763",
-          "version": "1.1.7"
-        }
-      },
-      {
-        "package": "LogModel",
-        "repositoryURL": "https://github.com/PDF-Archiver/LogModel.git",
-        "state": {
-          "branch": null,
-          "revision": "fee27fed62db42033f9deb9a478bcd4c05949a7e",
-          "version": "0.0.4"
         }
       },
       {
@@ -77,9 +68,9 @@
         "package": "SwiftUIX",
         "repositoryURL": "https://github.com/SwiftUIX/SwiftUIX",
         "state": {
-          "branch": "asauthorization-xcode12b6-patch",
-          "revision": "939b85a2c06f463722dcbd1a125343f29d85551b",
-          "version": null
+          "branch": null,
+          "revision": "7f6484328875a56187b1737e2f8fa3ce7c3c9030",
+          "version": "0.0.3"
         }
       },
       {
@@ -89,6 +80,15 @@
           "branch": null,
           "revision": "9974acf07b31b6f5bf363d5118dc1bd4fcac6122",
           "version": "0.16.1"
+        }
+      },
+      {
+        "package": "TPInAppReceipt",
+        "repositoryURL": "https://github.com/tikhop/TPInAppReceipt",
+        "state": {
+          "branch": null,
+          "revision": "1ea772be1b5b3f75afe542a8af6f43da5aef3da8",
+          "version": "3.0.2"
         }
       }
     ]

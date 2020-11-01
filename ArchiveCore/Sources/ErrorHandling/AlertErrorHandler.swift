@@ -46,30 +46,36 @@ struct AlertErrorHandler: ErrorHandler {
     }
 
     private func makeAlert(for presentation: Presentation) -> Alert {
-        let errorInfo = createErrorInfo(from: presentation.error)
+        if let alertDataModel = presentation.error as? AlertDataModel {
+            return Alert(viewModel: alertDataModel)
 
-        switch presentation.error.resolveCategory() {
-        case .retryable:
-            return Alert(
-                title: Text(errorInfo.title),
-                message: Text(errorInfo.message),
-                primaryButton: .default(Text("Dismiss")),
-                secondaryButton: .default(Text("Retry"),
-                    action: presentation.retryHandler
-                )
-            )
-        case .nonRetryable:
-            return Alert(
-                title: Text(errorInfo.title),
-                message: Text(errorInfo.message),
-                dismissButton: .default(Text("Dismiss"))
-            )
-//        case .requiresLogout:
-//            // We don't expect this code path to be hit, since
-//            // we're guarding for this case above, so we'll
-//            // trigger an assertion failure here.
-//            assertionFailure("Should have logged out")
-//            return Alert(title: Text("Logging out..."))
+        } else {
+
+            let errorInfo = createErrorInfo(from: presentation.error)
+
+            switch presentation.error.resolveCategory() {
+                case .retryable:
+                    return Alert(
+                        title: Text(errorInfo.title),
+                        message: Text(errorInfo.message),
+                        primaryButton: .default(Text("Dismiss")),
+                        secondaryButton: .default(Text("Retry"),
+                                                  action: presentation.retryHandler
+                        )
+                    )
+                case .nonRetryable:
+                    return Alert(
+                        title: Text(errorInfo.title),
+                        message: Text(errorInfo.message),
+                        dismissButton: .default(Text("Dismiss"))
+                    )
+//                case .requiresLogout:
+//                    // We don't expect this code path to be hit, since
+//                    // we're guarding for this case above, so we'll
+//                    // trigger an assertion failure here.
+//                    assertionFailure("Should have logged out")
+//                    return Alert(title: Text("Logging out..."))
+            }
         }
     }
 
@@ -87,7 +93,7 @@ struct AlertErrorHandler: ErrorHandler {
 
             return (LocalizedStringKey(title), LocalizedStringKey(message))
         } else {
-            return (LocalizedStringKey(defaultTitle), LocalizedStringKey(error.localizedDescription))
+            return (LocalizedStringKey(defaultTitle), LocalizedStringKey("\(error.localizedDescription)\n\n\(String(describing: error))"))
         }
     }
 }

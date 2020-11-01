@@ -160,7 +160,7 @@ public final class PDFProcessing: Operation, Log {
             let textBoxRequests = VNDetectTextRectanglesRequest { (request, error) in
 
                 if let error = error {
-                    Self.log.error("Error in text recognition.", metadata: ["error": "\(error.localizedDescription)"])
+                    Self.log.error("Error in text recognition.", metadata: ["error": "\(error)"])
                     return
                 }
 
@@ -184,7 +184,7 @@ public final class PDFProcessing: Operation, Log {
                     let textRecognitionRequest = VNRecognizeTextRequest { (request, error) in
 
                         if let error = error {
-                            Self.log.error("Error in text recognition.", metadata: ["error": "\(error.localizedDescription)"])
+                            Self.log.error("Error in text recognition.", metadata: ["error": "\(error)"])
                             return
                         }
 

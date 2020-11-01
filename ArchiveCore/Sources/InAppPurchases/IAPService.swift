@@ -7,6 +7,7 @@
 
 import ArchiveSharedConstants
 import Combine
+import ErrorHandling
 import StoreKit
 import TPInAppReceipt
 
@@ -31,12 +32,12 @@ public final class IAPService: NSObject, ObservableObject, Log {
 
         super.init()
 
-        #if DEBUG
-        appUsagePermitted = true
-        #else
+//        #if DEBUG
+//        appUsagePermitted = true
+//        #else
         InAppReceipt.refresh { [weak self] error in
             if let error = error {
-                Self.log.errorAndAssert("Failed to refresh receipt.", metadata: ["error": "\(error.localizedDescription)"])
+                Self.log.error("Failed to refresh receipt.", metadata: ["error": "\(error)"])
                 self?.error = error
             } else {
                 self?.validateReciept()
@@ -45,8 +46,8 @@ public final class IAPService: NSObject, ObservableObject, Log {
 
         paymentQueue.add(self)
 
-        self.productsRequest.delegate = self
-        self.productsRequest.start()
+        productsRequest.delegate = self
+        productsRequest.start()
 
         // validate the receipt at least once every hour in case the user has cancelled the subscription
         timer = Timer.scheduledTimer(withTimeInterval: 60 * 60, repeats: true) { [weak self] timer in
@@ -56,7 +57,7 @@ public final class IAPService: NSObject, ObservableObject, Log {
             }
             self.validateReciept()
         }
-        #endif
+//        #endif
     }
 
     /// Create and add a payment request to the payment queue.
@@ -90,7 +91,7 @@ public final class IAPService: NSObject, ObservableObject, Log {
             appUsagePermitted = hasActiveSubscription
         } catch {
             appUsagePermitted = false
-            log.errorAndAssert("Failed to validate receaipt", metadata: ["error": "\(error.localizedDescription)"])
+            log.errorAndAssert("Failed to validate receaipt", metadata: ["error": "\(error)"])
             DispatchQueue.main.async {
                 self.error = error
             }
@@ -140,7 +141,7 @@ extension IAPService: SKPaymentTransactionObserver {
 
     /// Called when an error occur while restoring purchases. Notify the user about the error.
     public func paymentQueue(_ queue: SKPaymentQueue, restoreCompletedTransactionsFailedWithError error: Error) {
-        log.error("restoreCompletedTransactionsFailedWithError", metadata: ["error": "\(error.localizedDescription)"])
+        log.error("restoreCompletedTransactionsFailedWithError", metadata: ["error": "\(error)"])
         guard let error = error as? SKError,
               error.code != .paymentCancelled else { return }
         DispatchQueue.main.async {
@@ -153,15 +154,16 @@ extension IAPService: SKPaymentTransactionObserver {
         log.debug("paymentQueueRestoreCompletedTransactionsFinished")
         validateReciept()
 
-        // TODO: refactor this
-        if appUsagePermitted {
-            AlertDataModel.createAndPost(title: "Subscription",
-                                         message: "✅ An active subscription was successfully restored.",
-                                         primaryButtonTitle: "OK")
-        } else {
-            AlertDataModel.createAndPost(title: "Subscription",
-                                         message: "❌ No active subscription could be restored.\nPlease contact us if this is an error:\nMore > Support",
-                                         primaryButtonTitle: "OK")
+        DispatchQueue.main.async {
+            if self.appUsagePermitted {
+                self.error = AlertDataModel.createAndPost(title: "Subscription",
+                                                          message: "✅ An active subscription was successfully restored.",
+                                                          primaryButtonTitle: "OK")
+            } else {
+                self.error = AlertDataModel.createAndPost(title: "Subscription",
+                                                          message: "❌ No active subscription could be restored.\nPlease contact us if this is an error:\nMore > Support",
+                                                          primaryButtonTitle: "OK")
+            }
         }
     }
 

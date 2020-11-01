@@ -48,7 +48,9 @@ let package = Package(
                     "TPInAppReceipt"
                 ]),
         .target(name: "ErrorHandling",
-                dependencies: []),
+                dependencies: [
+                    .product(name: "Logging", package: "swift-log")
+                ]),
         .target(name: "ArchiveSharedConstants",
                 dependencies: [
                     .product(name: "Logging", package: "swift-log")

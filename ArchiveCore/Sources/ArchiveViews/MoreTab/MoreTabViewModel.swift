@@ -16,6 +16,7 @@ final class MoreTabViewModel: ObservableObject, Log {
     static let mailRecipients = ["support@pdf-archiver.io"]
     static let mailSubject = "PDF Archiver: iOS Support"
 
+    @Published var error: Error?
     @Published var qualities: [LocalizedStringKey]  = ["100% - Lossless 🤯", "75% - Good 👌 (Default)", "50% - Normal 👍", "25% - Small 💾"]
     @Published var selectedQualityIndex = UserDefaults.PDFQuality.toIndex(UserDefaults.appGroup.pdfQuality)
 
@@ -67,7 +68,9 @@ final class MoreTabViewModel: ObservableObject, Log {
             log.error("Bundle Identifier not found.")
         }
 
-        AlertDataModel.createAndPost(title: "Reset App", message: "Please restart the app to complete the reset.", primaryButtonTitle: "OK")
+        DispatchQueue.main.async {
+            self.error = AlertDataModel.createAndPost(title: "Reset App", message: "Please restart the app to complete the reset.", primaryButtonTitle: "OK")
+        }
     }
 
     var manageSubscriptionUrl: URL {

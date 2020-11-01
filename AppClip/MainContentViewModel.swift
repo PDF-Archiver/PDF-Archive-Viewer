@@ -19,22 +19,23 @@ final class MainContentViewModel: ObservableObject {
     var scanViewModel = ScanTabViewModel(imageConverter: imageConverter,
                                          iapService: AppClipIAPService(),
                                          documentsFinishedHandler: documentsProcessingCompleted)
-    var alertViewModel = AlertViewModel()
     private var disposables = Set<AnyCancellable>()
 
     init() {
 
         sharingViewModel.objectWillChange
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] _ in
-                // bubble up the change from the nested view model
-                self?.objectWillChange.send()
-
-                DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
-                    self?.showAppStoreOverlay = self?.sharingViewModel.pdfDocument != nil
+            .map { [weak self] _ in
+                DispatchQueue.main.async {
+                    self?.objectWillChange.send()
                 }
             }
-            .store(in: &disposables)
+            .delay(for: .seconds(1), scheduler: DispatchQueue.global(qos: .background))
+            .map { [weak self] _ in
+                self?.sharingViewModel.pdfDocument != nil
+            }
+            .removeDuplicates()
+            .receive(on: DispatchQueue.main)
+            .assign(to: &$showAppStoreOverlay)
 
         scanViewModel.objectWillChange
             .receive(on: DispatchQueue.main)
@@ -43,17 +44,9 @@ final class MainContentViewModel: ObservableObject {
                 self?.objectWillChange.send()
             }
             .store(in: &disposables)
-
-        alertViewModel.objectWillChange
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] _ in
-                // bubble up the change from the nested view model
-                self?.objectWillChange.send()
-            }
-            .store(in: &disposables)
     }
 
-    private static func documentsProcessingCompleted() {
+    private static func documentsProcessingCompleted(error: inout Error?) {
         NotificationCenter.default.post(name: .foundProcessedDocument, object: nil)
     }
 }

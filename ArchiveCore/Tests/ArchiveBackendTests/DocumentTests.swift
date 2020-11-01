@@ -406,7 +406,7 @@ final class DocumentTests: XCTestCase {
 //        do {
 //            try document1.rename(archivePath: home, slugify: true)
 //        } catch let error {
-//            XCTFail(error.localizedDescription)
+//            XCTFail(error)
 //        }
 //
 //        // create a new document with the same name and try to rename it (again) - this should fail

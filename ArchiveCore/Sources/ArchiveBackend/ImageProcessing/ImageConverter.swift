@@ -6,6 +6,7 @@
 //  Copyright © 2019 Julian Kahnert. All rights reserved.
 //
 
+import ErrorHandling
 import Foundation
 import PDFKit
 import UIKit
@@ -51,7 +52,7 @@ public final class ImageConverter: ObservableObject, ImageConverterAPI, Log {
                     try FileManager.default.moveItem(at: documentUrl, to: destinationUrl)
                 }
             } catch {
-                log.errorAndAssert("Error while moving files.", metadata: ["error": "\(error.localizedDescription)"])
+                log.errorAndAssert("Error while moving files.", metadata: ["error": "\(error)"])
             }
         }
 
@@ -107,9 +108,9 @@ public final class ImageConverter: ObservableObject, ImageConverterAPI, Log {
         triggerObservation()
 
         guard let destinationURL = getDocumentDestination() else {
-            AlertDataModel.createAndPost(title: "Attention",
-                                         message: "Failed to get destination path.",
-                                         primaryButtonTitle: "OK")
+            self.error = AlertDataModel.createAndPost(title: "Attention",
+                                                      message: "Failed to get destination path.",
+                                                      primaryButtonTitle: "OK")
             return
         }
 

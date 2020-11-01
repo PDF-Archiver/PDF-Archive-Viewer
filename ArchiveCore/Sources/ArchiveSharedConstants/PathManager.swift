@@ -12,11 +12,7 @@ public final class PathManager: Log {
     public static let shared = PathManager()
 
     public static var iCloudDriveURL: URL? {
-        let url = FileManager.default.url(forUbiquityContainerIdentifier: nil)?.appendingPathComponent("Documents")
-        if url == nil {
-            AlertDataModel.createAndPostNoICloudDrive()
-        }
-        return url
+        FileManager.default.url(forUbiquityContainerIdentifier: nil)?.appendingPathComponent("Documents")
     }
     private static let appGroupContainerURL: URL = {
         guard let tempImageURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: Constants.sharedContainerIdentifier) else {
@@ -28,23 +24,13 @@ public final class PathManager: Log {
 
     public static let tempImageURL: URL = {
         let tempImageURL = appGroupContainerURL.appendingPathComponent("TempImages")
-        do {
-            try FileManager.default.createFolderIfNotExists(tempImageURL)
-        } catch {
-            log.criticalAndAssert("Failed to create temp folder.", metadata: ["error": "\(error.localizedDescription)"])
-            preconditionFailure("Failed to create temp folder.")
-        }
+        createFolderIfNotExists(tempImageURL, name: "TempIamges")
         return tempImageURL
     }()
 
     public static let tempPdfURL: URL = {
         let tempImageURL = appGroupContainerURL.appendingPathComponent("TempPDFDocuments")
-        do {
-            try FileManager.default.createFolderIfNotExists(tempImageURL)
-        } catch {
-            log.criticalAndAssert("Failed to create temp folder.", metadata: ["error": "\(error.localizedDescription)"])
-            preconditionFailure("Failed to create temp folder.")
-        }
+        createFolderIfNotExists(tempImageURL, name: "TempPDFDocuments")
         return tempImageURL
     }()
 
@@ -62,5 +48,21 @@ public final class PathManager: Log {
     private init() {
         self.archiveURL = UserDefaults.appGroup.archiveURL ?? Self.iCloudDriveURL
         self.untaggedURL = UserDefaults.appGroup.untaggedURL ?? Self.iCloudDriveURL?.appendingPathComponent("untagged")
+
+        Self.createFolderIfNotExists(archiveURL, name: "archive")
+        Self.createFolderIfNotExists(untaggedURL, name: "untagged")
+    }
+
+    private static func createFolderIfNotExists(_ folder: URL?, name: StaticString) {
+        guard let folder = folder else {
+            Self.log.info("Folder '\(name)' does not have an URL. - Skipping!")
+            return
+        }
+        do {
+            try FileManager.default.createFolderIfNotExists(folder)
+        } catch {
+            log.criticalAndAssert("Failed to create '\(name)' folder.", metadata: ["error": "\(error)"])
+            preconditionFailure("Failed to create '\(name)' folder.")
+        }
     }
 }

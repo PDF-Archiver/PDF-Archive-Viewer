@@ -251,7 +251,7 @@ final class TagTabViewModel: ObservableObject, Log {
                 AppStoreReviewRequest.shared.incrementCount()
 
             } catch {
-                Self.log.error("Error in PDFProcessing!", metadata: ["error": "\(error.localizedDescription)"])
+                Self.log.error("Error in PDFProcessing!", metadata: ["error": "\(error)"])
                 DispatchQueue.main.async {
                     self.error = error
                 }
@@ -280,7 +280,7 @@ final class TagTabViewModel: ObservableObject, Log {
                     self.currentDocument = self.getNewDocument()
                 }
             } catch {
-                Self.log.error("Error while deleting document!", metadata: ["error": "\(error.localizedDescription)"])
+                Self.log.error("Error while deleting document!", metadata: ["error": "\(error)"])
                 DispatchQueue.main.async {
                     self.error = error
                 }

@@ -16,17 +16,17 @@ public final class ScanTabViewModel: ObservableObject, Log {
     @Published public private(set) var error: Error?
     @Published public var showDocumentScan: Bool = false
     @Published public private(set) var progressValue: CGFloat = 0.0
-    @Published public private(set) var progressLabel: String = ""
+    @Published public private(set) var progressLabel: String = " "
 
     private let imageConverter: ImageConverterAPI
     private let iapService: IAPServiceAPI
-    private let documentsFinishedHandler: () -> Void
+    private let documentsFinishedHandler: (inout Error?) -> Void
 
     private var lastProgressValue: CGFloat?
     private var disposables = Set<AnyCancellable>()
     private let notificationFeedback = UINotificationFeedbackGenerator()
 
-    public init(imageConverter: ImageConverterAPI, iapService: IAPServiceAPI, documentsFinishedHandler: @escaping () -> Void) {
+    public init(imageConverter: ImageConverterAPI, iapService: IAPServiceAPI, documentsFinishedHandler: @escaping (inout Error?) -> Void) {
         self.imageConverter = imageConverter
         self.iapService = iapService
         self.documentsFinishedHandler = documentsFinishedHandler
@@ -46,7 +46,13 @@ public final class ScanTabViewModel: ObservableObject, Log {
                 self.updateProcessingIndicator(with: documentProgress)
 
                 guard documentProgress == nil else { return }
-                self.documentsFinishedHandler()
+
+                // there might be a better way for this inout workaround
+                var error: Error?
+                self.documentsFinishedHandler(&error)
+                if let error = error {
+                    self.error = error
+                }
             }
             .store(in: &disposables)
     }
@@ -75,7 +81,7 @@ public final class ScanTabViewModel: ObservableObject, Log {
                 log.info("Authorization status blocks camera access. Switch to preferences.")
 
                 notificationFeedback.notificationOccurred(.warning)
-                AlertDataModel.createAndPost(title: "Need Camera Access",
+                error = AlertDataModel.createAndPost(title: "Need Camera Access",
                                              message: "Camera access is required to scan documents.",
                                              primaryButton: .default(Text("Grant Access"),
                                                                      action: {
@@ -106,7 +112,7 @@ public final class ScanTabViewModel: ObservableObject, Log {
             }
             try StorageHelper.save(images)
         } catch {
-            assertionFailure("Could not save temp images with error:\n\(error.localizedDescription)")
+            assertionFailure("Could not save temp images with error:\n\(error)")
             DispatchQueue.main.async {
                 self.error = error
             }
@@ -119,7 +125,7 @@ public final class ScanTabViewModel: ObservableObject, Log {
         do {
             try imageConverter.startProcessing()
         } catch {
-            log.error("Failed to start processing.", metadata: ["error": "\(error.localizedDescription)"])
+            log.error("Failed to start processing.", metadata: ["error": "\(error)"])
             DispatchQueue.main.async {
                 self.error = error
             }
@@ -153,13 +159,15 @@ public final class ScanTabViewModel: ObservableObject, Log {
 
         // show subscription view controller, if no subscription was found
         if !isPermitted {
-            AlertDataModel.createAndPost(title: "No Subscription",
-                                         message: "No active subscription could be found. Your document will therefore not be saved.\nPlease support the app and subscribe.",
-                                         primaryButton: .default(Text("Activate"), action: {
-                                            // show the subscription view
-                                            NotificationCenter.default.post(.showSubscriptionView)
-                                         }),
-                                         secondaryButton: .cancel())
+            DispatchQueue.main.async {
+                self.error = AlertDataModel.createAndPost(title: "No Subscription",
+                                                          message: "No active subscription could be found. Your document will therefore not be saved.\nPlease support the app and subscribe.",
+                                                          primaryButton: .default(Text("Activate"), action: {
+                                                            // show the subscription view
+                                                            NotificationCenter.default.post(.showSubscriptionView)
+                                                          }),
+                                                          secondaryButton: .cancel())
+            }
         }
 
         return isPermitted

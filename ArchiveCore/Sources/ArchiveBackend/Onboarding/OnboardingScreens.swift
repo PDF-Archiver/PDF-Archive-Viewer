@@ -8,18 +8,19 @@
 import SwiftUI
 
 struct OnboardingScreens: View {
+    @State private var index = 0
     @Binding var isPresenting: Bool
     var onboardSet: OnboardSet
     var body: some View {
-        VStack {
-            TabView {
-                ForEach(onboardSet.cards) { item in
-                    OBCardView(isShowing: $isPresenting, card: item, width: onboardSet.width, height: onboardSet.height)
-                }
-            }.frame(height: onboardSet.height + 120)
-            .tabViewStyle(PageTabViewStyle())
-            .indexViewStyle(PageIndexViewStyle(backgroundDisplayMode: .always))
-            Spacer()
+        OBCardView(isShowing: $isPresenting, showNextHandler: showNextHandler, card: onboardSet.cards[index], width: onboardSet.width, height: onboardSet.height)
+    }
+
+    private func showNextHandler() {
+        let nextIndex = index + 1
+        if nextIndex < onboardSet.cards.count {
+            index = nextIndex
+        } else {
+            isPresenting = false
         }
     }
 }

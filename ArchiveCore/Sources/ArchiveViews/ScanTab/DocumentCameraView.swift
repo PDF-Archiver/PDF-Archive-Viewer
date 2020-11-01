@@ -59,7 +59,7 @@ public struct DocumentCameraView: UIViewControllerRepresentable, Log {
         }
 
         public func documentCameraViewController(_ controller: VNDocumentCameraViewController, didFailWithError error: Error) {
-            log.error("Scan did fail with error.", metadata: ["error": "\(error.localizedDescription)"])
+            log.error("Scan did fail with error.", metadata: ["error": "\(error)"])
             self.isShown.wrappedValue = false
         }
     }

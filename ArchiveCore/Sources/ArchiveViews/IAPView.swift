@@ -15,6 +15,7 @@ struct IAPView: View {
     @Environment(\.presentationMode) private var presentationMode
 
     var body: some View {
+        LazyView {
         VStack(alignment: .leading, spacing: 32.0) {
             Spacer()
             title
@@ -26,6 +27,7 @@ struct IAPView: View {
         }
         .padding()
         .maxWidth(600)
+        }
     }
 
     private var title: some View {

@@ -19,9 +19,6 @@ struct MainContentView: View {
     var body: some View {
         ZStack {
             ScanTabView(viewModel: viewModel.scanViewModel)
-                .alert(isPresented: $viewModel.alertViewModel.showAlert) {
-                    Alert(viewModel: viewModel.alertViewModel.alertViewModel)
-                }
 
             if viewModel.sharingViewModel.pdfDocument != nil {
                 PDFSharingView(viewModel: viewModel.sharingViewModel)

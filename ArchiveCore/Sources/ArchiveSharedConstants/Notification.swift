@@ -12,7 +12,6 @@ public extension Notification.Name {
     static let introChanges = Notification.Name("intro-changes")
     static let imageProcessingQueue = Notification.Name("ImageConverter.queueLength")
     static let showSubscriptionView = Notification.Name("show-subscription-view")
-    static let showError = Notification.Name("show-error")
     static let suggestionChange = Notification.Name("suggestion-change")
     static let foundProcessedDocument = Notification.Name("found-processed-document")
 }
@@ -20,7 +19,6 @@ public extension Notification.Name {
 public extension Notification {
     static let introChanges = Notification(name: .introChanges)
     static let showSubscriptionView = Notification(name: .showSubscriptionView)
-    static let showError = Notification(name: .showError)
     static let suggestionChange = Notification(name: .suggestionChange)
     static let foundProcessedDocument = Notification(name: .foundProcessedDocument)
 }

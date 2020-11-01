@@ -127,7 +127,7 @@ public final class ArchiveStore: ObservableObject, Log {
             try provider.startDownload(of: document.path)
             document.downloadStatus = .downloading(percent: 0)
         } catch {
-            log.errorAndAssert("Document download error.", metadata: ["error": "\(error.localizedDescription)"])
+            log.errorAndAssert("Document download error.", metadata: ["error": "\(error)"])
             throw error
         }
     }
@@ -150,7 +150,7 @@ public final class ArchiveStore: ObservableObject, Log {
         do {
             return try provider.getCreationDate(of: url)
         } catch {
-            log.errorAndAssert("Document download error.", metadata: ["error": "\(error.localizedDescription)"])
+            log.errorAndAssert("Document download error.", metadata: ["error": "\(error)"])
             throw error
         }
     }
@@ -273,6 +273,7 @@ public final class ArchiveStore: ObservableObject, Log {
 
     private func loadDocuments() {
         guard state == .uninitialized,
+              fileManager.fileExists(atPath: Self.savePath.path),
               documents.isEmpty else { return }
         do {
             let data = try Data(contentsOf: Self.savePath)
@@ -285,7 +286,7 @@ public final class ArchiveStore: ObservableObject, Log {
 
             updateYears()
         } catch {
-            log.error("JSON decoding error", metadata: ["error": "\(error.localizedDescription)"])
+            log.error("JSON decoding error", metadata: ["error": "\(error)"])
 
             try? fileManager.removeItem(at: Self.savePath)
         }
@@ -302,7 +303,7 @@ public final class ArchiveStore: ObservableObject, Log {
             try data.write(to: Self.savePath)
             log.info("Documents saved.")
         } catch {
-            log.error("JSON encoding error", metadata: ["error": "\(error.localizedDescription)"])
+            log.error("JSON encoding error", metadata: ["error": "\(error)"])
         }
     }
 }

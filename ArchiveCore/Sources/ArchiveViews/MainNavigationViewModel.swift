@@ -136,7 +136,9 @@ public final class MainNavigationViewModel: ObservableObject, Log {
 
             guard let iCloudContainerPath = PathManager.iCloudDriveURL else {
                 Self.log.error("Could not find a iCloud Drive url.")
-                AlertDataModel.createAndPostNoICloudDrive()
+                DispatchQueue.main.async {
+                    self.error = AlertDataModel.createAndPostNoICloudDrive()
+                }
                 return
             }
 
@@ -203,13 +205,13 @@ public final class MainNavigationViewModel: ObservableObject, Log {
 
     // MARK: - Helper Functions
 
-    private static func scanFinished() {
+    private static func scanFinished(error: inout Error?) {
         guard !UserDefaults.appGroup.firstDocumentScanAlertPresented else { return }
         UserDefaults.appGroup.firstDocumentScanAlertPresented = true
 
-        AlertDataModel.createAndPost(title: "First Scan processed! 🙂",
-                                     message: "The first document was processed successfully and is now waiting for you in the 'Tag' tab.\n\n📄   ➡️   🗄",
-                                     primaryButtonTitle: "OK")
+        error = AlertDataModel.createAndPost(title: "First Scan processed! 🙂",
+                                                  message: "The first document was processed successfully and is now waiting for you in the 'Tag' tab.\n\n📄   ➡️   🗄",
+                                                  primaryButtonTitle: "OK")
     }
 
     private func handle(url: URL) {
@@ -222,7 +224,7 @@ public final class MainNavigationViewModel: ObservableObject, Log {
             _ = url.startAccessingSecurityScopedResource()
             try Self.imageConverter.handle(url)
         } catch {
-            log.error("Unable to handle file.", metadata: ["filetype": "\(url.pathExtension)", "error": "\(error.localizedDescription)"])
+            log.error("Unable to handle file.", metadata: ["filetype": "\(url.pathExtension)", "error": "\(error)"])
             try? FileManager.default.removeItem(at: url)
 
             DispatchQueue.main.async {

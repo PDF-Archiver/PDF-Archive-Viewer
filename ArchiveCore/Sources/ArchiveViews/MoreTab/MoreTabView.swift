@@ -31,6 +31,7 @@ struct MoreTabView: View {
         }
         .navigationTitle("Preferences & More")
         .navigationViewStyle(StackNavigationViewStyle())
+        .emittingError(viewModel.error)
     }
 
     private var preferences: some View {
