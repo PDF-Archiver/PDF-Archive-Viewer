@@ -150,7 +150,7 @@ public final class ArchiveStore: ObservableObject, Log {
         do {
             return try provider.getCreationDate(of: url)
         } catch {
-            log.errorAndAssert("Document download error.", metadata: ["error": "\(error)"])
+            log.error("Document download error.", metadata: ["error": "\(error)"])
             throw error
         }
     }

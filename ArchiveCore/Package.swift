@@ -31,7 +31,8 @@ let package = Package(
         .target(name: "ArchiveBackend",
                 dependencies: [
                     "ArchiveSharedConstants",
-                    "DeepDiff"
+                    "DeepDiff",
+                    "ErrorHandling"
                 ]),
         .target(name: "ArchiveViews",
                 dependencies: [
@@ -45,7 +46,8 @@ let package = Package(
         .target(name: "InAppPurchases",
                 dependencies: [
                     "ArchiveSharedConstants",
-                    "TPInAppReceipt"
+                    "TPInAppReceipt",
+                    "ErrorHandling"
                 ]),
         .target(name: "ErrorHandling",
                 dependencies: [

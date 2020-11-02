@@ -25,12 +25,28 @@ struct PreviewProviderModifier: ViewModifier {
                 content
                     .previewDisplayName("Light Mode")
                     .environment(\.colorScheme, .light)
+                    .previewDevice("iPhone 12")
             }
 
             if includeDarkMode {
                 content
                     .previewDisplayName("Dark Mode")
                     .environment(\.colorScheme, .dark)
+                    .previewDevice("iPhone 12")
+            }
+
+            if includeLightMode {
+                content
+                    .previewDisplayName("Light Mode")
+                    .environment(\.colorScheme, .light)
+                    .previewDevice("iPad Air (4th generation)")
+            }
+
+            if includeDarkMode {
+                content
+                    .previewDisplayName("Dark Mode")
+                    .environment(\.colorScheme, .dark)
+                    .previewDevice("iPad Air (4th generation)")
             }
 
             if includeLargeTextMode {

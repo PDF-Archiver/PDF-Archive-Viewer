@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct OnboardCard: Identifiable {
+struct OnboardCard: Identifiable, Hashable {
     let id = UUID()
     let title: String
     let image: String
