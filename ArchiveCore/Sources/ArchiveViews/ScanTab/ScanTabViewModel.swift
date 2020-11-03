@@ -51,7 +51,9 @@ public final class ScanTabViewModel: ObservableObject, Log {
                 var error: Error?
                 self.documentsFinishedHandler(&error)
                 if let error = error {
-                    self.error = error
+                    DispatchQueue.main.async {
+                        self.error = error
+                    }
                 }
             }
             .store(in: &disposables)

@@ -57,11 +57,15 @@ public final class MainNavigationViewModel: ObservableObject, Log {
             .assign(to: &$currentTab)
 
         scanViewModel.objectWillChange
+            .receive(on: DispatchQueue.main)
             .sink { _ in
                 // bubble up the change from the nested view model
                 self.objectWillChange.send()
             }
             .store(in: &disposables)
+
+        // No need to add a 'tagViewModel.objectWillChange' publisher, because the MainNavigationView does not need to handle changes
+        // only the TagTabView must do so.
 
         // MARK: UserDefaults
         if !UserDefaults.appGroup.tutorialShown {
@@ -96,6 +100,8 @@ public final class MainNavigationViewModel: ObservableObject, Log {
 
         // MARK: Subscription
         Self.iapService.appUsagePermittedPublisher
+            // do not use initial value -> finish validation first
+            .dropFirst()
             .removeDuplicates()
             .combineLatest($currentTab)
             .receive(on: DispatchQueue.main)

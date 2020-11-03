@@ -29,13 +29,12 @@ final class MoreTabViewModel: ObservableObject, Log {
 
     init(iapService: IAPServiceAPI) {
         self.iapService = iapService
-//        subscriptionStatus = getCurrentStatus()
         $selectedQualityIndex
             .sink { selectedQuality in
                 UserDefaults.appGroup.pdfQuality = UserDefaults.PDFQuality.allCases[selectedQuality]
             }
             .store(in: &disposables)
-        // TODO: this is not updated
+
         iapService.appUsagePermittedPublisher
             .removeDuplicates()
             .receive(on: DispatchQueue.main)

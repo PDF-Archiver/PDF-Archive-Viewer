@@ -130,7 +130,7 @@ final class TagTabViewModel: ObservableObject, Log {
 
                 guard self.currentDocument == nil || !newUntaggedDocuments.contains(self.currentDocument!)  else { return nil }
 
-                return self.getNewDocument()
+                return self.getNewDocument(from: newUntaggedDocuments)
             }
             .receive(on: DispatchQueue.main)
             .sink { document in
@@ -158,7 +158,6 @@ final class TagTabViewModel: ObservableObject, Log {
 
                     // try to parse suggestions from document content
                     DispatchQueue.global(qos: .userInitiated).async { [weak self] in
-//                        doc
 
                         // get tags and save them in the background, they will be passed to the TagTabView
                         guard let text = pdfDocument.string else { return }
@@ -188,7 +187,6 @@ final class TagTabViewModel: ObservableObject, Log {
                 } else {
                     Self.log.error("Could not present document.")
                     self.pdfDocument = PDFDocument()
-//                    assertionFailure("Could not present document.")
                     self.specification = ""
                     self.documentTags = []
                     self.suggestedTags = []
@@ -243,7 +241,9 @@ final class TagTabViewModel: ObservableObject, Log {
                 filteredDocuments.append(document)
                 self.archiveStore.documents = filteredDocuments
 
-                self.currentDocument = self.getNewDocument()
+                DispatchQueue.main.async {
+                    self.currentDocument = self.getNewDocument(from: filteredDocuments)
+                }
 
                 self.notificationFeedback.notificationOccurred(.success)
 
@@ -277,7 +277,7 @@ final class TagTabViewModel: ObservableObject, Log {
                     self.documents.removeAll { $0.filename == currentDocument.filename }
 
                     // remove the current document and clear the vie
-                    self.currentDocument = self.getNewDocument()
+                    self.currentDocument = self.getNewDocument(from: self.archiveStore.documents)
                 }
             } catch {
                 Self.log.error("Error while deleting document!", metadata: ["error": "\(error)"])
@@ -288,10 +288,8 @@ final class TagTabViewModel: ObservableObject, Log {
         }
     }
 
-    private func getNewDocument() -> Document? {
-        // swiftlint:disable:next sorted_first_last
-//        DocumentService.archive.get(scope: .all, searchterms: [], status: .untagged)
-        archiveStore.documents
+    private func getNewDocument(from documents: [Document]) -> Document? {
+        documents
             .filter { $0.taggingStatus == .untagged }
             .sorted { $0.filename < $1.filename }
             .first { $0.downloadStatus == .local }

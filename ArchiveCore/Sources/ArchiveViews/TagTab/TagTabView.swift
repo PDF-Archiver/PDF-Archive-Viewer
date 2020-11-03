@@ -22,6 +22,7 @@ struct TagTabView: View {
     var body: some View {
         if viewModel.showLoadingView {
             LoadingView()
+                .navigationBarHidden(true)
                 .emittingError(viewModel.error)
         } else if viewModel.currentDocument != nil {
             Stack(spacing: 8) {
@@ -41,11 +42,13 @@ struct TagTabView: View {
                     }
                 }
             }
+            .navigationBarHidden(false)
             .navigationBarTitle(Text("Document"), displayMode: .inline)
             .navigationBarItems(leading: deleteNavBarView, trailing: saveNavBarView)
             .emittingError(viewModel.error)
         } else {
             PlaceholderView(name: "No iCloud Drive documents found. Please scan and tag documents first.")
+                .navigationBarHidden(true)
                 .emittingError(viewModel.error)
         }
     }
@@ -61,6 +64,7 @@ struct TagTabView: View {
             }
             .padding(.horizontal, 24)
         })
+        .disabled(viewModel.currentDocument == nil)
     }
 
     private var saveNavBarView: some View {
@@ -74,6 +78,7 @@ struct TagTabView: View {
             }
             .padding(.horizontal, 24)
         })
+        .disabled(viewModel.currentDocument == nil)
     }
 
     // MARK: Component Groups
@@ -135,7 +140,7 @@ struct TagTabView_Previews: PreviewProvider {
 
     static var previews: some View {
         TagTabView(viewModel: viewModel)
-//            .previewDevice("iPhone 11")
+            .makeForPreviewProvider()
     }
 }
 #endif

@@ -18,9 +18,6 @@ struct PDFSharingView: View {
             Color.systemBackground
             documentView
         }
-        .onChange(of: viewModel.pdfDocument, perform: { _ in
-            print("ViewModel has changed.")
-        })
         .emittingError(viewModel.error)
     }
 

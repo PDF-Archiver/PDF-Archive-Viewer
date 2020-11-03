@@ -47,7 +47,7 @@ final class IAPViewModel: ObservableObject, Log {
         case .level2:
             log.info("SubscriptionViewController - buy: Yearly subscription.")
             do {
-                try iapService.buy(subscription: .monthly)
+                try iapService.buy(subscription: .yearly)
                 presentationMode.dismiss()
             } catch {
                 DispatchQueue.main.async {

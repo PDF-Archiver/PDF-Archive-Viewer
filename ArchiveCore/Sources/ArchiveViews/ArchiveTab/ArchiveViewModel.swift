@@ -21,11 +21,12 @@ final class ArchiveViewModel: ObservableObject, Log {
         let viewModel = DocumentDetailViewModel(document)
         return DocumentDetailView(viewModel: viewModel)
     }
+    private static let defaultYears = ["All", "2020", "2019", "2018", "2017"]
 
     @Published private(set) var error: Error?
     @Published private(set) var selectedDocument: Document?
     @Published private(set) var documents: [Document] = []
-    @Published var years: [String] = ["All", "2019", "2018", "2017"]
+    @Published var years: [String] = defaultYears
     @Published var scopeSelection: Int = 0
     @Published var searchText = ""
     @Published var showLoadingView = true
@@ -53,7 +54,11 @@ final class ArchiveViewModel: ObservableObject, Log {
 
         archiveStore.$years
             .map { years -> [String] in
-                ["All"] + Array(years.sorted().reversed().prefix(4))
+                if years.isEmpty {
+                    return Self.defaultYears
+                } else {
+                    return ["All"] + Array(years.sorted().reversed().prefix(4))
+                }
             }
             .removeDuplicates()
             .receive(on: DispatchQueue.main)
