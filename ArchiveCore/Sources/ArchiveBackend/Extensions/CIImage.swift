@@ -15,7 +15,7 @@ extension CIImage {
     func jpegData(compressionQuality quality: CGFloat) -> Data? {
         #if canImport(AppKit)
         let bitmapRep = NSBitmapImageRep(ciImage: self)
-        let jpegData = bitmapRep.representation(using: .JPEG, properties: [NSBitmapImageRep.PropertyKey.compressionFactor: NSNumber(value: quality)])
+        let jpegData = bitmapRep.representation(using: .jpeg, properties: [.compressionFactor: NSNumber(value: Float(quality))])
 
         return jpegData
         #else

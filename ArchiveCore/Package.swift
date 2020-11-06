@@ -22,7 +22,9 @@ let package = Package(
         .package(url: "https://github.com/onmyway133/DeepDiff.git", from: "2.3.1"),
         .package(url: "https://github.com/SwiftUIX/SwiftUIX", from: "0.0.3"),
         .package(url: "https://github.com/dasautoooo/Parma", from: "0.1.1"),
-        .package(url: "https://github.com/WeTransfer/Diagnostics", from: "1.7.0"),
+        // TODO: switch back after a release
+//        .package(url: "https://github.com/WeTransfer/Diagnostics", from: "1.7.0"),
+        .package(url: "https://github.com/WeTransfer/Diagnostics", .branch("master")),
         .package(url: "https://github.com/tikhop/TPInAppReceipt", from: "3.0.2")
     ],
     targets: [

@@ -23,8 +23,9 @@
 // under the License.
 
 import BackgroundTasks
-import ExposureNotification
 
+@available(iOS 13.0, *)
+@available(macOS, unavailable)
 public enum BackgroundTaskIdentifier: String, CaseIterable {
     // only one task identifier is allowed have the .exposure-notification suffix
     case pdfProcessing = "pdf-processing"

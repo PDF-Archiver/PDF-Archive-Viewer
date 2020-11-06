@@ -23,9 +23,9 @@
         "package": "Diagnostics",
         "repositoryURL": "https://github.com/WeTransfer/Diagnostics",
         "state": {
-          "branch": null,
-          "revision": "0e7e1b79643404a826784e2f4b21a0a6376013fd",
-          "version": "1.7.0"
+          "branch": "master",
+          "revision": "38d59b8db1c554cb63f467699740a08f3f17122a",
+          "version": null
         }
       },
       {

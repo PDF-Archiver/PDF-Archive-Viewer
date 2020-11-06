@@ -55,10 +55,12 @@ public final class ImageConverter: ObservableObject, ImageConverterAPI, Log {
             }
         }
 
+        #if os(iOS)
         // by setting the delegate, the BackgroundTaskScheduler will be initialized
         if shouldStartBackgroundTask {
             BackgroundTaskScheduler.shared.delegate = self
         }
+        #endif
     }
 
     public func handle(_ url: URL) throws {
