@@ -25,9 +25,11 @@ struct MoreTabView: View {
         .listStyle(GroupedListStyle())
         .foregroundColor(.primary)
         .sheet(isPresented: $viewModel.isShowingMailView) {
+            #if os(iOS)
             SupportMailView(subject: MoreTabViewModel.mailSubject,
                             recipients: MoreTabViewModel.mailRecipients,
                             result: self.$viewModel.result)
+            #endif
         }
         .navigationTitle("Preferences & More")
         .navigationViewStyle(StackNavigationViewStyle())

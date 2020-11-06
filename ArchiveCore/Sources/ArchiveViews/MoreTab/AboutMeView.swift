@@ -31,10 +31,10 @@ struct AboutMeView: View {
                 Text("PDF Archiver")
                     .font(.largeTitle)
                     .fontWeight(.heavy)
-                    .foregroundColor(Color(.paDarkGray))
+                    .foregroundColor(.paDarkGray)
                 Text("Scan it. Tag it. Find it.")
                     .font(.title)
-                    .foregroundColor(Color(.paLightGray))
+                    .foregroundColor(.paLightGray)
             }
         }
     }

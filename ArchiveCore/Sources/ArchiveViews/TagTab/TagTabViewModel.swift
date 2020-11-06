@@ -85,8 +85,7 @@ final class TagTabViewModel: ObservableObject, Log {
                 return Array(sortedTags.prefix(5))
             }
             .removeDuplicates()
-            .assign(to: \.inputAccessoryViewSuggestions, on: self)
-            .store(in: &disposables)
+            .assign(to: &$inputAccessoryViewSuggestions)
 
         archiveStore.$documents
             .map { newDocuments -> [Document] in

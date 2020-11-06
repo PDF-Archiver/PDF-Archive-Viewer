@@ -8,8 +8,10 @@
 
 import PDFKit
 import SwiftUI
+import SwiftUIX
 
-public struct PDFCustomView: UIViewRepresentable {
+public struct PDFCustomView: AppKitOrUIKitViewRepresentable {
+    public typealias AppKitOrUIKitViewType = PDFView
 
     private let pdfDocument: PDFDocument?
 
@@ -17,18 +19,18 @@ public struct PDFCustomView: UIViewRepresentable {
         self.pdfDocument = pdfDocument
     }
 
-    public func makeUIView(context: Context) -> PDFView {
+    public func makeAppKitOrUIKitView(context: Context) -> PDFView {
         let view = PDFView()
         view.displayMode = .singlePageContinuous
         view.autoScales = true
         view.interpolationQuality = .low
-        view.backgroundColor = .paPDFBackground
+        view.backgroundColor = Color.paPDFBackground.toUIColor()!
 //        view.minScaleFactor = 0.1
 //        view.maxScaleFactor = 4.0
         return view
     }
 
-    public func updateUIView(_ view: PDFView, context: Context) {
+    public func updateAppKitOrUIKitView(_ view: PDFView, context: Context) {
         if let pdfDocument = pdfDocument {
             view.document = pdfDocument
             view.goToFirstPage(self)

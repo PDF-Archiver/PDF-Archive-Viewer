@@ -9,7 +9,6 @@
 import ErrorHandling
 import Foundation
 import PDFKit
-import UIKit
 import Vision
 
 public protocol ImageConverterDelegate: class {
@@ -64,7 +63,7 @@ public final class ImageConverter: ObservableObject, ImageConverterAPI, Log {
 
     public func handle(_ url: URL) throws {
 
-        if let image = UIImage(contentsOfFile: url.path) {
+        if let image = CIImage(contentsOf: url) {
             try StorageHelper.save([image])
             guard let destinationURL = getDocumentDestination() else { throw StorageError.noPathToSave }
             saveProcessAndSaveTempImages(at: destinationURL)

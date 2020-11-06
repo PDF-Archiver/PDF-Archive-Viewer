@@ -14,6 +14,7 @@ public struct MainNavigationView: View {
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     #endif
     @StateObject public var viewModel = MainNavigationViewModel()
+    @Environment(\.scenePhase) private var scenePhase
 
     public init() { }
 
@@ -38,6 +39,7 @@ public struct MainNavigationView: View {
             IAPView(viewModel: self.viewModel.iapViewModel)
         }
         .emittingError(viewModel.error)
+        .onChange(of: scenePhase, perform: viewModel.handleTempFilesIfNeeded)
     }
 
     private var sidebar: some View {
@@ -49,7 +51,7 @@ public struct MainNavigationView: View {
                             Text(LocalizedStringKey(tab.name))
                         } icon: {
                             Image(systemName: tab.iconName)
-                                .accentColor(Color(.paDarkRed))
+                                .accentColor(.paDarkRed)
                         }
                     }
                 }

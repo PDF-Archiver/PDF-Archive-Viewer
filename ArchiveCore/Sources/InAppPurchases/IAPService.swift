@@ -32,9 +32,15 @@ public final class IAPService: NSObject, ObservableObject, Log {
 
         super.init()
 
-//        #if DEBUG
-//        appUsagePermitted = true
-//        #else
+        #if !DEBUG
+        #error("Test IAP before release!")
+        // Error in IAP:
+        // https://developer.apple.com/forums/thread/661351
+        #endif
+
+        #if DEBUG
+        appUsagePermitted = true
+        #else
         InAppReceipt.refresh { [weak self] error in
             if let error = error {
                 Self.log.error("Failed to refresh receipt.", metadata: ["error": "\(error)"])
@@ -57,7 +63,7 @@ public final class IAPService: NSObject, ObservableObject, Log {
             }
             self.validateReciept()
         }
-//        #endif
+        #endif
     }
 
     /// Create and add a payment request to the payment queue.

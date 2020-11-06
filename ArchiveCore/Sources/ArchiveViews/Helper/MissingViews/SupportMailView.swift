@@ -10,6 +10,7 @@ import Diagnostics
 import MessageUI
 import SwiftUI
 
+@available(iOS 13.0, *)
 struct SupportMailView: UIViewControllerRepresentable {
 
     let subject: String

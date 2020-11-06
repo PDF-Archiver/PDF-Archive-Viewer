@@ -16,7 +16,6 @@ struct DocumentInformationForm: View {
 
     @Binding var tagInput: String
     @Binding var suggestedTags: [String]
-    @Binding var inputAccessoryViewSuggestions: [String]
 
     var body: some View {
         Form {
@@ -61,11 +60,9 @@ struct DocumentInformationForm: View {
                         isMultiLine: true,
                         tapHandler: documentTagTapped(_:))
                 .font(.body)
-            CustomTextField(text: $tagInput,
-                            placeholder: "Enter Tag",
-                            onCommit: saveCurrentTag,
-                            isFirstResponder: false,
-                            suggestions: self.inputAccessoryViewSuggestions)
+            TextField("Enter Tag",
+                      text: $tagInput,
+                      onCommit: saveCurrentTag)
                 .frame(maxHeight: 22)
                 .padding(EdgeInsets(top: 4.0, leading: 0.0, bottom: 4.0, trailing: 0.0))
         }
@@ -96,8 +93,7 @@ struct DocumentInformationForm_Previews: PreviewProvider {
                                     specification: .constant("Blue Pullover"),
                                     tags: $tags,
                                     tagInput: $tagInput,
-                                    suggestedTags: $suggestedTags,
-                                    inputAccessoryViewSuggestions: .constant([]))
+                                    suggestedTags: $suggestedTags)
                 }
         }
 

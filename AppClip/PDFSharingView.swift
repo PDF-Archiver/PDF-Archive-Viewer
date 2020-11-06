@@ -27,7 +27,7 @@ struct PDFSharingView: View {
 
             Text("Processing Completed! 📄")
                 .font(.body)
-                .foregroundColor(Color(.paDarkGray))
+                .foregroundColor(.paDarkGray)
 
             if let pdfDocument = viewModel.pdfDocument {
                 PDFCustomView(pdfDocument)
@@ -43,14 +43,14 @@ struct PDFSharingView: View {
                 }, label: {
                     Label("Share" as LocalizedStringKey, systemImage: .squareAndArrowUp)
                 })
-                .buttonStyle(FilledButtonStyle(foregroundColor: Color(.paWhite), backgroundColor: Color(.paDarkGray)))
+                .buttonStyle(FilledButtonStyle(foregroundColor: .paWhite, backgroundColor: .paDarkGray))
 
                 Button(action: {
                     viewModel.delete()
                 }, label: {
                     Text("Delete")
                 })
-                .buttonStyle(FilledButtonStyle(foregroundColor: Color(.paDarkRed), backgroundColor: Color(.systemBackground)))
+                .buttonStyle(FilledButtonStyle(foregroundColor: .paDarkRed, backgroundColor: .systemBackground))
             }
             .padding()
 
@@ -64,7 +64,7 @@ struct PDFSharingView: View {
                 .resizable()
                 .frame(width: 75, height: 75, alignment: .leading)
             Text("PDF Archiver")
-                .foregroundColor(Color(.paDarkRed))
+                .foregroundColor(.paDarkRed)
                 .font(.largeTitle)
                 .fontWeight(.heavy)
         }

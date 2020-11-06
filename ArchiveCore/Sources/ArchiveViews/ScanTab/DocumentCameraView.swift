@@ -9,13 +9,14 @@
 import SwiftUI
 import VisionKit
 
+@available(iOS 13.0, *)
 public struct DocumentCameraView: UIViewControllerRepresentable, Log {
 
     private let controller = VNDocumentCameraViewController()
     private let isShown: Binding<Bool>
-    private let imageHandler: ([UIImage]) -> Void
+    private let imageHandler: ([CIImage]) -> Void
 
-    public init(isShown: Binding<Bool>, imageHandler: @escaping ([UIImage]) -> Void) {
+    public init(isShown: Binding<Bool>, imageHandler: @escaping ([CIImage]) -> Void) {
         self.isShown = isShown
         self.imageHandler = imageHandler
     }
@@ -34,9 +35,9 @@ public struct DocumentCameraView: UIViewControllerRepresentable, Log {
     public final class Coordinator: NSObject, VNDocumentCameraViewControllerDelegate {
 
         private let isShown: Binding<Bool>
-        private let imageHandler: ([UIImage]) -> Void
+        private let imageHandler: ([CIImage]) -> Void
 
-        fileprivate init(isShown: Binding<Bool>, imageHandler: @escaping ([UIImage]) -> Void) {
+        fileprivate init(isShown: Binding<Bool>, imageHandler: @escaping ([CIImage]) -> Void) {
             self.isShown = isShown
             self.imageHandler = imageHandler
         }
@@ -45,9 +46,11 @@ public struct DocumentCameraView: UIViewControllerRepresentable, Log {
             self.isShown.wrappedValue = false
 
             DispatchQueue.global(qos: .userInitiated).async {
-                var images = [UIImage]()
+                var images = [CIImage]()
                 for index in 0..<scan.pageCount {
-                    let image = scan.imageOfPage(at: index)
+                    guard let image = CIImage(image: scan.imageOfPage(at: index)) else {
+                        preconditionFailure("Failed to convert scanned image.")
+                    }
                     images.append(image)
                 }
                 self.imageHandler(images)

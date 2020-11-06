@@ -10,8 +10,8 @@ import SwiftUI
 
 struct SubscriptionButtonStyle: ButtonStyle {
 
-    private let foregroundColor = Color(.systemBackground)
-    private let backgroundColor = Color(.paDarkGray)
+    private let foregroundColor: Color = .systemBackground
+    private let backgroundColor: Color = .paDarkGray
     var isPreferred: Bool = false
 
     func makeBody(configuration: Self.Configuration) -> some View {

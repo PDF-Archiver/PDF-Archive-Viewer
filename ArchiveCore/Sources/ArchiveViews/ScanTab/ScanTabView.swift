@@ -43,7 +43,7 @@ public struct ScanTabView: View {
                 .font(.largeTitle)
                 .fontWeight(.heavy)
             Text("PDF Archiver")
-                .foregroundColor(Color(.paDarkRed))
+                .foregroundColor(.paDarkRed)
                 .font(.largeTitle)
                 .fontWeight(.heavy)
             Text("Scan your documents, tag them and find them sorted in your iCloud Drive.")
@@ -52,7 +52,7 @@ public struct ScanTabView: View {
                 .lineLimit(nil)
         }
         .padding(16.0)
-        .foregroundColor(Color(.paDarkGray))
+        .foregroundColor(.paDarkGray)
         .opacity(opacity)
         .onAppear {
             withAnimation {

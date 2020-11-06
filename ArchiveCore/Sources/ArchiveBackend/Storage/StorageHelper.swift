@@ -8,13 +8,12 @@
 
 import Foundation
 import PDFKit.PDFDocument
-import UIKit.UIImage
 
 public enum StorageHelper {
 
     private static let seperator = "----"
 
-    public static func save(_ images: [UIImage]) throws {
+    public static func save(_ images: [CIImage]) throws {
 
         try FileManager.default.createFolderIfNotExists(PathManager.tempImageURL)
 

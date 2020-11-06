@@ -150,6 +150,10 @@ public final class MainNavigationViewModel: ObservableObject, Log {
 
             ArchiveStore.shared.update(archiveFolder: iCloudContainerPath, untaggedFolders: [iCloudContainerPath.appendingPathComponent("untagged")])
         }
+    }
+
+    func handleTempFilesIfNeeded(_ scenePhase: ScenePhase) {
+        guard scenePhase == .active else { return }
 
         // get documents from ShareExtension and AppClip
         let extensionURLs = (try? FileManager.default.contentsOfDirectory(at: PathManager.extensionTempPdfURL, includingPropertiesForKeys: [], options: [.skipsHiddenFiles, .skipsSubdirectoryDescendants])) ?? []
@@ -231,7 +235,7 @@ public final class MainNavigationViewModel: ObservableObject, Log {
             try Self.imageConverter.handle(url)
         } catch {
             log.error("Unable to handle file.", metadata: ["filetype": "\(url.pathExtension)", "error": "\(error)"])
-            try? FileManager.default.removeItem(at: url)
+//            try? FileManager.default.removeItem(at: url)
 
             DispatchQueue.main.async {
                 self.error = error

@@ -5,7 +5,7 @@
 //  Created by Stewart Lynch on 2020-06-27.
 //
 
-import UIKit
+import CoreGraphics
 
 class OnboardSet {
     private(set) var cards: [OnboardCard] = []

@@ -82,19 +82,52 @@ final class MoreTabViewModel: ObservableObject, Log {
 
     func showSupport() {
         log.info("More table view show: support")
+        #if os(macOS)
+        sendDiagnosticsReport()
+        #else
         if MFMailComposeViewController.canSendMail() {
             isShowingMailView = true
         } else {
-            guard let url = URL(string: "https://pdf-archiver.io/faq") else { fatalError("Could not generate the FAQ url.") }
+            guard let url = URL(string: "https://pdf-archiver.io/faq") else { preconditionFailure("Could not generate the FAQ url.") }
             UIApplication.shared.open(url)
         }
+        #endif
     }
-
-//    func updateSubscription() {
-//        subscriptionStatus = getCurrentStatus()
-//    }
-
-//    private func getCurrentStatus() -> LocalizedStringKey {
-//        iapService.appUsagePermitted() ? "Active ✅" : "Inactive ❌"
-//    }
 }
+
+#if os(macOS)
+import AppKit
+import Diagnostics
+
+extension MoreTabViewModel {
+    func sendDiagnosticsReport() {
+        // add a diagnostics report
+        var reporters = DiagnosticsReporter.DefaultReporter.allReporters
+        reporters.insert(CustomReporter.self, at: 1)
+        let report = DiagnosticsReporter.create(using: reporters)
+
+        guard let service = NSSharingService(named: .composeEmail) else {
+            log.errorAndAssert("Failed to get sharing service.")
+
+            guard let url = URL(string: "https://pdf-archiver.io/faq") else { preconditionFailure("Could not generate the FAQ url.") }
+            NSWorkspace.shared.open(url)
+            return
+        }
+        service.recipients = Self.mailRecipients
+        service.subject = Self.mailSubject
+
+        let url = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent("Diagnostics-Report.html")
+
+        // remove previous report
+        try? FileManager.default.removeItem(at: url)
+
+        do {
+            try report.data.write(to: url)
+        } catch {
+            preconditionFailure("Failed with error: \(error)")
+        }
+
+        service.perform(withItems: [url])
+    }
+}
+#endif

@@ -97,7 +97,7 @@ public final class ScanTabViewModel: ObservableObject, Log {
         }
     }
 
-    public func process(_ images: [UIImage]) {
+    public func process(_ images: [CIImage]) {
         assert(!Thread.isMainThread, "This might take some time and should not be executed on the main thread.")
 
         // validate subscription

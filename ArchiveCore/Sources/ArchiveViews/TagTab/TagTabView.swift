@@ -116,8 +116,7 @@ struct TagTabView: View {
                                 specification: $viewModel.specification,
                                 tags: $viewModel.documentTags,
                                 tagInput: $viewModel.documentTagInput,
-                                suggestedTags: $viewModel.suggestedTags,
-                                inputAccessoryViewSuggestions: $viewModel.inputAccessoryViewSuggestions)
+                                suggestedTags: $viewModel.suggestedTags)
     }
 }
 

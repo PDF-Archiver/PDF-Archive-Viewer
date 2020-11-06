@@ -24,7 +24,6 @@
 
 import BackgroundTasks
 import ExposureNotification
-import UIKit
 
 public enum BackgroundTaskIdentifier: String, CaseIterable {
     // only one task identifier is allowed have the .exposure-notification suffix
@@ -66,7 +65,7 @@ public final class BackgroundTaskScheduler: Log {
         let identifierString = taskIdentifier.backgroundTaskSchedulerIdentifier
         BGTaskScheduler.shared.register(forTaskWithIdentifier: identifierString, using: .main) { task in
             let backgroundTask = DispatchWorkItem {
-                self.exposureNotificationTask(task, with: taskIdentifier)
+                self.taskItem(task, with: taskIdentifier)
             }
 
             task.expirationHandler = {
@@ -99,7 +98,7 @@ public final class BackgroundTaskScheduler: Log {
 
     // MARK: - Task execution handlers.
 
-    private func exposureNotificationTask(_ task: BGTask, with taskIdentifier: BackgroundTaskIdentifier) {
+    private func taskItem(_ task: BGTask, with taskIdentifier: BackgroundTaskIdentifier) {
         delegate?.executeBackgroundTask { success in
             task.setTaskCompleted(success: success)
             if !success {

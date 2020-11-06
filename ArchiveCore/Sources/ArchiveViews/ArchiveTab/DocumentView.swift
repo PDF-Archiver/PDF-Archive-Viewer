@@ -30,7 +30,7 @@ struct DocumentView: View {
             tags
             if !showTagStatus && viewModel.downloadStatus.isDownloading {
                 LinearProgressBar(viewModel.downloadStatus.percentageDownloading)
-                    .foregroundColor(Color(.paDarkGray))
+                    .foregroundColor(.paDarkGray)
             }
         }
         .frame(maxWidth: .infinity, maxHeight: 65.0)

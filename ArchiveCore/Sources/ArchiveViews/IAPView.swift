@@ -16,17 +16,18 @@ struct IAPView: View {
 
     var body: some View {
         LazyView {
-        VStack(alignment: .leading, spacing: 32.0) {
-            Spacer()
-            title
-            features
-            subscriptionButtons
-            text
-            otherButtons
-            Spacer()
-        }
-        .padding()
-        .maxWidth(600)
+            VStack(alignment: .leading, spacing: 32.0) {
+                Spacer()
+                title
+                features
+                subscriptionButtons
+                text
+                otherButtons
+                Spacer()
+            }
+            .padding()
+            .maxWidth(600)
+            .onAppear(perform: Keyboard.main.dismiss)
         }
     }
 
@@ -41,7 +42,7 @@ struct IAPView: View {
                 Text("Premium Subscription")
                     .font(.title)
             }
-            .foregroundColor(Color(.paDarkGray))
+            .foregroundColor(.paDarkGray)
         }.padding(EdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16))
     }
 
@@ -55,7 +56,7 @@ struct IAPView: View {
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding()
-                .background(Color(.paDarkGray).opacity(0.125))
+                .background(Color.paDarkGray.opacity(0.125))
                 .cornerRadius(8)
                 ZStack(alignment: .topTrailing) {
                     VStack(alignment: .leading, spacing: 8) {
@@ -65,14 +66,14 @@ struct IAPView: View {
                     }
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding()
-                    .background(Color(.paDarkGray).opacity(0.125))
+                    .background(Color.paDarkGray.opacity(0.125))
                     .cornerRadius(8)
                     ZStack {
                         Text("Premium")
                             .padding(4)
                             .font(.footnote)
-                            .foregroundColor(Color(.paWhite))
-                            .background(Color(.paDarkRed))
+                            .foregroundColor(.paWhite)
+                            .background(.paDarkRed)
                             .cornerRadius(8)
                             .animation(nil)
                             .transition(.scale)
@@ -83,13 +84,13 @@ struct IAPView: View {
 
             HStack(spacing: 12) {
                 Image(systemName: .heartFill)
-                    .foregroundColor(Color(.paDarkRed))
+                    .foregroundColor(.paDarkRed)
                 Text("Support further development of a 1 person team.")
                 .fixedSize(horizontal: false, vertical: true)
                 .maxWidth(250)
             }
             .padding()
-            .background(Color(.paDarkGray).opacity(0.125))
+            .background(Color.paDarkGray.opacity(0.125))
             .cornerRadius(8)
         }
     }
@@ -126,7 +127,7 @@ struct IAPView: View {
         ScrollView {
             Text("• Try the app for free! You can try the app in a free trial period of 1 month by choosing a subscription. You can try the app without any costs in this period.\n• Your Apple account will be charged for the next subscriptioon period within the final 24 hours of the current period.\n• The subscription will renew automatically if you do not deactivate the renewal in the account setting in iTunes or the App Store at least 24 hours before the end of the subscription period.")
                 .font(.caption)
-                .foregroundColor(Color(.paLightGray))
+                .foregroundColor(.paLightGray)
         }
         .maxHeight(200)
     }
@@ -138,7 +139,7 @@ struct IAPView: View {
             }, label: {
                 Text("Restore")
             })
-            .buttonStyle(FilledButtonStyle(foregroundColor: Color(.paDarkGray), backgroundColor: Color(.systemBackground)))
+            .buttonStyle(FilledButtonStyle(foregroundColor: .paDarkGray, backgroundColor: .systemBackground))
 
             Button(action: {
                 self.viewModel.tapped(button: .cancel, presentationMode: self.presentationMode)
@@ -146,7 +147,7 @@ struct IAPView: View {
             }, label: {
                 Text("Cancel")
             })
-            .buttonStyle(FilledButtonStyle(foregroundColor: Color(.paDarkRed), backgroundColor: Color(.systemBackground)))
+            .buttonStyle(FilledButtonStyle(foregroundColor: .paDarkRed, backgroundColor: .systemBackground))
         }
     }
 }
