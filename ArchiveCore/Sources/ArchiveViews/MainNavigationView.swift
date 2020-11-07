@@ -9,6 +9,12 @@
 import Combine
 import SwiftUI
 
+#if os(macOS)
+fileprivate typealias CustomNavigationtStyle = DefaultNavigationViewStyle
+#else
+fileprivate typealias CustomNavigationtStyle = StackNavigationViewStyle
+#endif
+
 public struct MainNavigationView: View {
     #if os(iOS)
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
@@ -28,10 +34,10 @@ public struct MainNavigationView: View {
             } else {
                 sidebar
             }
-            #endif
             if viewModel.scanViewModel.showDocumentScan {
                 documentCameraView
             }
+            #endif
         }
         .intro(when: $viewModel.showTutorial)
         .sheet(isPresented: $viewModel.showSubscriptionView,
@@ -100,7 +106,7 @@ public struct MainNavigationView: View {
             ForEach(Tab.allCases) { tab in
                 viewModel.view(for: tab)
                     .wrapNavigationView(when: tab != .scan)
-                    .navigationViewStyle(StackNavigationViewStyle())
+                    .navigationViewStyle(CustomNavigationtStyle())
                     .tabItem {
                         Label(tab.name, systemImage: tab.iconName)
                     }
@@ -109,6 +115,7 @@ public struct MainNavigationView: View {
         }
     }
 
+    #if canImport(VisionKit)
     private var documentCameraView: some View {
         DocumentCameraView(
             isShown: $viewModel.scanViewModel.showDocumentScan,
@@ -116,6 +123,7 @@ public struct MainNavigationView: View {
             .edgesIgnoringSafeArea(.all)
             .statusBar(hidden: true)
     }
+    #endif
 }
 
 //struct MainNavigationView_Previews: PreviewProvider {

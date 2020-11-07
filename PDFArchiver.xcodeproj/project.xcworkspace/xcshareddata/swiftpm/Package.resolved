@@ -23,9 +23,9 @@
         "package": "Diagnostics",
         "repositoryURL": "https://github.com/WeTransfer/Diagnostics",
         "state": {
-          "branch": null,
-          "revision": "0e7e1b79643404a826784e2f4b21a0a6376013fd",
-          "version": "1.7.0"
+          "branch": "master",
+          "revision": "38d59b8db1c554cb63f467699740a08f3f17122a",
+          "version": null
         }
       },
       {
@@ -35,6 +35,15 @@
           "branch": null,
           "revision": "427aec0a0ab342246ec02369dea398597b61174a",
           "version": "0.9.3"
+        }
+      },
+      {
+        "package": "GraphicsRenderer",
+        "repositoryURL": "https://github.com/shaps80/GraphicsRenderer",
+        "state": {
+          "branch": null,
+          "revision": "fa9b28096ea13eb59333a02d616244482ad6039f",
+          "version": "1.4.4"
         }
       },
       {
@@ -71,15 +80,6 @@
           "branch": null,
           "revision": "7f6484328875a56187b1737e2f8fa3ce7c3c9030",
           "version": "0.0.3"
-        }
-      },
-      {
-        "package": "SwiftyStoreKit",
-        "repositoryURL": "https://github.com/bizz84/SwiftyStoreKit",
-        "state": {
-          "branch": null,
-          "revision": "9974acf07b31b6f5bf363d5118dc1bd4fcac6122",
-          "version": "0.16.1"
         }
       },
       {

@@ -36,7 +36,6 @@ public final class MainNavigationViewModel: ObservableObject, Log {
     @Published var showSubscriptionView: Bool = false
 
     private var disposables = Set<AnyCancellable>()
-    private let selectionFeedback = UISelectionFeedbackGenerator()
 
     public init() {
 
@@ -80,8 +79,7 @@ public final class MainNavigationViewModel: ObservableObject, Log {
                 UserDefaults.appGroup.lastSelectedTab = selectedTab
                 Self.log.info("Changed tab.", metadata: ["selectedTab": "\(selectedTab)"])
 
-                self.selectionFeedback.prepare()
-                self.selectionFeedback.selectionChanged()
+                FeedbackGenerator.selectionChanged()
             }
             .store(in: &disposables)
 

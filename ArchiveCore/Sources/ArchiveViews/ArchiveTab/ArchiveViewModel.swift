@@ -11,9 +11,6 @@
 import Combine
 import Foundation
 import SwiftUI
-//#if DEBUG
-//import DeepDiff
-//#endif
 
 final class ArchiveViewModel: ObservableObject, Log {
 
@@ -36,8 +33,6 @@ final class ArchiveViewModel: ObservableObject, Log {
 
     private var disposables = Set<AnyCancellable>()
     private let archiveStore: ArchiveStore
-    private let notificationFeedback = UINotificationFeedbackGenerator()
-    private let selectionFeedback = UISelectionFeedbackGenerator()
 
     init(_ archiveStore: ArchiveStore = ArchiveStore.shared) {
         self.archiveStore = archiveStore
@@ -71,8 +66,7 @@ final class ArchiveViewModel: ObservableObject, Log {
             .dropFirst()
             .sink { _ in
                 self.selectedFilters = self.selectedFilters.filter(\.isTag)
-                self.selectionFeedback.prepare()
-                self.selectionFeedback.selectionChanged()
+                FeedbackGenerator.selectionChanged()
             }
             .store(in: &disposables)
 
@@ -174,7 +168,7 @@ final class ArchiveViewModel: ObservableObject, Log {
 //            archive.update(document)
 //            NotificationCenter.default.post(Notification(name: .documentChanges))
 
-            notificationFeedback.notificationOccurred(.success)
+            FeedbackGenerator.notify(.success)
 
         case .local:
             selectedDocument = document
@@ -184,7 +178,6 @@ final class ArchiveViewModel: ObservableObject, Log {
     }
 
     func delete(at offsets: IndexSet) {
-        notificationFeedback.prepare()
         for index in offsets {
             let deletedDocument = documents.remove(at: index)
             do {
@@ -195,7 +188,7 @@ final class ArchiveViewModel: ObservableObject, Log {
                 }
             }
         }
-        notificationFeedback.notificationOccurred(.success)
+        FeedbackGenerator.notify(.success)
     }
 
     func selected(filterItem: FilterItem) {

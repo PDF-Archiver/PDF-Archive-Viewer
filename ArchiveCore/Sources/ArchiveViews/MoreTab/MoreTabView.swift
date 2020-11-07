@@ -10,6 +10,14 @@ import SwiftUI
 import SwiftUIX
 import Parma
 
+#if os(macOS)
+fileprivate typealias CustomListStyle = DefaultListStyle
+fileprivate typealias CustomNavigationtStyle = DefaultNavigationViewStyle
+#else
+fileprivate typealias CustomListStyle = GroupedListStyle
+fileprivate typealias CustomNavigationtStyle = StackNavigationViewStyle
+#endif
+
 struct MoreTabView: View {
 
     @ObservedObject var viewModel: MoreTabViewModel
@@ -21,7 +29,7 @@ struct MoreTabView: View {
             subscription
             moreInformation
         }
-        .listStyle(GroupedListStyle())
+        .listStyle(CustomListStyle())
         .foregroundColor(.primary)
         .sheet(isPresented: $viewModel.isShowingMailView) {
             #if canImport(MessageUI)
@@ -31,7 +39,7 @@ struct MoreTabView: View {
             #endif
         }
         .navigationTitle("Preferences & More")
-        .navigationViewStyle(StackNavigationViewStyle())
+        .navigationViewStyle(CustomNavigationtStyle())
         .emittingError(viewModel.error)
     }
 

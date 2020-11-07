@@ -6,11 +6,10 @@
 //  Copyright © 2019 Julian Kahnert. All rights reserved.
 //
 
+#if canImport(VisionKit)
 import SwiftUI
 import VisionKit
 
-@available(iOS 13.0, *)
-@available(macOS, unavailable)
 public struct DocumentCameraView: UIViewControllerRepresentable, Log {
 
     private let controller = VNDocumentCameraViewController()
@@ -68,3 +67,4 @@ public struct DocumentCameraView: UIViewControllerRepresentable, Log {
         }
     }
 }
+#endif

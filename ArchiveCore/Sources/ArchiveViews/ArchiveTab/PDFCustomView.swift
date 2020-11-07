@@ -24,7 +24,7 @@ public struct PDFCustomView: AppKitOrUIKitViewRepresentable {
         view.displayMode = .singlePageContinuous
         view.autoScales = true
         view.interpolationQuality = .low
-        view.backgroundColor = Color.paPDFBackground.toUIColor()!
+        view.backgroundColor = .init(Color.paPDFBackground)
 //        view.minScaleFactor = 0.1
 //        view.maxScaleFactor = 4.0
         return view

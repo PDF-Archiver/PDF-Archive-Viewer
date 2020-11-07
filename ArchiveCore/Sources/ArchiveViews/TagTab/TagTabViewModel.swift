@@ -38,8 +38,6 @@ final class TagTabViewModel: ObservableObject, Log {
     private let archiveStore: ArchiveStore
     private let tagStore: TagStore
     private var disposables = Set<AnyCancellable>()
-    private let notificationFeedback = UINotificationFeedbackGenerator()
-    private let selectionFeedback = UISelectionFeedbackGenerator()
 
     init(archiveStore: ArchiveStore = ArchiveStore.shared, tagStore: TagStore = TagStore.shared) {
         self.archiveStore = archiveStore
@@ -142,8 +140,7 @@ final class TagTabViewModel: ObservableObject, Log {
             .removeDuplicates()
             .dropFirst()
             .sink { _ in
-                self.selectionFeedback.prepare()
-                self.selectionFeedback.selectionChanged()
+                FeedbackGenerator.selectionChanged()
             }
             .store(in: &disposables)
 
@@ -199,8 +196,7 @@ final class TagTabViewModel: ObservableObject, Log {
                 let tmpTags = tags.map { $0.lowercased().slugified(withSeparator: "") }
                     .filter { !$0.isEmpty }
 
-                self.selectionFeedback.prepare()
-                self.selectionFeedback.selectionChanged()
+                FeedbackGenerator.selectionChanged()
 
                 return Set(tmpTags).sorted()
             }
@@ -233,7 +229,6 @@ final class TagTabViewModel: ObservableObject, Log {
         document.tags = Set(documentTags.map { $0.slugified(withSeparator: "") })
 
         DispatchQueue.global(qos: .userInitiated).async {
-            self.notificationFeedback.prepare()
             do {
                 try self.archiveStore.archive(document, slugify: true)
                 var filteredDocuments = self.archiveStore.documents.filter { $0.id != document.id }
@@ -244,7 +239,7 @@ final class TagTabViewModel: ObservableObject, Log {
                     self.currentDocument = self.getNewDocument(from: filteredDocuments)
                 }
 
-                self.notificationFeedback.notificationOccurred(.success)
+                FeedbackGenerator.notify(.success)
 
                 // increment the AppStoreReview counter
                 AppStoreReviewRequest.shared.incrementCount()
@@ -255,15 +250,14 @@ final class TagTabViewModel: ObservableObject, Log {
                     self.error = error
                 }
 
-                self.notificationFeedback.notificationOccurred(.error)
+                FeedbackGenerator.notify(.error)
             }
         }
     }
 
     func deleteDocument() {
 
-        notificationFeedback.prepare()
-        notificationFeedback.notificationOccurred(.success)
+        FeedbackGenerator.notify(.success)
 
         // delete document in archive
         guard let currentDocument = currentDocument else { return }

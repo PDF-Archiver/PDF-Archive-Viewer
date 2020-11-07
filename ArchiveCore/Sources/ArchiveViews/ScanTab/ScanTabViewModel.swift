@@ -10,7 +10,6 @@ import AVKit
 import Combine
 import Foundation
 import SwiftUI
-import VisionKit
 
 public final class ScanTabViewModel: ObservableObject, Log {
     @Published public private(set) var error: Error?
@@ -24,7 +23,6 @@ public final class ScanTabViewModel: ObservableObject, Log {
 
     private var lastProgressValue: CGFloat?
     private var disposables = Set<AnyCancellable>()
-    private let notificationFeedback = UINotificationFeedbackGenerator()
 
     public init(imageConverter: ImageConverterAPI, iapService: IAPServiceAPI, documentsFinishedHandler: @escaping (inout Error?) -> Void) {
         self.imageConverter = imageConverter
@@ -60,13 +58,12 @@ public final class ScanTabViewModel: ObservableObject, Log {
     }
 
     public func startScanning() {
-        notificationFeedback.prepare()
         let authorizationStatus = AVCaptureDevice.authorizationStatus(for: .video)
         switch authorizationStatus {
             case .authorized:
                 log.info("Start scanning a document.")
                 showDocumentScan = true
-                notificationFeedback.notificationOccurred(.success)
+                FeedbackGenerator.notify(.success)
 
                 // stop current image processing
                 imageConverter.stopProcessing()
@@ -82,13 +79,17 @@ public final class ScanTabViewModel: ObservableObject, Log {
             case .denied, .restricted:
                 log.info("Authorization status blocks camera access. Switch to preferences.")
 
-                notificationFeedback.notificationOccurred(.warning)
+                FeedbackGenerator.notify(.warning)
                 error = AlertDataModel.createAndPost(title: "Need Camera Access",
                                              message: "Camera access is required to scan documents.",
                                              primaryButton: .default(Text("Grant Access"),
                                                                      action: {
+                                                                        #if os(macOS)
+                                                                        // TODO: handle settings
+                                                                        #else
                                                                         guard let settingsAppURL = URL(string: UIApplication.openSettingsURLString) else { fatalError("Could not find settings url!") }
-                                                                        UIApplication.shared.open(settingsAppURL, options: [:], completionHandler: nil)
+                                                                        open(settingsAppURL)
+                                                                        #endif
                                              }),
                                              secondaryButton: .cancel())
 

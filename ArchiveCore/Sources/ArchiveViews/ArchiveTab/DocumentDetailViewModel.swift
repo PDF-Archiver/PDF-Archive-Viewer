@@ -16,7 +16,6 @@ final class DocumentDetailViewModel: ObservableObject {
     var activityItems: [Any] {
         [document.path]
     }
-    private let selectionFeedback = UISelectionFeedbackGenerator()
 
     init(_ document: Document) {
         self.document = document
@@ -24,7 +23,6 @@ final class DocumentDetailViewModel: ObservableObject {
     }
 
     func viewAppeared() {
-        selectionFeedback.prepare()
-        selectionFeedback.selectionChanged()
+        FeedbackGenerator.selectionChanged()
     }
 }

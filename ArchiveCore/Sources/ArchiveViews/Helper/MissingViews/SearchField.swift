@@ -88,7 +88,9 @@ struct SearchField_Previews: PreviewProvider {
                     }
                 }
             }
+            #if os(iOS)
             .navigationBarTitle(Text("Search"))
+            #endif
         }
     }
 }

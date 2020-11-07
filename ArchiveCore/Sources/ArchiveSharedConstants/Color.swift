@@ -23,3 +23,11 @@ public extension Color {
     static var paKeyboardBackground: Color { return Color("KeyboardBackground") }
     static var paPlaceholderGray: Color { return Color("PlaceholderGray") }
 }
+
+#if os(macOS)
+public extension Color {
+    static var systemBackground: Color { return Color(.windowBackgroundColor) }
+    static var secondarySystemBackground: Color { return Color(.controlBackgroundColor) }
+    static var systemGray6: Color { return Color(.darkGray) }
+}
+#endif

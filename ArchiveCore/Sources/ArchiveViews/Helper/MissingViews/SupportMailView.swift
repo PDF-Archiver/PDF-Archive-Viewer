@@ -59,7 +59,7 @@ struct SupportMailView: UIViewControllerRepresentable {
 
         // add a diagnostics report
         var reporters = DiagnosticsReporter.DefaultReporter.allReporters
-        reporters.insert(CustomReporter.self, at: 1)
+        reporters.insert(CustomDiagnosticsReporter.self, at: 1)
         let report = DiagnosticsReporter.create(using: reporters)
         mail.addDiagnosticReport(report)
 
@@ -69,27 +69,6 @@ struct SupportMailView: UIViewControllerRepresentable {
     func updateUIViewController(_ uiViewController: MFMailComposeViewController,
                                 context: UIViewControllerRepresentableContext<SupportMailView>) {
 
-    }
-}
-
-extension SupportMailView {
-    struct CustomReporter: DiagnosticsReporting {
-        static func report() -> DiagnosticsChapter {
-            let documents = ArchiveStore.shared.documents
-            let taggedCount = documents
-                .filter { $0.taggingStatus == .tagged }
-                .count
-            let untaggedCount = documents.count - taggedCount
-
-            let diagnostics: [String: String] = [
-                "Environment": AppEnvironment.get().rawValue,
-                "Version": AppEnvironment.getFullVersion(),
-                "Number of tagged Documents": String(taggedCount),
-                "Number of untagged Documents": String(untaggedCount),
-                "Subscription Expiry Date": UserDefaults.appGroup.subscriptionExpiryDate?.description ?? "NULL"
-            ]
-            return DiagnosticsChapter(title: "App Environment", diagnostics: diagnostics)
-        }
     }
 }
 #endif

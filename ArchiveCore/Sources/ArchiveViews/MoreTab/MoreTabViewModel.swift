@@ -55,8 +55,12 @@ final class MoreTabViewModel: ObservableObject, Log {
 
     func showPermissions() {
         log.info("More table view show: app permissions")
-        guard let link = URL(string: UIApplication.openSettingsURLString) else { fatalError("Could not find settings url!") }
-        UIApplication.shared.open(link)
+        #if os(macOS)
+        // TODO: handle settings
+        #else
+        guard let settingsAppURL = URL(string: UIApplication.openSettingsURLString) else { fatalError("Could not find settings url!") }
+        open(settingsAppURL)
+        #endif
     }
 
     func resetApp() {
@@ -93,7 +97,7 @@ final class MoreTabViewModel: ObservableObject, Log {
             isShowingMailView = true
         } else {
             guard let url = URL(string: "https://pdf-archiver.io/faq") else { preconditionFailure("Could not generate the FAQ url.") }
-            UIApplication.shared.open(url)
+            open(url)
         }
         #endif
     }
@@ -107,14 +111,14 @@ extension MoreTabViewModel {
     func sendDiagnosticsReport() {
         // add a diagnostics report
         var reporters = DiagnosticsReporter.DefaultReporter.allReporters
-        reporters.insert(CustomReporter.self, at: 1)
+        reporters.insert(CustomDiagnosticsReporter.self, at: 1)
         let report = DiagnosticsReporter.create(using: reporters)
 
         guard let service = NSSharingService(named: .composeEmail) else {
             log.errorAndAssert("Failed to get sharing service.")
 
             guard let url = URL(string: "https://pdf-archiver.io/faq") else { preconditionFailure("Could not generate the FAQ url.") }
-            NSWorkspace.shared.open(url)
+            open(url)
             return
         }
         service.recipients = Self.mailRecipients
