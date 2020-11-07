@@ -38,6 +38,15 @@
         }
       },
       {
+        "package": "GraphicsRenderer",
+        "repositoryURL": "https://github.com/shaps80/GraphicsRenderer",
+        "state": {
+          "branch": null,
+          "revision": "fa9b28096ea13eb59333a02d616244482ad6039f",
+          "version": "1.4.4"
+        }
+      },
+      {
         "package": "Parma",
         "repositoryURL": "https://github.com/dasautoooo/Parma",
         "state": {

@@ -7,10 +7,28 @@
 //
 // swiftlint:disable cyclomatic_complexity function_body_length
 
-#if canImport(UIKit)
+import GraphicsRenderer
 import PDFKit
-import UIKit
 import Vision
+
+#if canImport(UIKit)
+import UIKit
+private typealias Image = UIImage
+private typealias Font = UIFont
+private typealias Color = UIColor
+private typealias DrawingOptions = NSStringDrawingOptions
+#else
+import AppKit
+private typealias Image = NSImage
+private typealias Font = NSFont
+private typealias Color = NSColor
+private typealias DrawingOptions = NSString.DrawingOptions
+extension NSImage {
+    var cgImage: CGImage? {
+        cgImage(forProposedRect: nil, context: nil, hints: nil)
+    }
+}
+#endif
 
 public enum PDFProcessingError: Error {
     case unttaggedDocumentsPathNotFound
@@ -51,7 +69,6 @@ public final class PDFProcessing: Operation, Log {
             if isCancelled {
                 return
             }
-//            guard let untaggedPath = StorageHelper.Paths.untaggedPath else { throw PDFProcessingError.unttaggedDocumentsPathNotFound }
             try FileManager.default.createFolderIfNotExists(destinationFolder)
 
             // signal the start of the operation
@@ -120,7 +137,6 @@ public final class PDFProcessing: Operation, Log {
         } else {
 
             // only use tags that are already in the archive
-//            let archiveTags = DocumentService.archive.getAvailableTags(with: [])
             newTags = Set(newTags.intersection(archiveTags).prefix(5))
         }
 
@@ -128,9 +144,6 @@ public final class PDFProcessing: Operation, Log {
     }
 
     private func createPdf(of documentId: UUID) throws -> URL {
-        // initial setup
-//        guard let tempImagePath = StorageHelper.Paths.tempImagePath else { fatalError("Could not find temp image path.") }
-
         // check if the parent folder exists
         try FileManager.default.createFolderIfNotExists(tempImagePath)
 
@@ -139,18 +152,13 @@ public final class PDFProcessing: Operation, Log {
 
         // STEP II: filter and sort those urls in a second step to avoid shuffling around pages
         let sortedDocumentUrls = allImageUrls
-//        var sortedDocumentUrls = allImageUrls
             .filter { $0.lastPathComponent.starts(with: documentId.uuidString) }
             .sorted { $0.lastPathComponent < $1.lastPathComponent }
-
-//        for _ in 0..<5 {
-//            sortedDocumentUrls.append(contentsOf: sortedDocumentUrls)
-//        }
 
         var textObservations = [TextObservation]()
         for (imageIndex, imageUrl) in sortedDocumentUrls.enumerated() {
 
-            guard let image = UIImage(contentsOfFile: imageUrl.path) else {
+            guard let image = Image(contentsOfFile: imageUrl.path) else {
                 fatalError("Could not find image at \(imageUrl.path)")
             }
 
@@ -176,9 +184,8 @@ public final class PDFProcessing: Operation, Log {
             for (observationIndex, observation) in detectTextRectangleObservations.enumerated() {
 
                 // build and start processing of one observation
-                let textBox = self.transform(observation: observation, in: image)
-                if let croppedImage = image.crop(rectangle: textBox),
-                    let cgImage = croppedImage.cgImage {
+                let textBox = self.transform(observation: observation, in: image.size)
+                if let cgImage = image.cgImage?.cropping(to: textBox) {
 
                     // text recognition (OCR)
                     let textRecognitionRequest = VNRecognizeTextRequest { (request, error) in
@@ -233,8 +240,7 @@ public final class PDFProcessing: Operation, Log {
     }
 
     private static func renderPdf(from observations: [TextObservation]) -> PDFDocument {
-        let renderer = UIGraphicsPDFRenderer(bounds: .zero)
-        let data = renderer.pdfData { context in
+        let data = PDFRenderer(bounds: CGRect(x: 0, y: 0, width: 612, height: 792)).pdfData { context in
             for observation in observations {
 
                 let bounds = CGRect(origin: .zero, size: observation.image.size)
@@ -246,15 +252,15 @@ public final class PDFProcessing: Operation, Log {
                 }
             }
         }
-        guard let document = PDFDocument(data: data) else { fatalError("Could not generate PDF document.") }
+        guard let document = PDFDocument(data: data as Data) else { fatalError("Could not generate PDF document.") }
         return document
     }
 
-    private func transform(observation: VNTextObservation, in image: UIImage) -> CGRect {
+    private func transform(observation: VNTextObservation, in imageSize: CGSize) -> CGRect {
 
         // special thanks to: https://github.com/g-r-a-n-t/serial-vision/
         var transform = CGAffineTransform.identity
-        transform = transform.scaledBy(x: image.size.width, y: -image.size.height)
+        transform = transform.scaledBy(x: imageSize.width, y: -imageSize.height)
         transform = transform.translatedBy(x: 0, y: -1 )
 
         return CGRect(x: observation.boundingBox.applying(transform).origin.x,
@@ -279,18 +285,18 @@ public final class PDFProcessing: Operation, Log {
     }
 
     private struct TextObservation {
-        let image: UIImage
+        let image: Image
         let results: [TextObservationResult]
     }
 
 }
 
-extension UIFont {
-    fileprivate convenience init?(named fontName: String, fitting text: String, into targetSize: CGSize, with attributes: [NSAttributedString.Key: Any], options: NSStringDrawingOptions) {
+extension Font {
+    fileprivate convenience init?(named fontName: String, fitting text: String, into targetSize: CGSize, with attributes: [NSAttributedString.Key: Any], options: DrawingOptions) {
         var attributes = attributes
         let fontSize = targetSize.height
 
-        attributes[.font] = UIFont(name: fontName, size: fontSize)
+        attributes[.font] = Font(name: fontName, size: fontSize)
         let size = text.boundingRect(with: CGSize(width: .greatestFiniteMagnitude, height: fontSize),
                                      options: options,
                                      attributes: attributes,
@@ -306,11 +312,10 @@ extension UIFont {
 extension NSAttributedString {
     fileprivate static func createCleared(from text: String, with size: CGSize) -> NSAttributedString {
 
-        let fontName = UIFont.systemFont(ofSize: 0).fontName
-        var attributes: [NSAttributedString.Key: Any] = [NSAttributedString.Key.foregroundColor: UIColor.clear]
-        attributes[.font] = UIFont(named: fontName, fitting: text, into: size, with: attributes, options: .usesFontLeading)
+        let fontName = Font.systemFont(ofSize: 0).fontName
+        var attributes: [NSAttributedString.Key: Any] = [NSAttributedString.Key.foregroundColor: Color.clear]
+        attributes[.font] = Font(named: fontName, fitting: text, into: size, with: attributes, options: .usesFontLeading)
 
         return NSAttributedString(string: text, attributes: attributes)
     }
 }
-#endif

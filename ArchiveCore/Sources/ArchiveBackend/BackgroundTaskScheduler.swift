@@ -24,8 +24,6 @@
 
 import BackgroundTasks
 
-@available(iOS 13.0, *)
-@available(macOS, unavailable)
 public enum BackgroundTaskIdentifier: String, CaseIterable {
     // only one task identifier is allowed have the .exposure-notification suffix
     case pdfProcessing = "pdf-processing"
@@ -44,6 +42,8 @@ public protocol BackgroundTaskExecutionDelegate: AnyObject {
 ///         e -l objc -- (void)[[BGTaskScheduler sharedScheduler] _simulateLaunchForTaskWithIdentifier:@"de.JulianKahnert.PDFArchiveViewer.pdf-processing"]
 ///         To simulate the expiration of a background task, use the following:
 ///         e -l objc -- (void)[[BGTaskScheduler sharedScheduler] _simulateExpirationForTaskWithIdentifier:@"de.JulianKahnert.PDFArchiveViewer.pdf-processing"]
+@available(iOS 13.0, *)
+@available(macOS, unavailable)
 public final class BackgroundTaskScheduler: Log {
 
     // MARK: - Static.
