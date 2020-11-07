@@ -8,7 +8,9 @@
 // swiftlint:disable force_unwrapping
 
 import Combine
+#if canImport(MessageUI)
 import MessageUI
+#endif
 import SwiftUI
 
 final class MoreTabViewModel: ObservableObject, Log {
@@ -21,7 +23,9 @@ final class MoreTabViewModel: ObservableObject, Log {
     @Published var selectedQualityIndex = UserDefaults.PDFQuality.toIndex(UserDefaults.appGroup.pdfQuality)
 
     @Published var isShowingMailView: Bool = false
+    #if canImport(MessageUI)
     @Published var result: Result<MFMailComposeResult, Error>?
+    #endif
     @Published var subscriptionStatus: LocalizedStringKey = "Inactive ❌"
 
     private let iapService: IAPServiceAPI

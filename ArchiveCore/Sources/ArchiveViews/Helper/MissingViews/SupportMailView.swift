@@ -6,12 +6,11 @@
 //  Copyright © 2019 Julian Kahnert. All rights reserved.
 //
 
+#if canImport(MessageUI)
 import Diagnostics
 import MessageUI
 import SwiftUI
 
-@available(iOS 13.0, *)
-@available(macOS, unavailable)
 struct SupportMailView: UIViewControllerRepresentable {
 
     let subject: String
@@ -93,3 +92,4 @@ extension SupportMailView {
         }
     }
 }
+#endif

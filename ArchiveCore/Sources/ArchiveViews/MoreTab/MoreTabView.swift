@@ -6,7 +6,6 @@
 //  Copyright © 2019 Julian Kahnert. All rights reserved.
 //
 
-import MessageUI
 import SwiftUI
 import SwiftUIX
 import Parma
@@ -25,7 +24,7 @@ struct MoreTabView: View {
         .listStyle(GroupedListStyle())
         .foregroundColor(.primary)
         .sheet(isPresented: $viewModel.isShowingMailView) {
-            #if os(iOS)
+            #if canImport(MessageUI)
             SupportMailView(subject: MoreTabViewModel.mailSubject,
                             recipients: MoreTabViewModel.mailRecipients,
                             result: self.$viewModel.result)
