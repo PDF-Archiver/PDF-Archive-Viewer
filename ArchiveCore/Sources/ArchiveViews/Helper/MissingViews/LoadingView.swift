@@ -12,8 +12,9 @@ import SwiftUIX
 struct LoadingView: View {
     var body: some View {
         VStack(alignment: .center, spacing: 32.0) {
-            ActivityIndicator()
-                .animated(true)
+            ProgressView()
+                .progressViewStyle(CircularProgressViewStyle())
+                .scaleEffect(2, anchor: .center)
             Text("Loading documents ...")
         }
     }

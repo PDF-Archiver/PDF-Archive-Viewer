@@ -59,7 +59,8 @@ let package = Package(
                 ]),
         .target(name: "ArchiveSharedConstants",
                 dependencies: [
-                    .product(name: "Logging", package: "swift-log")
+                    .product(name: "Logging", package: "swift-log"),
+                    "SwiftUIX"
                 ]),
         .testTarget(name: "ArchiveBackendTests",
                     dependencies: [

@@ -8,8 +8,8 @@
 import Diagnostics
 import Foundation
 
-public struct CustomDiagnosticsReporter: DiagnosticsReporting {
-    public static func report() -> DiagnosticsChapter {
+struct CustomDiagnosticsReporter: DiagnosticsReporting {
+    static func report() -> DiagnosticsChapter {
         let documents = ArchiveStore.shared.documents
         let taggedCount = documents
             .filter { $0.taggingStatus == .tagged }

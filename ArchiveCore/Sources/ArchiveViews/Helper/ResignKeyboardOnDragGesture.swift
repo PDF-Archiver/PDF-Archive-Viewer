@@ -13,7 +13,9 @@ struct ResignKeyboardOnDragGesture: ViewModifier {
     func body(content: Content) -> some View {
         content.gesture(
             DragGesture().onChanged { _ in
+                #if !os(macOS)
                 Keyboard.main.dismiss()
+                #endif
             }
         )
     }

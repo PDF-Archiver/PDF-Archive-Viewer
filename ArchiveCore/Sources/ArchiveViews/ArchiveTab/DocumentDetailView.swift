@@ -16,17 +16,26 @@ struct DocumentDetailView: View {
                 .padding()
             PDFCustomView(viewModel.pdfDocument)
         }
-        .navigationBarTitle(Text(""), displayMode: .inline)
-        .navigationBarItems(trailing: shareNavigationButton)
+        .iOS { view in
+            view.navigationBarTitle(Text(""), displayMode: .inline)
+                .navigationBarItems(trailing: shareNavigationButton)
+        }
         .onAppear(perform: viewModel.viewAppeared)
         .sheet(isPresented: $viewModel.showActivityView) {
+            #if !os(macOS)
             AppActivityView(activityItems: self.viewModel.activityItems)
+            #endif
         }
     }
 
     var shareNavigationButton: some View {
         Button(action: {
+            #if os(macOS)
+            // TODO: test this
+            NSWorkspace.shared.activateFileViewerSelecting([viewModel.document.path])
+            #else
             self.viewModel.showActivityView = true
+            #endif
         }, label: {
             Image(systemName: "square.and.arrow.up")
         })

@@ -27,7 +27,11 @@ struct IAPView: View {
             }
             .padding()
             .maxWidth(600)
-            .onAppear(perform: Keyboard.main.dismiss)
+            .onAppear {
+                #if !os(macOS)
+                Keyboard.main.dismiss()
+                #endif
+            }
         }
     }
 
