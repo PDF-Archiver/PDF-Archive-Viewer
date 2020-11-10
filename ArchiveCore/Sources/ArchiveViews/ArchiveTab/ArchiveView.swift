@@ -9,9 +9,20 @@
 import SwiftUI
 import SwiftUIX
 
+#if os(macOS)
+// TODO: is this working out?
+struct EditButton: View {
+    var body: some View {
+        EmptyView()
+    }
+}
+#endif
+
 struct ArchiveView: View {
     @ObservedObject var viewModel: ArchiveViewModel
+    #if !os(macOS)
     @Environment(\.editMode) private var editMode
+    #endif
 
     var body: some View {
 
@@ -75,7 +86,9 @@ struct ArchiveView: View {
                 } else {
                     DocumentView(viewModel: document, showTagStatus: false)
                         .onTapGesture {
+                            #if !os(macOS)
                             guard editMode?.wrappedValue == .inactive else { return }
+                            #endif
                             viewModel.tapped(document)
                         }
                 }

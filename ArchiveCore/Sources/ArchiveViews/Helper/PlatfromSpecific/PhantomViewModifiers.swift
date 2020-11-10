@@ -13,11 +13,19 @@ extension View {
         self
     }
     
-    func navigationBarTitle(_ title: Text, displayMode: NavigationBarItem.TitleDisplayMode) -> some View {
+    func navigationBarTitle(_ title: Text, displayMode: NavigationBarItem.TitleDisplayMode = .inline) -> some View {
         self
     }
     
     func navigationBarItems<L, T>(leading: L, trailing: T) -> some View where L : View, T : View {
+        self
+    }
+    
+    func navigationBarItems<L>(leading: L) -> some View where L : View {
+        self
+    }
+    
+    func navigationBarItems<T>(trailing: T) -> some View where T : View {
         self
     }
 }

@@ -11,8 +11,17 @@
 import Diagnostics
 import Foundation
 import Logging
+#if !os(macOS)
+// TODO: add sentry again
 import Sentry
+#endif
 import SwiftUI
+
+#if os(macOS)
+fileprivate typealias CustomWindowStyle = HiddenTitleBarWindowStyle
+#else
+fileprivate typealias CustomWindowStyle = DefaultWindowStyle
+#endif
 
 @main
 struct PDFArchiverApp: App, Log {
@@ -26,22 +35,27 @@ struct PDFArchiverApp: App, Log {
     var body: some Scene {
         WindowGroup {
             MainNavigationView()
+                .frame(maxWidth: 1000, maxHeight: 500)
                 .environmentObject(OrientationInfo())
                 .onChange(of: scenePhase) { phase in
                     Self.log.info("Scene change: \(phase)")
 
+                    #if !os(macOS)
                     // schedule a new background task
                     if phase != .active,
                        MainNavigationViewModel.imageConverter.totalDocumentCount.value > 0 {
                         BackgroundTaskScheduler.shared.scheduleTask(with: .pdfProcessing)
                     }
+                    #endif
                 }
         }
-//        #if os(macOS)
-//        Settings {
-//            Text("Test")
-//        }
-//        #endif
+        .windowStyle(CustomWindowStyle())
+        #if os(macOS)
+        Settings {
+            Text("Test")
+                .padding()
+        }
+        #endif
     }
 
     private func setup() {
@@ -67,6 +81,7 @@ struct PDFArchiverApp: App, Log {
             _ = ArchiveStore.shared
         }
 
+        #if !os(macOS)
         // Create a Sentry client and start crash handler
         SentrySDK.start(options: [
             "dsn": Constants.sentryDsn,
@@ -86,8 +101,9 @@ struct PDFArchiverApp: App, Log {
             event.context?["device"]?["usable_memory"] = nil
             return event
         }
+        #endif
 
-        #if DEBUG
+        #if !os(macOS) && DEBUG
         DispatchQueue.main.asyncAfter(deadline: .now()) {
             UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { (_, error) in
                 if let error = error {

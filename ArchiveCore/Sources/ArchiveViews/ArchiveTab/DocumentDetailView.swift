@@ -16,10 +16,8 @@ struct DocumentDetailView: View {
                 .padding()
             PDFCustomView(viewModel.pdfDocument)
         }
-        .iOS { view in
-            view.navigationBarTitle(Text(""), displayMode: .inline)
-                .navigationBarItems(trailing: shareNavigationButton)
-        }
+        .navigationBarTitle(Text(""), displayMode: .inline)
+        .navigationBarItems(trailing: shareNavigationButton)
         .onAppear(perform: viewModel.viewAppeared)
         .sheet(isPresented: $viewModel.showActivityView) {
             #if !os(macOS)

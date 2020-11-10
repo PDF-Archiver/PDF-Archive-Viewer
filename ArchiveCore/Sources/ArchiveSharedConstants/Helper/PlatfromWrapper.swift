@@ -18,16 +18,3 @@ public func open(_ url: URL) {
     UIApplication.shared.open(url)
     #endif
 }
-
-#if os(macOS)
-import SwiftUIX
-// TODO: do these symbols exist on macOS 11?
-extension Label where Title == Text, Icon == Image {
-    /// Creates a label with a system icon image and a title generated from a
-    /// localized string.
-    @available(iOS 14.0, OSX 10.16, tvOS 14.0, watchOS 7.0, *)
-    public init(_ titleKey: LocalizedStringKey, systemImage name: SanFranciscoSymbolName) {
-        self.init(titleKey, systemImage: name.rawValue)
-    }
-}
-#endif
