@@ -11,11 +11,11 @@ import SwiftUIX
 import Parma
 
 #if os(macOS)
-fileprivate typealias CustomListStyle = DefaultListStyle
-fileprivate typealias CustomNavigationtStyle = DefaultNavigationViewStyle
+private typealias CustomListStyle = DefaultListStyle
+private typealias CustomNavigationtStyle = DefaultNavigationViewStyle
 #else
-fileprivate typealias CustomListStyle = GroupedListStyle
-fileprivate typealias CustomNavigationtStyle = StackNavigationViewStyle
+private typealias CustomListStyle = GroupedListStyle
+private typealias CustomNavigationtStyle = StackNavigationViewStyle
 #endif
 
 struct MoreTabView: View {

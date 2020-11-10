@@ -46,7 +46,8 @@ struct OnboardingScreens: View {
                         })
                 }
             }
-            .frame(proxy.size, alignment: .center)
+            .frame(width: proxy.frame(in: .global).width,
+                   height: proxy.frame(in: .global).height)
         }
     }
 

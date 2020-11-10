@@ -10,9 +10,9 @@ import Combine
 import SwiftUI
 
 #if os(macOS)
-fileprivate typealias CustomNavigationtStyle = DefaultNavigationViewStyle
+private typealias CustomNavigationtStyle = DefaultNavigationViewStyle
 #else
-fileprivate typealias CustomNavigationtStyle = StackNavigationViewStyle
+private typealias CustomNavigationtStyle = StackNavigationViewStyle
 #endif
 
 public struct MainNavigationView: View {

@@ -17,12 +17,6 @@ import Sentry
 #endif
 import SwiftUI
 
-#if os(macOS)
-fileprivate typealias CustomWindowStyle = HiddenTitleBarWindowStyle
-#else
-fileprivate typealias CustomWindowStyle = DefaultWindowStyle
-#endif
-
 @main
 struct PDFArchiverApp: App, Log {
 
@@ -33,29 +27,37 @@ struct PDFArchiverApp: App, Log {
     }
 
     var body: some Scene {
+        #if os(macOS)
         WindowGroup {
-            MainNavigationView()
-                .frame(maxWidth: 1000, maxHeight: 500)
-                .environmentObject(OrientationInfo())
-                .onChange(of: scenePhase) { phase in
-                    Self.log.info("Scene change: \(phase)")
-
-                    #if !os(macOS)
-                    // schedule a new background task
-                    if phase != .active,
-                       MainNavigationViewModel.imageConverter.totalDocumentCount.value > 0 {
-                        BackgroundTaskScheduler.shared.scheduleTask(with: .pdfProcessing)
-                    }
-                    #endif
-                }
+            mainView
         }
         .windowStyle(CustomWindowStyle())
-        #if os(macOS)
+
         Settings {
             Text("Test")
                 .padding()
         }
+        #else
+        WindowGroup {
+            mainView
+        }
         #endif
+    }
+
+    private var mainView: some View {
+        MainNavigationView()
+            .environmentObject(OrientationInfo())
+            .onChange(of: scenePhase) { phase in
+                Self.log.info("Scene change: \(phase)")
+
+                #if !os(macOS)
+                // schedule a new background task
+                if phase != .active,
+                   MainNavigationViewModel.imageConverter.totalDocumentCount.value > 0 {
+                    BackgroundTaskScheduler.shared.scheduleTask(with: .pdfProcessing)
+                }
+                #endif
+            }
     }
 
     private func setup() {

@@ -33,13 +33,15 @@ struct TagTabView: View {
                 #else
                 documentsList
                 #endif
-                GeometryReader { geometry in
+                GeometryReader { proxy in
                     VStack(spacing: 0) {
                         pdfView
-                            .frame(height: geometry.size.height * 0.6)
+                            .frame(height: proxy.size.height * 0.6)
                         documentInformation
-                            .frame(height: geometry.size.height * 0.4)
+                            .frame(height: proxy.size.height * 0.4)
                     }
+                    .frame(width: proxy.frame(in: .global).width,
+                           height: proxy.frame(in: .global).height)
                 }
             }
             .navigationBarHidden(false)

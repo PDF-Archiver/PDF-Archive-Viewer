@@ -32,25 +32,13 @@ struct Stack<Content: View>: View {
         #else
         horizontal
         #endif
-//        GeometryReader { geometry in
-//            if geometry.size.width * 1.3 < geometry.size.height {
-//                VStack(alignment: .center, spacing: spacing) {
-//                    content
-//                }
-//                .frame(maxWidth: .infinity, maxHeight: .infinity)
-//            } else {
-//                HStack(alignment: .center, spacing: spacing) {
-//                    content
-//                }
-//                .frame(maxWidth: .infinity, maxHeight: .infinity)
-//            }
-//        }
     }
 
     var vertical: some View {
         VStack(alignment: .center, spacing: spacing) {
             content
         }
+        // TODO: do we really need this?
         .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 
@@ -58,6 +46,7 @@ struct Stack<Content: View>: View {
         HStack(alignment: .center, spacing: spacing) {
             content
         }
+        // TODO: do we really need this?
         .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 }

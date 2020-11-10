@@ -30,7 +30,7 @@
 			<key>File</key>
 			<string>com.mono0926.LicensePlist/Diagnostics</string>
 			<key>Title</key>
-			<string>Diagnostics (1.7.0)</string>
+			<string>Diagnostics</string>
 			<key>Type</key>
 			<string>PSChildPaneSpecifier</string>
 		</dict>
@@ -38,7 +38,15 @@
 			<key>File</key>
 			<string>com.mono0926.LicensePlist/Down</string>
 			<key>Title</key>
-			<string>Down (0.9.3)</string>
+			<string>Down (0.9.4)</string>
+			<key>Type</key>
+			<string>PSChildPaneSpecifier</string>
+		</dict>
+		<dict>
+			<key>File</key>
+			<string>com.mono0926.LicensePlist/GraphicsRenderer</string>
+			<key>Title</key>
+			<string>GraphicsRenderer (1.4.4)</string>
 			<key>Type</key>
 			<string>PSChildPaneSpecifier</string>
 		</dict>
@@ -46,7 +54,7 @@
 			<key>File</key>
 			<string>com.mono0926.LicensePlist/Parma</string>
 			<key>Title</key>
-			<string>Parma (0.1.1)</string>
+			<string>Parma (0.2.0)</string>
 			<key>Type</key>
 			<string>PSChildPaneSpecifier</string>
 		</dict>
@@ -54,7 +62,7 @@
 			<key>File</key>
 			<string>com.mono0926.LicensePlist/sentry-cocoa</string>
 			<key>Title</key>
-			<string>Sentry (5.2.0)</string>
+			<string>Sentry (5.2.2)</string>
 			<key>Type</key>
 			<string>PSChildPaneSpecifier</string>
 		</dict>
@@ -70,15 +78,7 @@
 			<key>File</key>
 			<string>com.mono0926.LicensePlist/SwiftUIX</string>
 			<key>Title</key>
-			<string>SwiftUIX (0.0.3)</string>
-			<key>Type</key>
-			<string>PSChildPaneSpecifier</string>
-		</dict>
-		<dict>
-			<key>File</key>
-			<string>com.mono0926.LicensePlist/SwiftyStoreKit</string>
-			<key>Title</key>
-			<string>SwiftyStoreKit (0.16.1)</string>
+			<string>SwiftUIX</string>
 			<key>Type</key>
 			<string>PSChildPaneSpecifier</string>
 		</dict>

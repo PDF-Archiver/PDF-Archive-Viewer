@@ -27,7 +27,7 @@ final class LocalFolderProvider: FolderProvider {
             preconditionFailure("Could not create local watcher.")
         }
         self.watcher = watcher
-        watcher.onFolderNotification = { [weak self] folder in
+        watcher.onFolderNotification = { [weak self] _ in
             guard let self = self else { return }
 
             let changes = self.createChanges()

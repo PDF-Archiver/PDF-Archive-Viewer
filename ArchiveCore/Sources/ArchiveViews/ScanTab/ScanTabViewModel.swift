@@ -61,6 +61,10 @@ public final class ScanTabViewModel: ObservableObject, Log {
         let authorizationStatus = AVCaptureDevice.authorizationStatus(for: .video)
         switch authorizationStatus {
             case .authorized:
+
+                // show warning if app usage is not permitted
+                testAppUsagePermitted()
+
                 log.info("Start scanning a document.")
                 showDocumentScan = true
                 FeedbackGenerator.notify(.success)
@@ -156,6 +160,7 @@ public final class ScanTabViewModel: ObservableObject, Log {
         }
     }
 
+    @discardableResult
     private func testAppUsagePermitted() -> Bool {
 
         let isPermitted = iapService.appUsagePermitted

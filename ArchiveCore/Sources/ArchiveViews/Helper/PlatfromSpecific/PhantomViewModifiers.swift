@@ -12,20 +12,20 @@ extension View {
     func navigationBarHidden(_ value: Bool) -> some View {
         self
     }
-    
+
     func navigationBarTitle(_ title: Text, displayMode: NavigationBarItem.TitleDisplayMode = .inline) -> some View {
         self
     }
-    
-    func navigationBarItems<L, T>(leading: L, trailing: T) -> some View where L : View, T : View {
+
+    func navigationBarItems<L, T>(leading: L, trailing: T) -> some View where L: View, T: View {
         self
     }
-    
-    func navigationBarItems<L>(leading: L) -> some View where L : View {
+
+    func navigationBarItems<L>(leading: L) -> some View where L: View {
         self
     }
-    
-    func navigationBarItems<T>(trailing: T) -> some View where T : View {
+
+    func navigationBarItems<T>(trailing: T) -> some View where T: View {
         self
     }
 }
