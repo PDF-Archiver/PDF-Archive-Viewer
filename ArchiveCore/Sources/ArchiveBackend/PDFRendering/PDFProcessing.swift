@@ -240,19 +240,58 @@ public final class PDFProcessing: Operation, Log {
     }
 
     private static func renderPdf(from observations: [TextObservation]) -> PDFDocument {
-        let data = PDFRenderer(bounds: CGRect(x: 0, y: 0, width: 612, height: 792)).pdfData { context in
-            for observation in observations {
 
-                let bounds = CGRect(origin: .zero, size: observation.image.size)
+        var pages = [PDFPage]()
+        for observation in observations {
 
-                context.beginPage(withBounds: bounds, pageInfo: [:])
-                observation.image.draw(in: bounds)
-                for result in observation.results {
-                    result.attributedText.draw(in: result.rect)
-                }
+            // create context - we use different contexts in order to get different page sizes in the PDF
+            var bounds = CGRect(origin: .zero, size: observation.image.size)
+            let data = NSMutableData()
+            let consumer = CGDataConsumer(data: data)!
+            let context = CGContext(consumer: consumer, mediaBox: &bounds, nil)!
+
+            #if os(macOS)
+                let previousContext = NSGraphicsContext.current
+                NSGraphicsContext.current = NSGraphicsContext(cgContext: context, flipped: true)
+            #else
+                UIGraphicsPushContext(context)
+            #endif
+            var info = [String: Any]()
+            info[kCGPDFContextMediaBox as String] = bounds
+            let pageInfo = info as CFDictionary
+            context.beginPDFPage(pageInfo)
+
+            // TODO: do we need this on macOS?
+            let transform = CGAffineTransform(a: 1, b: 0, c: 0, d: -1, tx: 0, ty: bounds.height)
+            context.concatenate(transform)
+
+            // save data in context
+            observation.image.draw(in: bounds)
+            for result in observation.results {
+                result.attributedText.draw(in: result.rect)
             }
+            
+            // close context
+            context.endPDFPage()
+            context.closePDF()
+            #if os(macOS)
+                NSGraphicsContext.current = previousContext
+            #else
+                UIGraphicsPopContext()
+            #endif
+
+            // extract pdf from context
+            guard let document = PDFDocument(data: data as Data),
+                  let page = document.page(at: 0) else { fatalError("Could not generate PDF document.") }
+            pages.append(page)
         }
-        guard let document = PDFDocument(data: data as Data) else { fatalError("Could not generate PDF document.") }
+
+        // merge pages
+        let document = PDFDocument()
+        for (index, page) in pages.enumerated() {
+            document.insert(page, at: index)
+        }
+
         return document
     }
 

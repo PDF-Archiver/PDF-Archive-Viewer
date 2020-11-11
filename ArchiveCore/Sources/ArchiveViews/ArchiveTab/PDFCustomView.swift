@@ -35,8 +35,8 @@ public struct PDFCustomView: AppKitOrUIKitViewRepresentable {
             view.document = pdfDocument
             view.goToFirstPage(self)
 
-//            // show the whole document in the view
-//            view.scaleFactor = view.scaleFactorForSizeToFit
+            // show the whole document in the view
+            view.scaleFactor = view.scaleFactorForSizeToFit
         }
     }
 }

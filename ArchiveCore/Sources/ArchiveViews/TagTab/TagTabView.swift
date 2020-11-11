@@ -35,9 +35,13 @@ struct TagTabView: View {
                 #endif
                 GeometryReader { proxy in
                     VStack(spacing: 0) {
-                        pdfView
+                        PDFCustomView(self.viewModel.pdfDocument)
                             .frame(height: proxy.size.height * 0.6)
-                        documentInformation
+                        DocumentInformationForm(date: $viewModel.date,
+                                                specification: $viewModel.specification,
+                                                tags: $viewModel.documentTags,
+                                                tagInput: $viewModel.documentTagInput,
+                                                suggestedTags: $viewModel.suggestedTags)
                             .frame(height: proxy.size.height * 0.4)
                     }
                     .frame(width: proxy.frame(in: .global).width,
@@ -107,18 +111,6 @@ struct TagTabView: View {
             }
         }
         .frame(maxWidth: 300)
-    }
-
-    private var pdfView: some View {
-        PDFCustomView(self.viewModel.pdfDocument)
-    }
-
-    private var documentInformation: some View {
-        DocumentInformationForm(date: $viewModel.date,
-                                specification: $viewModel.specification,
-                                tags: $viewModel.documentTags,
-                                tagInput: $viewModel.documentTagInput,
-                                suggestedTags: $viewModel.suggestedTags)
     }
 }
 

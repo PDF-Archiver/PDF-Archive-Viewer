@@ -32,12 +32,6 @@ public final class IAPService: NSObject, ObservableObject, Log {
 
         super.init()
 
-        #if !DEBUG
-        #error("Test IAP before release!")
-        // Error in IAP:
-        // https://developer.apple.com/forums/thread/661351
-        #endif
-
         #if DEBUG
         appUsagePermitted = true
         #else
